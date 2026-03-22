@@ -1,0 +1,37 @@
+project: halalflow
+updated: 2026-03-22T14:30:00Z
+
+tasks:
+  - id: scaffold
+    status: done
+    owner: pm-halalflow
+    notes: "Next.js 16, Tailwind v4, TypeScript scaffold complete"
+  - id: shariah-engine
+    status: done
+    owner: pm-halalflow
+    notes: "AAOIFI screening engine: debt/cash/revenue ratios + sector exclusion"
+  - id: company-profiles
+    status: done
+    owner: pm-halalflow
+    notes: "Company pages with compliance breakdown, ratio bars, score ring"
+  - id: screener
+    status: done
+    owner: pm-halalflow
+    notes: "Full screener with filter/sort by status, sector, score"
+  - id: watchlist
+    status: done
+    owner: pm-halalflow
+    notes: "LocalStorage watchlist with table + card view"
+  - id: research
+    status: done
+    owner: pm-halalflow
+    notes: "Research reports page with export-to-text"
+  - id: kanban
+    status: done
+    owner: pm-halalflow
+    notes: "Kanban board with add/move/delete tasks, 3 columns"
+
+next_actions:
+  - "Integrate live market data API"
+  - "Add price alerts via Telegram"
+  - "Expand GCC/MENA stock universe"
