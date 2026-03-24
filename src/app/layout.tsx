@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-  title: "HalalFlow — Shariah Stock Intelligence Terminal",
-  description: "Bloomberg-lite for Muslim investors. Shariah screening, compliance breakdown, and research for global equities.",
+  title: "HalalFlow — Shariah Stock Intelligence",
+  description: "Shariah-compliant stock screening for the modern Muslim investor. Real-time AAOIFI screening. 4,200+ equities covered.",
 };
 
 export default function RootLayout({
@@ -16,14 +15,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.className} h-full`} suppressHydrationWarning>
-      <body className="min-h-full flex flex-col bg-[#0a0e1a] text-slate-100 antialiased">
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} h-full`} suppressHydrationWarning>
+      <body className="min-h-[100dvh] flex flex-col bg-[var(--background)] text-[var(--foreground)] antialiased">
         <Navbar />
-        <main className="flex-1 max-w-screen-2xl mx-auto w-full px-6 py-6">
+        <main className="flex-1 max-w-screen-2xl mx-auto w-full px-6 py-8">
           {children}
         </main>
-        <footer className="border-t border-white/5 py-4 text-center text-xs text-slate-600">
-          HalalFlow — Shariah Intelligence Terminal &nbsp;·&nbsp; Not financial advice &nbsp;·&nbsp; AAOIFI Methodology
+        <footer className="border-t border-zinc-200/50 py-5 text-center text-xs text-zinc-400">
+          HalalFlow — Shariah Intelligence Terminal · Not financial advice · AAOIFI Methodology
         </footer>
       </body>
     </html>

@@ -2,34 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
-import { BarChart2, BookMarked, Columns3, Search, TrendingUp, FileText } from 'lucide-react';
+import { ChartLineUp, MagnifyingGlass, BookmarkSimple, FileText, Kanban, TrendUp } from '@phosphor-icons/react';
 
 const links = [
-  { href: '/', label: 'Dashboard', icon: BarChart2 },
-  { href: '/screener', label: 'Screener', icon: Search },
-  { href: '/watchlist', label: 'Watchlist', icon: BookMarked },
+  { href: '/', label: 'Dashboard', icon: ChartLineUp },
+  { href: '/screener', label: 'Screener', icon: MagnifyingGlass },
+  { href: '/watchlist', label: 'Watchlist', icon: BookmarkSimple },
   { href: '/research', label: 'Research', icon: FileText },
-  { href: '/kanban', label: 'Kanban', icon: Columns3 },
+  { href: '/kanban', label: 'Kanban', icon: Kanban },
 ];
 
 export function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/8 bg-[#0a0e1a]/95 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 border-b border-zinc-200/50 bg-white/80 backdrop-blur-xl">
       <div className="max-w-screen-2xl mx-auto px-6 h-14 flex items-center justify-between">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-            <TrendingUp className="w-4 h-4 text-emerald-400" />
+          <div className="w-8 h-8 rounded-lg bg-emerald-600/10 border border-emerald-600/20 flex items-center justify-center">
+            <TrendUp className="w-4 h-4 text-emerald-600" weight="bold" />
           </div>
-          <span className="font-bold text-base tracking-tight">
-            Halal<span className="text-emerald-400">Flow</span>
+          <span className="font-bold text-base tracking-tight text-zinc-950">
+            Halal<span className="text-emerald-600">Flow</span>
           </span>
         </Link>
 
-        {/* Nav links */}
         <div className="flex items-center gap-1">
           {links.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || (href !== '/' && pathname.startsWith(href));
@@ -37,23 +34,21 @@ export function Navbar() {
               <Link
                 key={href}
                 href={href}
-                className={clsx(
-                  'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                   active
-                    ? 'bg-emerald-500/15 text-emerald-400'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
-                )}
+                    ? 'bg-emerald-600/10 text-emerald-700'
+                    : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100/80'
+                }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-3.5 h-3.5" weight={active ? 'bold' : 'regular'} />
                 {label}
               </Link>
             );
           })}
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="flex items-center gap-2 text-xs text-zinc-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           Live
         </div>
       </div>
