@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Stock {
+  id           String      @id @default(cuid())
+  ticker       String      @unique
+  name         String
+  exchange     String
+  sector       String
+  country      String
+  debtRatio    Float
+  cashRatio    Float
+  revenueRatio Float
+  status       String
+  score        Float
+  lastUpdated  DateTime    @default(now())
+  screenings   Screening[]
+}
+
+model Screening {
+  id        String   @id @default(cuid())
+  stockId   String
+  stock     Stock    @relation(fields: [stockId], references: [id])
+  result    String
+  ratios    String
+  method    String
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+}
