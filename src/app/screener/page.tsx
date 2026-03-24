@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Search, Filter } from 'lucide-react';
+import { MagnifyingGlass, Funnel } from '@phosphor-icons/react';
 import { companies, sectors } from '@/data/companies';
 import { CompanyCard } from '@/components/CompanyCard';
 import type { ComplianceStatus } from '@/types';
@@ -9,11 +9,11 @@ import clsx from 'clsx';
 
 type StatusFilter = ComplianceStatus | 'all';
 
-const statusOptions: { value: StatusFilter; label: string; color: string }[] = [
-  { value: 'all', label: 'All', color: 'text-slate-300' },
-  { value: 'HALAL', label: 'Halal', color: 'text-emerald-400' },
-  { value: 'DOUBTFUL', label: 'Doubtful', color: 'text-amber-400' },
-  { value: 'NON_COMPLIANT', label: 'Non-Compliant', color: 'text-red-400' },
+const statusOptions: { value: StatusFilter; label: string; activeClass: string }[] = [
+  { value: 'all', label: 'All', activeClass: 'bg-zinc-100 text-zinc-900 border-zinc-300' },
+  { value: 'HALAL', label: 'Halal', activeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  { value: 'DOUBTFUL', label: 'Doubtful', activeClass: 'bg-amber-50 text-amber-700 border-amber-200' },
+  { value: 'NON_COMPLIANT', label: 'Non-Compliant', activeClass: 'bg-red-50 text-red-600 border-red-200' },
 ];
 
 export default function ScreenerPage() {
@@ -58,38 +58,38 @@ export default function ScreenerPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Shariah Screener</h1>
-        <p className="text-slate-400 text-sm mt-1">Filter and sort global equities by Shariah compliance status</p>
+        <h1 className="text-2xl font-bold tracking-tighter text-zinc-950">Shariah Screener</h1>
+        <p className="text-zinc-500 text-sm mt-1">Filter and sort global equities by Shariah compliance status</p>
       </div>
 
       {/* Filters */}
-      <div className="bg-[#111827] border border-white/8 rounded-xl p-4 space-y-4">
+      <div className="border border-zinc-200/50 rounded-xl p-4 bg-white space-y-4">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
           <input
             type="text"
             placeholder="Search by ticker, name, or sector..."
             value={query}
             onChange={e => setQuery(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/8 transition-colors"
+            className="w-full bg-zinc-50 border border-zinc-200/80 rounded-lg pl-9 pr-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-emerald-500/50 focus:bg-white transition-colors"
           />
         </div>
 
         <div className="flex items-center gap-4 flex-wrap">
           {/* Status filter */}
           <div className="flex items-center gap-1.5">
-            <Filter className="w-3.5 h-3.5 text-slate-500" />
-            <span className="text-xs text-slate-500 mr-1">Status:</span>
+            <Funnel className="w-3.5 h-3.5 text-zinc-400" />
+            <span className="text-xs text-zinc-400 mr-1">Status:</span>
             {statusOptions.map(opt => (
               <button
                 key={opt.value}
                 onClick={() => setStatusFilter(opt.value)}
                 className={clsx(
-                  'text-xs px-3 py-1.5 rounded-full border transition-colors font-medium',
+                  'text-xs px-3 py-1.5 rounded-full border transition-all duration-200 font-medium active:scale-[0.98]',
                   statusFilter === opt.value
-                    ? 'bg-white/10 border-white/20 ' + opt.color
-                    : 'bg-transparent border-white/8 text-slate-500 hover:text-slate-300 hover:border-white/15'
+                    ? opt.activeClass
+                    : 'bg-transparent border-zinc-200/80 text-zinc-500 hover:text-zinc-700 hover:border-zinc-300'
                 )}
               >
                 {opt.label}
@@ -99,11 +99,11 @@ export default function ScreenerPage() {
 
           {/* Sector filter */}
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-500">Sector:</span>
+            <span className="text-xs text-zinc-400">Sector:</span>
             <select
               value={sectorFilter}
               onChange={e => setSectorFilter(e.target.value)}
-              className="bg-white/5 border border-white/10 text-sm text-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500/40"
+              className="bg-zinc-50 border border-zinc-200/80 text-sm text-zinc-700 rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500/40"
             >
               <option value="all">All Sectors</option>
               {sectors.map(s => <option key={s} value={s}>{s}</option>)}
@@ -112,11 +112,11 @@ export default function ScreenerPage() {
 
           {/* Sort */}
           <div className="flex items-center gap-1.5 ml-auto">
-            <span className="text-xs text-slate-500">Sort:</span>
+            <span className="text-xs text-zinc-400">Sort:</span>
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value as typeof sortBy)}
-              className="bg-white/5 border border-white/10 text-sm text-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500/40"
+              className="bg-zinc-50 border border-zinc-200/80 text-sm text-zinc-700 rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500/40"
             >
               <option value="score">Compliance Score</option>
               <option value="marketCap">Market Cap</option>
@@ -129,23 +129,23 @@ export default function ScreenerPage() {
 
       {/* Results count */}
       <div className="flex items-center justify-between">
-        <span className="text-sm text-slate-400">
-          Showing <strong className="text-slate-200">{filtered.length}</strong> of {companies.length} equities
+        <span className="text-sm text-zinc-500">
+          Showing <strong className="text-zinc-900">{filtered.length}</strong> of {companies.length} equities
         </span>
       </div>
 
-      {/* Grid */}
+      {/* Grid — 2-col asymmetric */}
       {filtered.length > 0 ? (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filtered.map(c => <CompanyCard key={c.id} company={c} />)}
         </div>
       ) : (
-        <div className="text-center py-20 text-slate-500">
-          <Search className="w-10 h-10 mx-auto mb-3 opacity-30" />
+        <div className="text-center py-20 text-zinc-400">
+          <MagnifyingGlass className="w-10 h-10 mx-auto mb-3 opacity-30" />
           <p>No equities match your filters.</p>
           <button
             onClick={() => { setQuery(''); setStatusFilter('all'); setSectorFilter('all'); }}
-            className="mt-3 text-sm text-emerald-400 hover:text-emerald-300"
+            className="mt-3 text-sm text-emerald-600 hover:text-emerald-700 active:scale-[0.98] transition-all"
           >
             Clear filters
           </button>

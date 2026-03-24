@@ -1,21 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Trash2, ChevronRight, Columns3 } from 'lucide-react';
+import { Plus, Trash, CaretRight, Columns } from '@phosphor-icons/react';
 import { useKanban } from '@/lib/kanban-store';
 import type { KanbanTask } from '@/types';
 import clsx from 'clsx';
 
-const COLUMNS: { id: KanbanTask['status']; label: string; color: string; dot: string }[] = [
-  { id: 'todo', label: 'To Do', color: 'border-slate-500/30', dot: 'bg-slate-400' },
-  { id: 'in_progress', label: 'In Progress', color: 'border-amber-500/30', dot: 'bg-amber-400' },
-  { id: 'done', label: 'Done', color: 'border-emerald-500/30', dot: 'bg-emerald-400' },
+const COLUMNS: { id: KanbanTask['status']; label: string; borderColor: string; dot: string }[] = [
+  { id: 'todo', label: 'To Do', borderColor: 'border-zinc-200', dot: 'bg-zinc-400' },
+  { id: 'in_progress', label: 'In Progress', borderColor: 'border-amber-200', dot: 'bg-amber-500' },
+  { id: 'done', label: 'Done', borderColor: 'border-emerald-200', dot: 'bg-emerald-500' },
 ];
 
 const PRIORITIES: Record<KanbanTask['priority'], string> = {
-  high: 'text-red-400 bg-red-500/10',
-  medium: 'text-amber-400 bg-amber-500/10',
-  low: 'text-slate-400 bg-slate-500/10',
+  high: 'text-red-600 bg-red-50',
+  medium: 'text-amber-600 bg-amber-50',
+  low: 'text-zinc-500 bg-zinc-100',
 };
 
 function TaskCard({ task, onMove, onDelete }: {
@@ -26,19 +26,19 @@ function TaskCard({ task, onMove, onDelete }: {
   const otherStatuses = COLUMNS.filter(c => c.id !== task.status);
 
   return (
-    <div className="bg-[#0f172a] border border-white/8 rounded-lg p-3.5 group hover:border-white/15 transition-colors">
+    <div className="bg-white border border-zinc-200/50 rounded-lg p-3.5 group hover:border-emerald-200 transition-colors">
       <div className="flex items-start justify-between gap-2 mb-2">
-        <p className="text-sm font-medium leading-snug flex-1">{task.title}</p>
+        <p className="text-sm font-medium text-zinc-950 leading-snug flex-1">{task.title}</p>
         <button
           onClick={() => onDelete(task.id)}
-          className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-red-400 transition-all flex-shrink-0"
+          className="opacity-0 group-hover:opacity-100 text-zinc-300 hover:text-red-500 transition-all flex-shrink-0 active:scale-[0.98]"
         >
-          <Trash2 className="w-3.5 h-3.5" />
+          <Trash className="w-3.5 h-3.5" />
         </button>
       </div>
 
       {task.description && (
-        <p className="text-xs text-slate-500 mb-2.5 leading-relaxed">{task.description}</p>
+        <p className="text-xs text-zinc-400 mb-2.5 leading-relaxed">{task.description}</p>
       )}
 
       <div className="flex items-center gap-1.5 flex-wrap">
@@ -46,22 +46,22 @@ function TaskCard({ task, onMove, onDelete }: {
           {task.priority}
         </span>
         {task.label && (
-          <span className="text-xs bg-white/5 text-slate-400 px-2 py-0.5 rounded-full">{task.label}</span>
+          <span className="text-xs bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded-full">{task.label}</span>
         )}
         {task.dueDate && (
-          <span className="text-xs text-slate-600 ml-auto">{task.dueDate}</span>
+          <span className="text-xs text-zinc-400 ml-auto" style={{ fontVariantNumeric: 'tabular-nums' }}>{task.dueDate}</span>
         )}
       </div>
 
       {/* Move actions */}
-      <div className="flex gap-1.5 mt-3 pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-all">
+      <div className="flex gap-1.5 mt-3 pt-3 border-t border-zinc-100 opacity-0 group-hover:opacity-100 transition-all">
         {otherStatuses.map(col => (
           <button
             key={col.id}
             onClick={() => onMove(task.id, col.id)}
-            className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-200 bg-white/5 hover:bg-white/10 px-2 py-1 rounded transition-colors"
+            className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-700 bg-zinc-50 hover:bg-zinc-100 px-2 py-1 rounded active:scale-[0.98] transition-all"
           >
-            <ChevronRight className="w-3 h-3" />
+            <CaretRight className="w-3 h-3" weight="bold" />
             {col.label}
           </button>
         ))}
@@ -86,20 +86,20 @@ function AddTaskForm({ status, onAdd, onCancel }: {
   };
 
   return (
-    <div className="bg-[#0f172a] border border-emerald-500/30 rounded-lg p-3.5 space-y-2.5">
+    <div className="bg-white border border-emerald-200 rounded-lg p-3.5 space-y-2.5">
       <input
         autoFocus
         value={title}
         onChange={e => setTitle(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') submit(); if (e.key === 'Escape') onCancel(); }}
         placeholder="Task title..."
-        className="w-full bg-white/5 border border-white/10 rounded px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/40"
+        className="w-full bg-zinc-50 border border-zinc-200/80 rounded px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-emerald-500/40"
       />
       <div className="flex gap-2">
         <select
           value={priority}
           onChange={e => setPriority(e.target.value as KanbanTask['priority'])}
-          className="flex-1 bg-white/5 border border-white/10 text-xs text-slate-300 rounded px-2 py-1.5 focus:outline-none"
+          className="flex-1 bg-zinc-50 border border-zinc-200/80 text-xs text-zinc-700 rounded px-2 py-1.5 focus:outline-none"
         >
           <option value="high">High</option>
           <option value="medium">Medium</option>
@@ -109,19 +109,19 @@ function AddTaskForm({ status, onAdd, onCancel }: {
           value={label}
           onChange={e => setLabel(e.target.value)}
           placeholder="Label..."
-          className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1.5 text-xs text-slate-300 placeholder:text-slate-500 focus:outline-none"
+          className="flex-1 bg-zinc-50 border border-zinc-200/80 rounded px-2 py-1.5 text-xs text-zinc-700 placeholder:text-zinc-400 focus:outline-none"
         />
       </div>
       <div className="flex gap-2">
         <button
           onClick={submit}
-          className="flex-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-medium py-1.5 rounded hover:bg-emerald-500/30 transition-colors"
+          className="flex-1 bg-emerald-600 text-white text-xs font-medium py-1.5 rounded-lg hover:bg-emerald-700 active:scale-[0.98] transition-all"
         >
           Add Task
         </button>
         <button
           onClick={onCancel}
-          className="flex-1 bg-white/5 border border-white/10 text-slate-400 text-xs font-medium py-1.5 rounded hover:bg-white/10 transition-colors"
+          className="flex-1 bg-zinc-100 border border-zinc-200/80 text-zinc-500 text-xs font-medium py-1.5 rounded-lg hover:bg-zinc-200 active:scale-[0.98] transition-all"
         >
           Cancel
         </button>
@@ -137,30 +137,30 @@ export default function KanbanPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Columns3 className="w-6 h-6 text-emerald-400" />
+        <h1 className="text-2xl font-bold tracking-tighter text-zinc-950 flex items-center gap-2">
+          <Columns className="w-6 h-6 text-emerald-600" weight="duotone" />
           HalalFlow Kanban
         </h1>
-        <p className="text-slate-400 text-sm mt-1">Track platform development tasks in real-time</p>
+        <p className="text-zinc-500 text-sm mt-1">Track platform development tasks in real-time</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {COLUMNS.map(col => {
           const tasks = byStatus(col.id);
           return (
-            <div key={col.id} className={clsx('bg-[#111827] border rounded-xl p-4', col.color)}>
+            <div key={col.id} className={clsx('bg-zinc-50/80 border rounded-xl p-4', col.borderColor)}>
               {/* Column header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className={clsx('w-2 h-2 rounded-full', col.dot)} />
-                  <span className="font-semibold text-sm">{col.label}</span>
-                  <span className="text-xs text-slate-500 bg-white/5 px-1.5 py-0.5 rounded-full">{tasks.length}</span>
+                  <span className="font-semibold text-sm text-zinc-950">{col.label}</span>
+                  <span className="text-xs text-zinc-400 bg-white px-1.5 py-0.5 rounded-full border border-zinc-200/50">{tasks.length}</span>
                 </div>
                 <button
                   onClick={() => setAddingIn(col.id)}
-                  className="text-slate-500 hover:text-emerald-400 transition-colors"
+                  className="text-zinc-400 hover:text-emerald-600 active:scale-[0.98] transition-all"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-4 h-4" weight="bold" />
                 </button>
               </div>
 
@@ -186,7 +186,7 @@ export default function KanbanPage() {
                   />
                 ))}
                 {tasks.length === 0 && !addingIn && (
-                  <div className="text-center py-8 text-slate-600 text-xs">
+                  <div className="text-center py-8 text-zinc-400 text-xs">
                     No tasks here
                   </div>
                 )}

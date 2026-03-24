@@ -9,15 +9,15 @@ interface BadgeProps {
 const config: Record<ComplianceStatus, { label: string; classes: string }> = {
   HALAL: {
     label: 'HALAL',
-    classes: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
+    classes: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
   },
   DOUBTFUL: {
     label: 'DOUBTFUL',
-    classes: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
+    classes: 'bg-amber-50 text-amber-700 border border-amber-200',
   },
   NON_COMPLIANT: {
     label: 'NON-COMPLIANT',
-    classes: 'bg-red-500/15 text-red-400 border border-red-500/30',
+    classes: 'bg-red-50 text-red-600 border border-red-200',
   },
 };
 
@@ -30,7 +30,13 @@ const sizes = {
 export function ComplianceBadge({ status, size = 'md' }: BadgeProps) {
   const { label, classes } = config[status];
   return (
-    <span className={clsx('inline-flex items-center font-semibold rounded-full', classes, sizes[size])}>
+    <span
+      className={clsx(
+        'inline-flex items-center font-semibold rounded-full',
+        classes,
+        sizes[size]
+      )}
+    >
       {label}
     </span>
   );
