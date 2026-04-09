@@ -10,7 +10,7 @@ export function ScoreRing({ score, size = 80 }: ScoreRingProps) {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (score / 100) * circumference;
 
-  const color = score >= 70 ? '#10b981' : score >= 40 ? '#f59e0b' : '#ef4444';
+  const color = score >= 70 ? '#059669' : score >= 40 ? '#d97706' : '#dc2626';
 
   return (
     <svg width={size} height={size} className="-rotate-90">
@@ -19,7 +19,7 @@ export function ScoreRing({ score, size = 80 }: ScoreRingProps) {
         cy={size / 2}
         r={radius}
         fill="none"
-        stroke="rgba(255,255,255,0.08)"
+        stroke="rgba(39, 39, 42, 0.08)"
         strokeWidth={6}
       />
       <circle
@@ -44,6 +44,7 @@ export function ScoreRing({ score, size = 80 }: ScoreRingProps) {
           fill: color,
           fontSize: size * 0.22,
           fontWeight: 700,
+          fontVariantNumeric: 'tabular-nums',
           transform: `rotate(90deg)`,
           transformOrigin: `${size / 2}px ${size / 2}px`,
         }}
