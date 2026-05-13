@@ -1,83 +1,118 @@
-# HalalFlow — Shariah Stock Intelligence Terminal
+# HalalFlow — Islamic Finance Workflow Engine
 
-Bloomberg-lite for Muslim investors. Research, monitor, and understand Shariah compliance for global equities.
+Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, NGOs, cooperatives, and Muslim SMEs.
 
-## Features
+## What it does
 
-| Feature | Description |
-|---------|-------------|
-| **Shariah Screening Engine** | AAOIFI-compliant debt/cash/revenue ratio screening |
-| **Company Profiles** | Full compliance breakdown with pass/fail criteria and purification guidance |
-| **Screener** | Filter, sort, and search equities by compliance status, sector, score |
-| **Watchlist** | Persistent local watchlist with compliance summary |
-| **Research Reports** | Expandable compliance reports with export-to-text |
-| **Kanban Board** | Real-time task tracking for platform development |
+HalalFlow helps teams manage structured approval workflows:
 
-## Shariah Screening Rules (AAOIFI)
+- Mosque expense approvals
+- Zakat distribution requests
+- Donation acknowledgments
+- Invoice and payment approvals
+- Cooperative cashflow workflows
+- Any multi-step approval process
 
-```
-1. Debt Ratio:         Total Debt / Total Assets   < 33%
-2. Cash + Securities:  (Cash + Sec) / Total Assets < 33%
-3. Non-Halal Revenue:  Non-Halal Rev / Total Rev   < 5%
-```
+## MVP Features
 
-Categorically excluded sectors: Banking, Alcohol, Tobacco, Gambling, Defense, Adult Entertainment.
-
-## Architecture
-
-```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── page.tsx            # Dashboard
-│   ├── screener/           # Full equity screener
-│   ├── company/[id]/       # Company profile + compliance detail
-│   ├── watchlist/          # User watchlist
-│   ├── research/           # Compliance research reports
-│   └── kanban/             # Kanban task board
-├── components/             # Shared UI components
-│   ├── ui/
-│   │   ├── Badge.tsx       # Compliance status badge
-│   │   ├── RatioBar.tsx    # Animated ratio progress bar
-│   │   └── ScoreRing.tsx   # SVG compliance score ring
-│   ├── Navbar.tsx
-│   ├── CompanyCard.tsx
-│   └── WatchButton.tsx
-├── lib/
-│   ├── shariah-engine.ts   # Core screening logic
-│   ├── watchlist-store.ts  # localStorage watchlist hook
-│   └── kanban-store.ts     # localStorage kanban hook
-├── data/
-│   └── companies.ts        # Screened company data
-└── types/
-    └── index.ts            # TypeScript types
-```
+| Feature | Status |
+|---------|--------|
+| Authentication | ✅ |
+| Organizations / workspaces | ✅ |
+| User roles (owner, admin, member) | ✅ |
+| Workflow templates with ordered steps | ✅ |
+| Workflow instances (submit, track) | ✅ |
+| Step-by-step approvals (approve/reject) | ✅ |
+| Status tracking | ✅ |
+| Audit logs | ✅ |
+| Comments per workflow | ✅ |
+| Dashboard | ✅ |
+| Settings + member invite | ✅ |
 
 ## Stack
 
 - **Next.js 16** (App Router, TypeScript, Turbopack)
 - **Tailwind CSS v4**
-- **lucide-react** for icons
-- **clsx** for conditional classes
-- localStorage for watchlist + kanban persistence
+- **Prisma 6 + SQLite** (swap for Postgres in production)
+- **iron-session** for auth
+- **@phosphor-icons/react** for icons
 
 ## Getting Started
 
 ```bash
 npm install
+cp .env.example .env          # set DATABASE_URL and SESSION_SECRET
+npm run db:migrate             # run migrations
+npm run db:seed                # seed demo data
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
+Demo credentials: `admin@halalflow.app` / `changeme123`
+
+## Architecture
+
+```
+src/
+├── app/
+│   ├── dashboard/          # Org overview + recent workflows
+│   ├── workflows/          # List, create, approve workflows
+│   ├── templates/          # Create/manage workflow templates
+│   ├── settings/           # Org settings, member management
+│   ├── login/              # Auth pages
+│   ├── register/
+│   ├── onboarding/         # Create first org
+│   └── api/                # REST API routes
+│       ├── auth/
+│       ├── orgs/
+│       ├── templates/
+│       └── workflows/
+├── components/
+│   ├── Navbar.tsx
+│   └── ui/
+└── lib/
+    ├── db.ts               # Prisma client
+    └── session.ts          # iron-session config
+```
+
+## Data Model
+
+```
+Organization → OrgMember → User
+Organization → WorkflowTemplate → TemplateStep
+Organization → Workflow → Approval (one per step)
+Workflow → Comment
+Workflow → AuditLog
+```
+
+## Workflow Lifecycle
+
+1. Owner/admin creates a **WorkflowTemplate** with ordered steps
+2. Any member submits a **Workflow** from a template
+3. Each step generates an **Approval** record (status: pending)
+4. Members approve/reject the current step
+5. On approval: advances to next step; on final step: status → `approved`
+6. On rejection: status → `rejected` immediately
+
+## Self-hosting
+
+Works with any Node.js host. For production, set:
+
+```env
+DATABASE_URL="file:./data/prod.db"   # or postgres://...
+SESSION_SECRET="your-32-char-secret"
+```
+
 ## Roadmap
 
-- [ ] Live market data API (Alpha Vantage / Yahoo Finance)
-- [ ] Price alerts via Telegram/email
-- [ ] GCC/MENA stock universe expansion (Tadawul, DFM, ADX)
-- [ ] PDF compliance certificate export
-- [ ] Portfolio-level purification calculator
-- [ ] Shariah Scholar commentary integration
+- [ ] Email notifications on approval/rejection
+- [ ] Multi-org switching
+- [ ] Workflow template export/import
+- [ ] Per-step role assignment enforcement
+- [ ] PDF receipt generation
+- [ ] Hosted SaaS (cloud.halalflow.app)
 
-## Disclaimer
+## License
 
-HalalFlow is an intelligence terminal, not a broker or financial advisor. Always consult a qualified Shariah scholar and financial advisor before investing.
+MIT — free to use, self-host, and modify.

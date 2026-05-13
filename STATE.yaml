@@ -1,37 +1,37 @@
 project: halalflow
-updated: 2026-03-22T14:30:00Z
+updated: 2026-05-13T00:00:00Z
+product: Islamic Finance Workflow Engine
 
-tasks:
-  - id: scaffold
+milestones:
+  - id: M1-foundation
     status: done
-    owner: pm-halalflow
-    notes: "Next.js 16, Tailwind v4, TypeScript scaffold complete"
-  - id: shariah-engine
+    notes: "Schema, auth, org creation, session, proxy auth guard"
+  - id: M2-templates
     status: done
-    owner: pm-halalflow
-    notes: "AAOIFI screening engine: debt/cash/revenue ratios + sector exclusion"
-  - id: company-profiles
+    notes: "Template CRUD with ordered steps, template detail page"
+  - id: M3-workflows
     status: done
-    owner: pm-halalflow
-    notes: "Company pages with compliance breakdown, ratio bars, score ring"
-  - id: screener
+    notes: "Workflow instances from templates, list with filters"
+  - id: M4-approvals
     status: done
-    owner: pm-halalflow
-    notes: "Full screener with filter/sort by status, sector, score"
-  - id: watchlist
+    notes: "Step-by-step approve/reject, status propagation, audit log"
+  - id: M5-dashboard
     status: done
-    owner: pm-halalflow
-    notes: "LocalStorage watchlist with table + card view"
-  - id: research
-    status: done
-    owner: pm-halalflow
-    notes: "Research reports page with export-to-text"
-  - id: kanban
-    status: done
-    owner: pm-halalflow
-    notes: "Kanban board with add/move/delete tasks, 3 columns"
+    notes: "Stats, recent workflows, comments, settings + member invite"
+
+stack:
+  framework: "Next.js 16 (App Router)"
+  database: "SQLite via Prisma 6"
+  auth: "iron-session"
+  css: "Tailwind v4"
+
+demo:
+  email: "admin@halalflow.app"
+  password: "changeme123"
 
 next_actions:
-  - "Integrate live market data API"
-  - "Add price alerts via Telegram"
-  - "Expand GCC/MENA stock universe"
+  - "Add email notifications on step approve/reject"
+  - "Enforce per-step role assignment (only specific roles can approve)"
+  - "Multi-org switching in session"
+  - "Workflow template import/export (JSON)"
+  - "Production deployment guide with Postgres"

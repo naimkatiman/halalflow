@@ -1,0 +1,93 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import { prisma } from "@/lib/db";
+import { SessionData, sessionOptions } from "@/lib/session";
+import { z } from "zod";
+
+const createSchema = z.object({
+  templateId: z.string().min(1),
+  title: z.string().min(1).max(200),
+  description: z.string().optional(),
+});
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
+
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get("status");
+
+    const workflows = await prisma.workflow.findMany({
+      where: { orgId: session.orgId, ...(status ? { status } : {}) },
+      include: {
+        template: { select: { id: true, name: true } },
+        createdBy: { select: { id: true, name: true, email: true } },
+        approvals: {
+          include: {
+            step: { select: { order: true, name: true } },
+            approver: { select: { id: true, name: true } },
+          },
+          orderBy: { createdAt: "asc" },
+        },
+        _count: { select: { comments: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json({ workflows });
+  } catch {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
+
+    const body = await request.json();
+    const { templateId, title, description } = createSchema.parse(body);
+
+    const template = await prisma.workflowTemplate.findFirst({
+      where: { id: templateId, orgId: session.orgId },
+      include: { steps: { orderBy: { order: "asc" } } },
+    });
+    if (!template) return NextResponse.json({ error: "Template not found" }, { status: 404 });
+    if (template.steps.length === 0) return NextResponse.json({ error: "Template has no steps" }, { status: 400 });
+
+    const workflow = await prisma.workflow.create({
+      data: {
+        orgId: session.orgId,
+        templateId,
+        title,
+        description,
+        status: "in_progress",
+        currentStep: 0,
+        createdById: session.userId,
+        approvals: {
+          create: template.steps.map((step) => ({ stepId: step.id, status: "pending" })),
+        },
+        auditLogs: {
+          create: {
+            userId: session.userId,
+            action: "created",
+            detail: `Workflow created from template "${template.name}"`,
+          },
+        },
+      },
+      include: {
+        template: { select: { id: true, name: true } },
+        approvals: { include: { step: true }, orderBy: { createdAt: "asc" } },
+      },
+    });
+
+    return NextResponse.json({ workflow }, { status: 201 });
+  } catch (error) {
+    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

@@ -1,0 +1,62 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import { prisma } from "@/lib/db";
+import { SessionData, sessionOptions } from "@/lib/session";
+import { z } from "zod";
+
+const stepSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().optional(),
+  order: z.number().int().min(0),
+});
+
+const createSchema = z.object({
+  name: z.string().min(1).max(100),
+  description: z.string().optional(),
+  steps: z.array(stepSchema).min(1),
+});
+
+export async function GET() {
+  try {
+    const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
+
+    const templates = await prisma.workflowTemplate.findMany({
+      where: { orgId: session.orgId },
+      include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json({ templates });
+  } catch {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
+
+    const body = await request.json();
+    const { name, description, steps } = createSchema.parse(body);
+
+    const template = await prisma.workflowTemplate.create({
+      data: {
+        orgId: session.orgId,
+        name,
+        description,
+        steps: { create: steps.map((s) => ({ name: s.name, description: s.description, order: s.order })) },
+      },
+      include: { steps: { orderBy: { order: "asc" } } },
+    });
+
+    return NextResponse.json({ template }, { status: 201 });
+  } catch (error) {
+    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

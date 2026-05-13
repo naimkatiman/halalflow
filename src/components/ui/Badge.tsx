@@ -1,24 +1,13 @@
 import clsx from 'clsx';
-import type { ComplianceStatus } from '@/types';
 
-interface BadgeProps {
-  status: ComplianceStatus;
-  size?: 'sm' | 'md' | 'lg';
-}
+type WorkflowStatus = 'pending' | 'in_progress' | 'approved' | 'rejected' | 'cancelled';
 
-const config: Record<ComplianceStatus, { label: string; classes: string }> = {
-  HALAL: {
-    label: 'HALAL',
-    classes: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-  },
-  DOUBTFUL: {
-    label: 'DOUBTFUL',
-    classes: 'bg-amber-50 text-amber-700 border border-amber-200',
-  },
-  NON_COMPLIANT: {
-    label: 'NON-COMPLIANT',
-    classes: 'bg-red-50 text-red-600 border border-red-200',
-  },
+const config: Record<WorkflowStatus, { label: string; classes: string }> = {
+  pending: { label: 'Pending', classes: 'bg-amber-50 text-amber-700 border border-amber-200' },
+  in_progress: { label: 'In Progress', classes: 'bg-blue-50 text-blue-700 border border-blue-200' },
+  approved: { label: 'Approved', classes: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
+  rejected: { label: 'Rejected', classes: 'bg-red-50 text-red-600 border border-red-200' },
+  cancelled: { label: 'Cancelled', classes: 'bg-zinc-100 text-zinc-600 border border-zinc-200' },
 };
 
 const sizes = {
@@ -27,16 +16,15 @@ const sizes = {
   lg: 'text-sm px-3 py-1.5',
 };
 
-export function ComplianceBadge({ status, size = 'md' }: BadgeProps) {
-  const { label, classes } = config[status];
+interface BadgeProps {
+  status: WorkflowStatus;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export function StatusBadge({ status, size = 'md' }: BadgeProps) {
+  const { label, classes } = config[status] ?? config['pending'];
   return (
-    <span
-      className={clsx(
-        'inline-flex items-center font-semibold rounded-full',
-        classes,
-        sizes[size]
-      )}
-    >
+    <span className={clsx('inline-flex items-center font-semibold rounded-full', classes, sizes[size])}>
       {label}
     </span>
   );

@@ -6,20 +6,18 @@ import { SessionData, sessionOptions } from "@/lib/session";
 export async function GET() {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    if (!session.isLoggedIn) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     return NextResponse.json({
       user: {
         id: session.userId,
         email: session.email,
+        name: session.name,
         role: session.role,
+        orgId: session.orgId,
+        orgRole: session.orgRole,
       },
     });
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
-      { status: 500 }
-    );
+  } catch {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

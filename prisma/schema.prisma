@@ -7,36 +7,114 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Stock {
-  id           String      @id @default(cuid())
-  ticker       String      @unique
-  name         String
-  exchange     String
-  sector       String
-  country      String
-  debtRatio    Float
-  cashRatio    Float
-  revenueRatio Float
-  status       String
-  score        Float
-  lastUpdated  DateTime    @default(now())
-  screenings   Screening[]
-}
-
-model Screening {
-  id        String   @id @default(cuid())
-  stockId   String
-  stock     Stock    @relation(fields: [stockId], references: [id])
-  result    String
-  ratios    String
-  method    String
-  createdAt DateTime @default(now())
-}
-
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
+  id          String      @id @default(cuid())
+  email       String      @unique
+  name        String
+  password    String
+  role        String      @default("user")
+  createdAt   DateTime    @default(now())
+  memberships OrgMember[]
+  workflows   Workflow[]  @relation("CreatedWorkflows")
+  approvals   Approval[]
+  comments    Comment[]
+  auditLogs   AuditLog[]
+}
+
+model Organization {
+  id        String             @id @default(cuid())
+  name      String
+  slug      String             @unique
+  createdAt DateTime           @default(now())
+  members   OrgMember[]
+  templates WorkflowTemplate[]
+  workflows Workflow[]
+}
+
+model OrgMember {
+  id        String       @id @default(cuid())
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String       @default("member")
+  createdAt DateTime     @default(now())
+
+  @@unique([orgId, userId])
+}
+
+model WorkflowTemplate {
+  id          String         @id @default(cuid())
+  orgId       String
+  org         Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  steps       TemplateStep[]
+  workflows   Workflow[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model TemplateStep {
+  id          String           @id @default(cuid())
+  templateId  String
+  template    WorkflowTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  order       Int
+  name        String
+  description String?
+  approvals   Approval[]
+}
+
+model Workflow {
+  id          String           @id @default(cuid())
+  orgId       String
+  org         Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  templateId  String
+  template    WorkflowTemplate @relation(fields: [templateId], references: [id])
+  title       String
+  description String?
+  status      String           @default("pending")
+  currentStep Int              @default(0)
+  createdById String
+  createdBy   User             @relation("CreatedWorkflows", fields: [createdById], references: [id])
+  approvals   Approval[]
+  comments    Comment[]
+  auditLogs   AuditLog[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Approval {
+  id         String       @id @default(cuid())
+  workflowId String
+  workflow   Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  stepId     String
+  step       TemplateStep @relation(fields: [stepId], references: [id])
+  approverId String?
+  approver   User?        @relation(fields: [approverId], references: [id])
+  status     String       @default("pending")
+  note       String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  body       String
+  createdAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String
+  detail     String?
+  createdAt  DateTime @default(now())
 }
