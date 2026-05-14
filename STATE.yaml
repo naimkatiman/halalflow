@@ -1,6 +1,17 @@
 project: halalflow
-updated: 2026-05-13T00:00:00Z
+updated: 2026-05-15T00:00:00Z
 product: Islamic Finance Workflow Engine
+
+merge_consolidation:
+  date: 2026-05-15
+  notes: >-
+    11 parallel claude/festive-lamport-* branches each attempted the pivot from
+    stock screener to workflow engine. Build-tested top 3 full-MVP candidates;
+    UpQWO won (widest API surface, no deprecation warnings, best docs). main
+    fast-forwarded to it and pushed. Pre-pivot stock-screener roadmap work is in
+    git stash 'stock-screener-roadmap-shelved-2026-05-15'. Other 10 branches
+    still on origin pending a delete/archive decision.
+  verified: "build green; e2e smoke — login, template list, workflow create, step approve, audit log all pass"
 
 milestones:
   - id: M1-foundation
