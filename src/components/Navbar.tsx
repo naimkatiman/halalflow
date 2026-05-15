@@ -46,6 +46,34 @@ export function Navbar() {
     );
   }
 
+  if (pathname === '/') {
+    return (
+      <header className="border-b border-zinc-200/50 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
+          <Link href="/" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
+            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" />
+            HalalFlow
+          </Link>
+          <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
+            <a href="#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
+            <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
+          </nav>
+          <div className="flex items-center gap-3">
+            <Link href="/login" className="text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
+              Sign in
+            </Link>
+            <Link
+              href="/register"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors active:translate-y-px"
+            >
+              Get started
+            </Link>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   const nav = [
     { href: '/dashboard', label: 'Dashboard', icon: SquaresFour },
     { href: '/workflows', label: 'Workflows', icon: CheckSquare },
