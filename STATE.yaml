@@ -1,37 +1,38 @@
 project: halalflow
-updated: 2026-03-22T14:30:00Z
+updated: 2026-05-13T09:42:00+08:00
 
-tasks:
-  - id: scaffold
-    status: done
-    owner: pm-halalflow
-    notes: "Next.js 16, Tailwind v4, TypeScript scaffold complete"
-  - id: shariah-engine
-    status: done
-    owner: pm-halalflow
-    notes: "AAOIFI screening engine: debt/cash/revenue ratios + sector exclusion"
-  - id: company-profiles
-    status: done
-    owner: pm-halalflow
-    notes: "Company pages with compliance breakdown, ratio bars, score ring"
-  - id: screener
-    status: done
-    owner: pm-halalflow
-    notes: "Full screener with filter/sort by status, sector, score"
-  - id: watchlist
-    status: done
-    owner: pm-halalflow
-    notes: "LocalStorage watchlist with table + card view"
-  - id: research
-    status: done
-    owner: pm-halalflow
-    notes: "Research reports page with export-to-text"
-  - id: kanban
-    status: done
-    owner: pm-halalflow
-    notes: "Kanban board with add/move/delete tasks, 3 columns"
+product:
+  identity: Shariah Stock Intelligence Terminal
+  positioning_wrapper: docs/ (build-in-public strategy — marketing/narrative layer, not feature spec)
+  stack: Next.js 16 + Tailwind v4 + Prisma + iron-session + Upstash Redis
+  market_data_source: market-data-hub (Railway, in-house) — https://market-data-hub.up.railway.app
+  market_data_source_repo: /home/naim/.openclaw/workspace/market-data-hub
+
+build_status:
+  npm_run_build: passing
+  last_verified: 2026-05-13T09:01+08:00
+
+scaffold_phase_tasks:
+  - { id: scaffold,            status: done, completed: 2026-03-22 }
+  - { id: shariah-engine,      status: done, completed: 2026-03-22 }
+  - { id: company-profiles,    status: done, completed: 2026-03-22 }
+  - { id: screener,            status: done, completed: 2026-03-22 }
+  - { id: watchlist,           status: done, completed: 2026-03-22 }
+  - { id: research,            status: done, completed: 2026-03-22 }
+  - { id: kanban,              status: done, completed: 2026-03-22 }
+  - { id: auth-iron-session,   status: done, completed: 2026-03-25 }
+
+roadmap_phase:
+  plan: docs/plans/2026-05-13-roadmap-build.md
+  driver: Hermes cron 'halalflow-hourly-build' → claude -p subprocess
+  items:
+    - { id: live-market-data,         status: in_progress, note: "R1 consume hub; R1.5 extend hub for fundamentals; R1.6 consume fundamentals" }
+    - { id: price-alerts,             status: pending }
+    - { id: mena-universe,            status: pending }
+    - { id: pdf-compliance-export,    status: pending }
+    - { id: purification-calculator,  status: pending }
+    - { id: scholar-commentary,       status: pending }
 
 next_actions:
-  - "Integrate live market data API"
-  - "Add price alerts via Telegram"
-  - "Expand GCC/MENA stock universe"
+  - "Cron picks first unchecked line from docs/plans/2026-05-13-roadmap-build.md"
+  - "User reviews execution log weekly; intervenes if cron drifts"

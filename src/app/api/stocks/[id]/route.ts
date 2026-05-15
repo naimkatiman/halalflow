@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { getCompany } from "@/data/companies";
+import { HubUnavailableError, SymbolNotFoundError } from "@/lib/market-data/errors";
 
 const updateSchema = z.object({
   ticker: z.string().min(1).max(10).optional(),
@@ -21,19 +23,28 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const stock = await prisma.stock.findUnique({
-      where: { id },
-      include: { screenings: true },
-    });
-    if (!stock) {
+    const company = await getCompany(id);
+    if (!company) {
       return NextResponse.json({ error: "Stock not found" }, { status: 404 });
     }
-    return NextResponse.json(stock, {
+    return NextResponse.json(company, {
       headers: {
         "Cache-Control": "public, max-age=30, stale-while-revalidate=60",
       },
     });
   } catch (error) {
+    if (error instanceof HubUnavailableError) {
+      return NextResponse.json(
+        { error: "Market data hub unavailable" },
+        { status: 503, headers: { "Retry-After": "30" } }
+      );
+    }
+    if (error instanceof SymbolNotFoundError) {
+      return NextResponse.json(
+        { error: `Symbol not found: ${error.symbol}` },
+        { status: 404 }
+      );
+    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }

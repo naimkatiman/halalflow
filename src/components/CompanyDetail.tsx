@@ -47,6 +47,14 @@ export function CompanyDetail({ company }: { company: Company }) {
               {screening && <ComplianceBadge status={screening.status} size="lg" />}
               <span className="text-xs bg-zinc-100 text-zinc-500 px-2.5 py-1 rounded-full">{company.exchange}</span>
               <span className="text-xs bg-zinc-100 text-zinc-500 px-2.5 py-1 rounded-full">{company.country}</span>
+              {company.fundamentalsAsOfDate && (
+                <span
+                  className="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full"
+                  title="Fundamentals reporting period (as_of_date) from market-data-hub"
+                >
+                  Fundamentals as of {company.fundamentalsAsOfDate}
+                </span>
+              )}
             </div>
             <p className="text-zinc-700 text-lg font-medium mt-1">{company.name}</p>
             <p className="text-zinc-400 text-sm mt-0.5">{company.sector} &middot; {company.industry}</p>
@@ -56,7 +64,7 @@ export function CompanyDetail({ company }: { company: Company }) {
             {screening && <ScoreRing score={screening.score} size={80} />}
             <div className="text-right">
               <div className="text-3xl font-bold text-zinc-950" style={{ fontVariantNumeric: 'tabular-nums' }}>${company.price.toFixed(2)}</div>
-              <div className={`text-sm font-medium mt-1 ${up ? 'text-emerald-600' : 'text-red-500'}`} style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <div aria-live="polite" className={`text-sm font-medium mt-1 ${up ? 'text-emerald-600' : 'text-red-500'}`} style={{ fontVariantNumeric: 'tabular-nums' }}>
                 {up ? '+' : ''}{company.priceChange.toFixed(2)} ({up ? '+' : ''}{company.priceChangePercent.toFixed(2)}%)
               </div>
               <div className="mt-3">

@@ -42,6 +42,7 @@ export interface Company {
   eps: number;
   dividendYield: number;
   financials: CompanyFinancials;
+  fundamentalsAsOfDate?: string;
   screening?: ShariahScreenResult;
   news?: NewsItem[];
   tags?: string[];

@@ -62,6 +62,8 @@ export function CompanyCard({ company }: CompanyCardProps) {
             ${company.price.toFixed(2)}
           </div>
           <div
+            aria-live="polite"
+            style={{ fontVariantNumeric: 'tabular-nums' }}
             className={`flex items-center gap-1 text-sm font-medium mt-0.5 ${
               up ? 'text-emerald-600' : 'text-red-500'
             }`}

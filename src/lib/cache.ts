@@ -1,3 +1,9 @@
+export const CACHE_TTL = {
+  QUOTE: 5 * 60,
+  CANDLE: 60 * 60,
+  FUNDAMENTALS: 24 * 60 * 60,
+} as const;
+
 interface CacheEntry {
   value: unknown;
   expiresAt: number;
@@ -60,6 +66,14 @@ export const cache = {
       value,
       expiresAt: Date.now() + ttlSeconds * 1000,
     });
+  },
+
+  async cacheWithTTL<T>(key: string, ttlSeconds: number, fetcher: () => Promise<T>): Promise<T> {
+    const cached = await this.get<T>(key);
+    if (cached !== null) return cached;
+    const fresh = await fetcher();
+    await this.set(key, fresh, ttlSeconds);
+    return fresh;
   },
 
   async del(key: string): Promise<void> {

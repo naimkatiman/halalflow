@@ -34,9 +34,37 @@ model Screening {
 }
 
 model User {
+  id         String      @id @default(cuid())
+  email      String      @unique
+  password   String
+  role       String      @default("user")
+  createdAt  DateTime    @default(now())
+  alertRules AlertRule[]
+}
+
+model AlertRule {
   id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  role      String   @default("user")
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  symbol    String
+  condition String
+  threshold Float
+  channel   String
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
+  alerts    Alert[]
+
+  @@index([userId])
+  @@index([symbol, active])
+}
+
+model Alert {
+  id              String    @id @default(cuid())
+  ruleId          String
+  rule            AlertRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  triggeredAt     DateTime  @default(now())
+  priceAtTrigger  Float
+  delivered       Boolean   @default(false)
+
+  @@index([ruleId])
 }

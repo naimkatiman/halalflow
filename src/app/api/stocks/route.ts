@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { getCompanies } from "@/data/companies";
+import { HubUnavailableError, SymbolNotFoundError } from "@/lib/market-data/errors";
 
 const stockSchema = z.object({
   ticker: z.string().min(1).max(10),
@@ -27,22 +29,24 @@ export async function GET(request: NextRequest) {
     const sort = searchParams.get("sort") || "ticker";
     const order = searchParams.get("order") || "asc";
 
-    const where: Record<string, unknown> = {};
-    if (status) where.status = status;
-    if (sector) where.sector = sector;
-    if (exchange) where.exchange = exchange;
-    if (country) where.country = country;
+    let companies = await getCompanies();
 
-    const [data, total] = await Promise.all([
-      prisma.stock.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { [sort]: order },
-        include: { screenings: true },
-      }),
-      prisma.stock.count({ where }),
-    ]);
+    if (status) companies = companies.filter((c) => c.screening?.status === status);
+    if (sector) companies = companies.filter((c) => c.sector === sector);
+    if (exchange) companies = companies.filter((c) => c.exchange === exchange);
+    if (country) companies = companies.filter((c) => c.country === country);
+
+    companies.sort((a, b) => {
+      const av = (a as unknown as Record<string, unknown>)[sort];
+      const bv = (b as unknown as Record<string, unknown>)[sort];
+      if (av == null || bv == null) return 0;
+      if (av < bv) return order === "asc" ? -1 : 1;
+      if (av > bv) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    const total = companies.length;
+    const data = companies.slice((page - 1) * limit, page * limit);
 
     return NextResponse.json(
       { data, total, page, totalPages: Math.ceil(total / limit) },
@@ -53,6 +57,18 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
+    if (error instanceof HubUnavailableError) {
+      return NextResponse.json(
+        { error: "Market data hub unavailable" },
+        { status: 503, headers: { "Retry-After": "30" } }
+      );
+    }
+    if (error instanceof SymbolNotFoundError) {
+      return NextResponse.json(
+        { error: `Symbol not found: ${error.symbol}` },
+        { status: 404 }
+      );
+    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }

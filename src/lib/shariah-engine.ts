@@ -19,6 +19,7 @@
  */
 
 import type { ShariahScreenResult, CompanyFinancials, ComplianceStatus } from '@/types';
+import type { HubFundamentals } from './market-data/hub-client';
 
 const NON_COMPLIANT_SECTORS = [
   'Banks', 'Diversified Banks', 'Thrifts & Mortgage Finance',
@@ -161,6 +162,58 @@ function buildExplanation(
   }
 
   return `This stock does not meet Shariah compliance standards. It fails ${failed.length} criteria: ${failed.join('; ')}. It is not permissible (haram) to invest in under standard Islamic finance rules.`;
+}
+
+export interface LiveScreenInput {
+  fundamentals: HubFundamentals;
+  sector: string;
+  industry: string;
+  // Hub doesn't expose non-halal revenue today; caller supplies it
+  // (e.g. 0 when unknown, or an analyst-provided estimate).
+  nonHalalRevenue?: number;
+  // Optional context the live payload doesn't carry but the pure engine accepts.
+  totalEquity?: number;
+  marketCap?: number;
+}
+
+/**
+ * Accepts a live `HubFundamentals` payload (snake_case, nullable fields, no
+ * `non_halal_revenue`), normalizes it to the engine's internal
+ * `CompanyFinancials` shape, and runs the standard pure screening.
+ *
+ * Mapping:
+ *   total_debt              -> totalDebt           (null -> 0)
+ *   total_assets            -> totalAssets         (null -> 0)
+ *   cash_and_equivalents
+ *     + short_term_investments -> cashAndSecurities  (nulls -> 0)
+ *   total_revenue           -> totalRevenue        (null -> 0)
+ *   non_halal_revenue       (not provided by hub) -> caller-supplied, default 0
+ */
+export function screenCompanyLive(input: LiveScreenInput): ShariahScreenResult {
+  const {
+    fundamentals,
+    sector,
+    industry,
+    nonHalalRevenue = 0,
+    totalEquity = 0,
+    marketCap = 0,
+  } = input;
+
+  const cashAndSecurities =
+    (fundamentals.cash_and_equivalents ?? 0) +
+    (fundamentals.short_term_investments ?? 0);
+
+  const financials: CompanyFinancials = {
+    totalDebt: fundamentals.total_debt ?? 0,
+    totalAssets: fundamentals.total_assets ?? 0,
+    cashAndSecurities,
+    nonHalalRevenue,
+    totalRevenue: fundamentals.total_revenue ?? 0,
+    totalEquity,
+    marketCap,
+  };
+
+  return screenCompany(financials, sector, industry);
 }
 
 export function getPurificationGuidance(

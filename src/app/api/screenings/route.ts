@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { getQuote, HubUnavailableError, SymbolNotFoundError } from "@/lib/market-data";
+import type { Quote } from "@/lib/market-data";
+import { getFundamentals, type HubFundamentals } from "@/lib/market-data/hub-client";
 
 const screeningSchema = z.object({
   stockId: z.string().min(1),
@@ -8,6 +11,41 @@ const screeningSchema = z.object({
   ratios: z.string(),
   method: z.enum(["AAOIFI", "DJIM", "MSCI"]),
 });
+
+interface PriceContext {
+  price: number;
+  change: number;
+  percentChange: number;
+  timestamp: string;
+}
+
+async function safeGetPriceContext(ticker: string): Promise<PriceContext | null> {
+  try {
+    const quote: Quote = await getQuote(ticker);
+    return {
+      price: quote.price,
+      change: quote.change,
+      percentChange: quote.percent_change,
+      timestamp: quote.timestamp,
+    };
+  } catch (error) {
+    if (error instanceof HubUnavailableError || error instanceof SymbolNotFoundError) {
+      return null;
+    }
+    return null;
+  }
+}
+
+async function safeGetFundamentals(ticker: string): Promise<HubFundamentals | null> {
+  try {
+    return await getFundamentals(ticker);
+  } catch (error) {
+    if (error instanceof HubUnavailableError || error instanceof SymbolNotFoundError) {
+      return null;
+    }
+    return null;
+  }
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,8 +70,30 @@ export async function GET(request: NextRequest) {
       prisma.screening.count({ where }),
     ]);
 
+    const uniqueTickers = Array.from(
+      new Set(data.map((row) => row.stock?.ticker).filter((t): t is string => !!t))
+    );
+    const [priceEntries, fundamentalsEntries] = await Promise.all([
+      Promise.all(
+        uniqueTickers.map(async (ticker) => [ticker, await safeGetPriceContext(ticker)] as const)
+      ),
+      Promise.all(
+        uniqueTickers.map(async (ticker) => [ticker, await safeGetFundamentals(ticker)] as const)
+      ),
+    ]);
+    const priceByTicker = new Map(priceEntries);
+    const fundamentalsByTicker = new Map(fundamentalsEntries);
+
+    const enriched = data.map((row) => ({
+      ...row,
+      currentPrice: row.stock?.ticker ? priceByTicker.get(row.stock.ticker) ?? null : null,
+      fundamentals: row.stock?.ticker
+        ? fundamentalsByTicker.get(row.stock.ticker) ?? null
+        : null,
+    }));
+
     return NextResponse.json(
-      { data, total, page, totalPages: Math.ceil(total / limit) },
+      { data: enriched, total, page, totalPages: Math.ceil(total / limit) },
       {
         headers: {
           "Cache-Control": "public, max-age=30, stale-while-revalidate=60",
@@ -56,7 +116,16 @@ export async function POST(request: NextRequest) {
       data: validated,
       include: { stock: true },
     });
-    return NextResponse.json(screening, { status: 201 });
+    const [currentPrice, fundamentals] = screening.stock?.ticker
+      ? await Promise.all([
+          safeGetPriceContext(screening.stock.ticker),
+          safeGetFundamentals(screening.stock.ticker),
+        ])
+      : [null, null];
+    return NextResponse.json(
+      { ...screening, currentPrice, fundamentals },
+      { status: 201 }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
