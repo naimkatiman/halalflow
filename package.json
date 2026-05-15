@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "prisma migrate deploy && next start",
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
