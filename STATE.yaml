@@ -28,6 +28,23 @@ deployment:
     - "SQLite is single-writer; migrate to Postgres before real concurrent load"
     - "Demo creds admin@halalflow.app / changeme123 are seeded in prod — rotate or gate before sharing publicly"
 
+landing_page:
+  date: 2026-05-15
+  status: live
+  spec: docs/superpowers/specs/2026-05-15-landing-page-design.md
+  notes: >-
+    Public marketing landing page at / for anonymous visitors (was a redirect to
+    /login). Logged-in users still redirect to /dashboard. Direction B —
+    emerald hero with Islamic geometric motif, asymmetric split, zig-zag
+    use-case grid, connected stepper. Built under taste-skill (variance 8 /
+    motion 6 / density 4): CSS-only motion, zero new dependencies. Components
+    in src/components/landing/; Navbar.tsx has a public header branch for /.
+    Verified live: / 200 anon, 307->/dashboard logged-in, /login + /register
+    unaffected.
+  iterate_next:
+    - "No mobile hamburger menu — nav links hidden under sm breakpoint"
+    - "Hero/CTA are contained (max-w-screen-xl) not full-bleed — by design, given the global layout <main> wrapper; revisit if full-bleed wanted"
+
 milestones:
   - id: M1-foundation
     status: done
