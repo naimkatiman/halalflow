@@ -13,6 +13,21 @@ merge_consolidation:
     still on origin pending a delete/archive decision.
   verified: "build green; e2e smoke — login, template list, workflow create, step approve, audit log all pass"
 
+deployment:
+  platform: Railway
+  project: halalflow (fa7e3052-3b82-40f0-b85d-54747445d973)
+  service: halalflow (existing service, redeployed 2026-05-15)
+  url: https://halalflow-production.up.railway.app
+  database: SQLite on Railway volume 'halalflow-volume' mounted at /data (DATABASE_URL=file:/data/dev.db)
+  notes: >-
+    package.json wired for Railway — postinstall runs prisma generate, start runs
+    prisma migrate deploy before next start. Prod DB seeded once via 'railway ssh
+    npx prisma db seed'. Live e2e smoke (login, workflow create, step approve,
+    dashboard) all pass.
+  follow_ups:
+    - "SQLite is single-writer; migrate to Postgres before real concurrent load"
+    - "Demo creds admin@halalflow.app / changeme123 are seeded in prod — rotate or gate before sharing publicly"
+
 milestones:
   - id: M1-foundation
     status: done
