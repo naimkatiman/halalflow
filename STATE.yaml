@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-15T00:00:00Z
+updated: 2026-05-17T16:12:40Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -78,3 +78,8 @@ next_actions:
   - "Multi-org switching in session"
   - "Workflow template import/export (JSON)"
   - "Production deployment guide with Postgres"
+
+workflow_engine_roadmap:
+  path: docs/plans/2026-05-17-workflow-engine-roadmap.md
+  cron_job: 292210eaf040
+  status: active

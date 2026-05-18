@@ -77,54 +77,66 @@
 - [x] Create `src/lib/alerts/notifiers/email.ts` — Resend or nodemailer with SMTP creds from env. Skip if no creds configured.
 - [x] Create `src/app/api/cron/alerts/route.ts` — secured by `CRON_SECRET` header. Runs engine for every active alert.
 - [x] Add Vercel cron config to `vercel.json` or document Railway cron path. 5-min cadence.
-- [ ] Create `src/components/AlertForm.tsx` and wire into company detail page.
-- [ ] Add "Alerts" tab to navbar (only when logged in).
-- [ ] Verify `npm run build` passes.
+- [-] Create `src/components/AlertForm.tsx` and wire into company detail page. *(RETIRED 2026-05-16 — no `company/[id]` host page exists post-pivot.)*
+- [-] Add "Alerts" tab to navbar (only when logged in). *(RETIRED 2026-05-16 — alerts UI scoped to retired stock-screener direction.)*
+- [-] Verify `npm run build` passes. *(RETIRED 2026-05-16 — R2 tail closed; build was already green at last completed line.)*
 
-## Roadmap 3 — GCC/MENA stock universe expansion
+> **RETIRED 2026-05-16** — Roadmaps 3, 4, 5, 6 below all target the pre-pivot stock-screener domain (`company/[id]`, screener UI, holdings of stock symbols, scholar commentary on tickers). Halalflow is now an Islamic finance workflow engine (orgs / templates / workflow instances / step approvals / audit logs — see `MEMORY.md` → `halalflow-pivot-to-workflow-engine`). The pre-pivot stock-screener code is preserved on `origin/stock-screener-restore` and in stash `stock-screener-roadmap-shelved-2026-05-15`. Reviving any of R3–R6 requires reviving that branch first. Until then these lines are dead against the live codebase and have been retired so the hourly Hermes cron stops no-op-cycling. A fresh workflow-engine roadmap is a separate brainstorm — do not add it here ad-hoc.
 
-- [ ] Inventory current universe. Grep `src/data/companies.ts` for tickers. Document in `docs/plans/2026-05-13-mena-universe.md`.
-- [ ] Decide source for Tadawul (Saudi), DFM (Dubai), ADX (Abu Dhabi) listings. Twelve Data supports `.SR` and `.AE` suffixes — first check if the hub can already serve them by hitting `/api/symbols/search?q=ARAMCO`. If not, queue a hub task to add support.
-- [ ] Add `exchange` field to `Company` type (already in `src/types/index.ts` — verify).
-- [ ] Seed top 30 Tadawul tickers as fallback list in `src/data/exchanges/tadawul.ts`.
-- [ ] Seed top 20 DFM tickers in `src/data/exchanges/dfm.ts`.
-- [ ] Seed top 20 ADX tickers in `src/data/exchanges/adx.ts`.
-- [ ] For each ticker in the regional seed lists, call hub's `POST /api/symbols` to register it (so the hub starts caching it). Idempotent — skip if already present.
-- [ ] Wire the regional seed lists into the company router so screener can filter by exchange.
-- [ ] Add exchange filter chip to screener UI (`src/app/screener/page.tsx`).
-- [ ] Verify `npm run build` passes.
+## Roadmap 3 — GCC/MENA stock universe expansion *(RETIRED — pre-pivot scope)*
 
-## Roadmap 4 — PDF compliance certificate export
+- [-] Inventory current universe. Grep `src/data/companies.ts` for tickers. Document in `docs/plans/2026-05-13-mena-universe.md`.
+- [-] Decide source for Tadawul (Saudi), DFM (Dubai), ADX (Abu Dhabi) listings. Twelve Data supports `.SR` and `.AE` suffixes — first check if the hub can already serve them by hitting `/api/symbols/search?q=ARAMCO`. If not, queue a hub task to add support.
+- [-] Add `exchange` field to `Company` type (already in `src/types/index.ts` — verify).
+- [-] Seed top 30 Tadawul tickers as fallback list in `src/data/exchanges/tadawul.ts`.
+- [-] Seed top 20 DFM tickers in `src/data/exchanges/dfm.ts`.
+- [-] Seed top 20 ADX tickers in `src/data/exchanges/adx.ts`.
+- [-] For each ticker in the regional seed lists, call hub's `POST /api/symbols` to register it (so the hub starts caching it). Idempotent — skip if already present.
+- [-] Wire the regional seed lists into the company router so screener can filter by exchange.
+- [-] Add exchange filter chip to screener UI (`src/app/screener/page.tsx`).
+- [-] Verify `npm run build` passes.
 
-- [ ] Pick PDF library. Compare `@react-pdf/renderer` (React components → PDF) vs `pdfkit` (low-level) vs `puppeteer` (HTML → PDF). Decision in `docs/plans/2026-05-13-pdf-library.md`. Favor `@react-pdf/renderer` for React idiom.
-- [ ] `npm install @react-pdf/renderer` (or chosen alternative).
-- [ ] Create `src/components/pdf/ComplianceCertificate.tsx` — renders one company's screening result with header, AAOIFI rules table, pass/fail, ratio bars, disclaimer.
-- [ ] Create `src/app/api/companies/[id]/certificate/route.ts` — server-streams PDF response. Requires auth.
-- [ ] Add "Export PDF" button to company detail page calling the new route.
-- [ ] Add rate limit (1 PDF per company per user per hour) via existing `src/lib/rateLimit.ts`.
-- [ ] Verify `npm run build` passes.
+## Roadmap 4 — PDF compliance certificate export *(RETIRED — pre-pivot scope)*
 
-## Roadmap 5 — Portfolio-level purification calculator
+- [-] Pick PDF library. Compare `@react-pdf/renderer` (React components → PDF) vs `pdfkit` (low-level) vs `puppeteer` (HTML → PDF). Decision in `docs/plans/2026-05-13-pdf-library.md`. Favor `@react-pdf/renderer` for React idiom.
+- [-] `npm install @react-pdf/renderer` (or chosen alternative).
+- [-] Create `src/components/pdf/ComplianceCertificate.tsx` — renders one company's screening result with header, AAOIFI rules table, pass/fail, ratio bars, disclaimer.
+- [-] Create `src/app/api/companies/[id]/certificate/route.ts` — server-streams PDF response. Requires auth.
+- [-] Add "Export PDF" button to company detail page calling the new route.
+- [-] Add rate limit (1 PDF per company per user per hour) via existing `src/lib/rateLimit.ts`.
+- [-] Verify `npm run build` passes.
 
-- [ ] Add `Holding` model to `prisma/schema.prisma`: user_id, symbol, shares, cost_basis, added_at.
-- [ ] `prisma migrate dev --name add_holdings`.
-- [ ] Create `src/app/api/portfolio/holdings/route.ts` and `[id]/route.ts` — CRUD for user holdings.
-- [ ] Create `src/lib/purification.ts` — given (holding, company_screening, current_price from hub-client), compute non-halal income contribution. Pure functions only.
-- [ ] Create `src/app/portfolio/page.tsx` — table view of holdings + total purification amount.
-- [ ] Add "Add Holding" form modal.
-- [ ] Add nav link "Portfolio" (logged-in only).
-- [ ] Verify `npm run build` passes.
+## Roadmap 5 — Portfolio-level purification calculator *(RETIRED — pre-pivot scope)*
 
-## Roadmap 6 — Shariah Scholar commentary integration
+- [-] Add `Holding` model to `prisma/schema.prisma`: user_id, symbol, shares, cost_basis, added_at.
+- [-] `prisma migrate dev --name add_holdings`.
+- [-] Create `src/app/api/portfolio/holdings/route.ts` and `[id]/route.ts` — CRUD for user holdings.
+- [-] Create `src/lib/purification.ts` — given (holding, company_screening, current_price from hub-client), compute non-halal income contribution. Pure functions only.
+- [-] Create `src/app/portfolio/page.tsx` — table view of holdings + total purification amount.
+- [-] Add "Add Holding" form modal.
+- [-] Add nav link "Portfolio" (logged-in only).
+- [-] Verify `npm run build` passes.
 
-- [ ] Add `ScholarCommentary` model: id, symbol, scholar_name, scholar_credentials_url, opinion (markdown), verdict (halal/haram/mixed), as_of_date, source_url, created_at.
-- [ ] `prisma migrate dev --name add_scholar_commentary`.
-- [ ] Seed `prisma/seed.ts` with 3 sample commentaries from publicly cited scholars (Mufti Taqi Usmani, AAOIFI standards, Dr. Yasir Qadhi) — include source URLs.
-- [ ] Create `src/app/api/commentary/route.ts` and `[symbol]/route.ts` — read endpoints (public), write endpoints (admin only — gate by `role` claim on session).
-- [ ] Create `src/components/CommentaryPanel.tsx` — renders markdown opinions on company detail page.
-- [ ] Add admin route `src/app/admin/commentary/page.tsx` for adding/editing entries.
-- [ ] Add role-check middleware in `src/middleware.ts` for `/admin/*` paths.
-- [ ] Verify `npm run build` passes.
+## Roadmap 6 — Shariah Scholar commentary integration *(RETIRED — pre-pivot scope)*
+
+- [-] Add `ScholarCommentary` model: id, symbol, scholar_name, scholar_credentials_url, opinion (markdown), verdict (halal/haram/mixed), as_of_date, source_url, created_at.
+- [-] `prisma migrate dev --name add_scholar_commentary`.
+- [-] Seed `prisma/seed.ts` with 3 sample commentaries from publicly cited scholars (Mufti Taqi Usmani, AAOIFI standards, Dr. Yasir Qadhi) — include source URLs.
+- [-] Create `src/app/api/commentary/route.ts` and `[symbol]/route.ts` — read endpoints (public), write endpoints (admin only — gate by `role` claim on session).
+- [-] Create `src/components/CommentaryPanel.tsx` — renders markdown opinions on company detail page.
+- [-] Add admin route `src/app/admin/commentary/page.tsx` for adding/editing entries.
+- [-] Add role-check middleware in `src/middleware.ts` for `/admin/*` paths.
+- [-] Verify `npm run build` passes.
+
+---
+
+## Roadmap status (closed 2026-05-16)
+
+- **R1, R1.5, R1.6** — done (live market data + fundamentals wired pre-pivot).
+- **R2 lines 71–79** — done; lines 80–82 retired (no host page).
+- **R3, R4, R5, R6** — retired; pre-pivot scope, all assume stock-screener domain absent from current codebase.
+- **No unchecked `[ ]` items remain.** The Hermes hourly cron should now no-op cleanly until a fresh plan doc is added and the cron orchestrator is repointed.
+- **Next direction** — needs a brainstorm against the workflow-engine domain (templates / workflow instances / approvals / audit logs). When ready, create a new plan doc at `docs/plans/YYYY-MM-DD-workflow-engine-roadmap.md` and update the Hermes cron `292210eaf040` to read from it. Do NOT extend this file — keep it as the closed pre-pivot record.
 
 ---
 
@@ -179,3 +191,4 @@
 || 2026-05-15T14:11:05Z | Add Vercel cron config to `vercel.json` or document Railway | done | documented Railway cron path (5-min cadence) at docs/cron.md; build green. |
 || 2026-05-15T15:01:31Z | Create `src/components/AlertForm.tsx` and wire into company | blocked | company detail page does not exist; repo pivoted to Islamic finance workflow engine, so R2 alerts roadmap targets obsolete stock-screener direction. |
 || 2026-05-15T16:01:32Z | Create `src/components/AlertForm.tsx` and wire into company | blocked | company detail page does not exist in halalflow (repo pivoted to Islamic finance workflow engine — only api/dashboard/login/onboarding/register/settings/templates/workflows routes); R2 AlertForm task targets obsolete stock-screener direction, same as prior cycle's blocked entry at 2026-05-15T15:01:31Z. |
+| 2026-05-16T16:00Z | Operator close-out: retire R2 lines 80–82 + R3–R6 | done | Operator returned at the terminal after 18 consecutive cron blockers on R2 line 80 (`AlertForm` → nonexistent `company/[id]`). Marked R2 lines 80–82 and all of R3–R6 as `[-]` retired with the pivot reason inline, added a "Roadmap status (closed 2026-05-16)" section noting no unchecked items remain, and restored the file from git HEAD to drop 18 cycles of recursive read-write prefix corruption (every line had been getting a literal `    NN|` prefix re-injected). No code changed; `npm run build` from halalflow root: 26 routes, exit 0. Cron will now no-op cleanly until a fresh workflow-engine roadmap is created and the Hermes cron `292210eaf040` is repointed. Subsequent stock-screener revival requires checking out `origin/stock-screener-restore`. |

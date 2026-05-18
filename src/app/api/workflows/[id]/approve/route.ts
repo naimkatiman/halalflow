@@ -3,12 +3,40 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { buildWorkflowDecisionEmail, sendEmail } from "@/lib/notifications/email";
 import { z } from "zod";
 
 const approveSchema = z.object({
   action: z.enum(["approved", "rejected"]),
   note: z.string().optional(),
 });
+
+type WorkflowForNotification = {
+  title: string;
+  org: {
+    name: string;
+    members: Array<{ role: string; user: { email: string } }>;
+  };
+  createdBy: { name: string; email: string };
+};
+
+function normalizeEmail(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function collectRecipients(workflow: WorkflowForNotification, actorEmail: string) {
+  const recipients = new Set<string>();
+  recipients.add(normalizeEmail(workflow.createdBy.email));
+
+  for (const member of workflow.org.members) {
+    if (["owner", "admin"].includes(member.role)) {
+      recipients.add(normalizeEmail(member.user.email));
+    }
+  }
+
+  recipients.delete(normalizeEmail(actorEmail));
+  return Array.from(recipients);
+}
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -19,10 +47,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const workflow = await prisma.workflow.findFirst({
       where: { id, orgId: session.orgId },
       include: {
+        org: {
+          include: {
+            members: { include: { user: { select: { email: true } } } },
+          },
+        },
+        createdBy: { select: { name: true, email: true } },
         template: { include: { steps: { orderBy: { order: "asc" } } } },
         approvals: { include: { step: true }, orderBy: { createdAt: "asc" } },
       },
     });
+
     if (!workflow) return NextResponse.json({ error: "Not found" }, { status: 404 });
     if (!["in_progress", "pending"].includes(workflow.status)) {
       return NextResponse.json({ error: "Workflow is not active" }, { status: 400 });
@@ -32,9 +67,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { action, note } = approveSchema.parse(body);
 
     const pendingApproval = workflow.approvals.find(
-      (a) => a.status === "pending" && a.step.order === workflow.currentStep
+      (approval) => approval.status === "pending" && approval.step.order === workflow.currentStep
     );
-    if (!pendingApproval) return NextResponse.json({ error: "No pending step at current position" }, { status: 400 });
+    if (!pendingApproval) {
+      return NextResponse.json({ error: "No pending step at current position" }, { status: 400 });
+    }
 
     const totalSteps = workflow.template.steps.length;
     const nextStep = workflow.currentStep + 1;
@@ -68,7 +105,40 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       include: { approvals: { include: { step: true }, orderBy: { createdAt: "asc" } } },
     });
 
-    return NextResponse.json({ workflow: updated });
+    const recipientEmails = collectRecipients(workflow, session.email);
+    const emailEnvelope = buildWorkflowDecisionEmail({
+      workflowTitle: workflow.title,
+      workflowStatus: action,
+      stepName: pendingApproval.step.name,
+      actorName: session.name || workflow.createdBy.name || session.email,
+      note,
+      recipients: recipientEmails,
+      orgName: workflow.org.name,
+    });
+
+    const deliveries = await Promise.allSettled(
+      recipientEmails.map((to) =>
+        sendEmail({
+          to,
+          subject: emailEnvelope.subject,
+          text: `${emailEnvelope.text}\n\nOpen HalalFlow to review the updated workflow status.`,
+        })
+      )
+    );
+
+    const notifications = deliveries.map((result, index) => {
+      const recipient = recipientEmails[index];
+      if (result.status === "fulfilled") {
+        return { recipient, ...result.value };
+      }
+      return {
+        recipient,
+        ok: false,
+        reason: result.reason instanceof Error ? result.reason.message : String(result.reason),
+      };
+    });
+
+    return NextResponse.json({ workflow: updated, notifications });
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
