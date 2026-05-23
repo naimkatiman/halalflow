@@ -78,14 +78,21 @@ next_actions:
   - "Production deployment guide with Postgres"
 
 latest_cycle:
-  date: 2026-05-23T15:15:06Z
-  change: "Add multi-org switcher UI to Settings page (fetches user's orgs, shows Active badge, Switch button reloads page on success)"
+  date: 2026-05-23T17:15:09Z
+  change: "Add workflow template JSON export — /api/templates/[id]/export returns clean JSON (name, description, steps) and template detail page gets an Export button"
   files:
-    - src/app/settings/page.tsx
-    - src/app/settings/OrgSwitcher.tsx
+    - src/app/api/templates/[id]/export/route.ts
+    - src/app/templates/[id]/ExportButton.tsx
+    - src/app/templates/[id]/page.tsx
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-23T15:15:06Z
+    change: "Add multi-org switcher UI to Settings page (fetches user's orgs, shows Active badge, Switch button reloads page on success)"
+    files:
+      - src/app/settings/page.tsx
+      - src/app/settings/OrgSwitcher.tsx
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-23T14:15:09Z
     change: "Block workflow creators from approving their own workflows (API 403 + UI hides approval buttons for creators)"
     files:
