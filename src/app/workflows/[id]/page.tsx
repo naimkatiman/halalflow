@@ -142,7 +142,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             </div>
           </div>
 
-          {currentApproval && isActive && (
+          {currentApproval && isActive && workflow.createdById !== session.userId && (
             <ApprovalActions workflowId={workflow.id} stepName={currentApproval.step.name} />
           )}
 

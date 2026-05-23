@@ -62,6 +62,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!["in_progress", "pending"].includes(workflow.status)) {
       return NextResponse.json({ error: "Workflow is not active" }, { status: 400 });
     }
+    if (workflow.createdById === session.userId) {
+      return NextResponse.json({ error: "You cannot approve your own workflow" }, { status: 403 });
+    }
 
     const body = await request.json();
     const { action, note } = approveSchema.parse(body);

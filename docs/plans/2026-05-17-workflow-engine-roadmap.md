@@ -25,7 +25,7 @@ HalalFlow is now an Islamic finance workflow engine with these live surfaces:
 ## First small improvements
 
 - [x] Add email notifications when a workflow step is approved or rejected.
-- [ ] Enforce who may approve a step based on org membership / role rules.
+- [x] Enforce who may approve a step based on org membership / role rules.
 - [ ] Add workflow template import/export as JSON for portability.
 - [ ] Add multi-org switching support in the session and UI.
 - [ ] Write a deployment guide for production Postgres instead of SQLite.
@@ -44,3 +44,4 @@ HalalFlow is now an Islamic finance workflow engine with these live surfaces:
 |---|---|---|---|
 | 2026-05-17T00:00Z | Create workflow-engine roadmap | done | Fresh roadmap drafted after closing the stock-screener era. First unchecked item is email notifications on approve/reject. |
 | 2026-05-17T16:12Z | Add email notifications when a workflow step is approved or rejected. | done | Added Resend-backed optional email helper, wired `/api/workflows/[id]/approve` to notify workflow creator + org admins/owners, documented `RESEND_API_KEY` and `HALALFLOW_EMAIL_FROM`, and verified `npm run build`. |
+| 2026-05-23T14:15Z | Enforce who may approve a step based on org membership / role rules. | done | Initial enforcement: blocked workflow creators from approving their own workflows (API returns 403, UI hides approval buttons). Future cycles can extend to per-role or per-step assignment rules. |
