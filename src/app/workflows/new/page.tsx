@@ -31,10 +31,12 @@ function NewWorkflowForm() {
       .then((d) => {
         setTemplates(d.templates ?? []);
         if (preselectedId) setTemplateId(preselectedId);
-        else if (d.templates?.length > 0 && !templateId) setTemplateId(d.templates[0].id);
+        else if (d.templates?.length > 0) {
+          setTemplateId((prev) => prev || d.templates[0].id);
+        }
       })
       .catch(() => {});
-  }, []);
+  }, [preselectedId]);
 
   const selectedTemplate = templates.find((t) => t.id === templateId);
 

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut } from '@phosphor-icons/react';
+import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
 interface NavUser {
@@ -17,6 +17,7 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<NavUser | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -59,17 +60,58 @@ export function Navbar() {
             <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
+            <Link href="/login" className="hidden sm:block text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
               Sign in
             </Link>
             <Link
               href="/register"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors active:translate-y-px"
+              className="hidden sm:block bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors active:translate-y-px"
             >
               Get started
             </Link>
+            <button
+              className="sm:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <List className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+        {mobileOpen && (
+          <div className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-2">
+            <a
+              href="#use-cases"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Use cases
+            </a>
+            <a
+              href="#how-it-works"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              How it works
+            </a>
+            <div className="pt-2 border-t border-zinc-100 flex flex-col gap-2">
+              <Link
+                href="/login"
+                className="text-sm font-medium text-zinc-500 hover:text-zinc-900 py-2"
+                onClick={() => setMobileOpen(false)}
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/register"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg text-center"
+                onClick={() => setMobileOpen(false)}
+              >
+                Get started
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
     );
   }

@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-17T16:12:40Z
+updated: 2026-05-23T04:15:08Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -42,7 +42,6 @@ landing_page:
     Verified live: / 200 anon, 307->/dashboard logged-in, /login + /register
     unaffected.
   iterate_next:
-    - "No mobile hamburger menu — nav links hidden under sm breakpoint"
     - "Hero/CTA are contained (max-w-screen-xl) not full-bleed — by design, given the global layout <main> wrapper; revisit if full-bleed wanted"
 
 milestones:
