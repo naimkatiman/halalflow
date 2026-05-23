@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { InviteMemberForm } from './InviteMemberForm';
+import { OrgSwitcher } from './OrgSwitcher';
 import { Buildings, Users } from '@phosphor-icons/react/dist/ssr';
 
 export default async function SettingsPage() {
@@ -24,12 +25,29 @@ export default async function SettingsPage() {
 
   const canInvite = ['owner', 'admin'].includes(session.orgRole);
 
+  const memberships = await prisma.orgMember.findMany({
+    where: { userId: session.userId },
+    include: { org: true },
+    orderBy: { createdAt: 'asc' },
+  });
+
+  const userOrgs = memberships.map((m) => ({
+    id: m.org.id,
+    name: m.org.name,
+    slug: m.org.slug,
+    role: m.role,
+  }));
+
   return (
     <div className="max-w-2xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">Settings</h1>
         <p className="text-sm text-zinc-500 mt-0.5">Manage your workspace</p>
       </div>
+
+      {userOrgs.length > 1 && (
+        <OrgSwitcher orgs={userOrgs} currentOrgId={session.orgId} />
+      )}
 
       <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-3">
         <div className="flex items-center gap-2 mb-1">
