@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-23T04:15:08Z
+updated: 2026-05-23T05:15:06Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -72,11 +72,18 @@ demo:
   password: "changeme123"
 
 next_actions:
-  - "Add email notifications on step approve/reject"
   - "Enforce per-step role assignment (only specific roles can approve)"
   - "Multi-org switching in session"
   - "Workflow template import/export (JSON)"
   - "Production deployment guide with Postgres"
+
+latest_cycle:
+  date: 2026-05-23T05:15:06Z
+  change: "Clean up .env.example (remove pre-pivot market-data vars, add SESSION_SECRET) and harden session.ts to require SESSION_SECRET in production runtime"
+  files:
+    - .env.example
+    - src/lib/session.ts
+  verification: "npm run lint clean; npm run build green"
 
 workflow_engine_roadmap:
   path: docs/plans/2026-05-17-workflow-engine-roadmap.md
