@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { ArrowLeft, Plus } from '@phosphor-icons/react/dist/ssr';
+import { ExportButton } from './ExportButton';
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
@@ -47,6 +48,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
           {template.description && <p className="text-sm text-zinc-500 mt-0.5">{template.description}</p>}
         </div>
         <div className="flex items-center gap-2">
+          <ExportButton templateId={template.id} templateName={template.name} />
           <Link
             href={`/workflows/new?templateId=${template.id}`}
             className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-3 py-2 rounded-lg transition-colors"
