@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-23T05:15:06Z
+updated: 2026-05-23T19:15:09Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -72,21 +72,30 @@ demo:
   password: "changeme123"
 
 next_actions:
-  - "Enforce per-step role assignment (only specific roles can approve)"
-  - "Multi-org switching in session"
-  - "Workflow template import/export (JSON)"
-  - "Production deployment guide with Postgres"
+  - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-23T17:15:09Z
-  change: "Add workflow template JSON export — /api/templates/[id]/export returns clean JSON (name, description, steps) and template detail page gets an Export button"
+  date: 2026-05-23T19:15:09Z
+  change: "Write production deployment guide for Postgres migration — docs/deployment.md with provider switch, env changes, migrate/deploy/seed steps, Railway + generic host guidance"
   files:
-    - src/app/api/templates/[id]/export/route.ts
-    - src/app/templates/[id]/ExportButton.tsx
-    - src/app/templates/[id]/page.tsx
+    - docs/deployment.md
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-23T18:15:07Z
+    change: "Add workflow template JSON import — POST /api/templates/import accepts exported JSON shape, validates with zod, creates template with steps; ImportButton added to /templates list page"
+    files:
+      - src/app/api/templates/import/route.ts
+      - src/app/templates/ImportButton.tsx
+      - src/app/templates/page.tsx
+    verification: "npm run lint clean; npm run build green"
+  - date: 2026-05-23T17:15:09Z
+    change: "Add workflow template JSON export — /api/templates/[id]/export returns clean JSON (name, description, steps) and template detail page gets an Export button"
+    files:
+      - src/app/api/templates/[id]/export/route.ts
+      - src/app/templates/[id]/ExportButton.tsx
+      - src/app/templates/[id]/page.tsx
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-23T15:15:06Z
     change: "Add multi-org switcher UI to Settings page (fetches user's orgs, shows Active badge, Switch button reloads page on success)"
     files:

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { Plus, Clipboard } from '@phosphor-icons/react/dist/ssr';
+import { ImportButton } from './ImportButton';
 
 export default async function TemplatesPage() {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
@@ -27,13 +28,16 @@ export default async function TemplatesPage() {
           <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">Templates</h1>
           <p className="text-sm text-zinc-500 mt-0.5">Reusable workflow structures</p>
         </div>
-        <Link
-          href="/templates/new"
-          className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-colors"
-        >
-          <Plus className="w-4 h-4" weight="bold" />
-          New template
-        </Link>
+        <div className="flex items-center gap-2">
+          <ImportButton />
+          <Link
+            href="/templates/new"
+            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus className="w-4 h-4" weight="bold" />
+            New template
+          </Link>
+        </div>
       </div>
 
       {templates.length === 0 ? (

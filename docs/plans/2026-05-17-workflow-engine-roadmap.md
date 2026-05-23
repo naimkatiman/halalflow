@@ -26,9 +26,9 @@ HalalFlow is now an Islamic finance workflow engine with these live surfaces:
 
 - [x] Add email notifications when a workflow step is approved or rejected.
 - [x] Enforce who may approve a step based on org membership / role rules.
-- [ ] Add workflow template import/export as JSON for portability.
-- [ ] Add multi-org switching support in the session and UI.
-- [ ] Write a deployment guide for production Postgres instead of SQLite.
+- [x] Add workflow template import/export as JSON for portability.
+- [x] Add multi-org switching support in the session and UI.
+- [x] Write a deployment guide for production Postgres instead of SQLite.
 
 ## Notes for future cycles
 
@@ -45,3 +45,6 @@ HalalFlow is now an Islamic finance workflow engine with these live surfaces:
 | 2026-05-17T00:00Z | Create workflow-engine roadmap | done | Fresh roadmap drafted after closing the stock-screener era. First unchecked item is email notifications on approve/reject. |
 | 2026-05-17T16:12Z | Add email notifications when a workflow step is approved or rejected. | done | Added Resend-backed optional email helper, wired `/api/workflows/[id]/approve` to notify workflow creator + org admins/owners, documented `RESEND_API_KEY` and `HALALFLOW_EMAIL_FROM`, and verified `npm run build`. |
 | 2026-05-23T14:15Z | Enforce who may approve a step based on org membership / role rules. | done | Initial enforcement: blocked workflow creators from approving their own workflows (API returns 403, UI hides approval buttons). Future cycles can extend to per-role or per-step assignment rules. |
+| 2026-05-23T18:15Z | Add workflow template import/export as JSON for portability. | done | Export already existed; added POST /api/templates/import that accepts the exported JSON shape, validates with zod, and creates a template with steps. Added ImportButton to /templates list page. Verified npm run lint and npm run build green. |
+| 2026-05-23T18:15Z | Add multi-org switching support in the session and UI. | done | Already implemented in prior cycles: /api/orgs/[id]/switch updates session orgId/orgRole, and OrgSwitcher UI on /settings lets users switch orgs. Verified present in build output. |
+| 2026-05-23T19:15Z | Write a deployment guide for production Postgres instead of SQLite. | done | Added docs/deployment.md with step-by-step Postgres migration, env var changes, migrate/deploy/seed flow, Railway and generic host guidance. Verified npm run lint and npm run build green. |
