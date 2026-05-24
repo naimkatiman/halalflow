@@ -11,7 +11,7 @@ export default async function DashboardPage() {
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
 
-  const [workflows, templates, org] = await Promise.all([
+  const [workflows, templates, org, totalWorkflows] = await Promise.all([
     prisma.workflow.findMany({
       where: { orgId: session.orgId },
       include: {
@@ -23,10 +23,11 @@ export default async function DashboardPage() {
     }),
     prisma.workflowTemplate.count({ where: { orgId: session.orgId } }),
     prisma.organization.findUnique({ where: { id: session.orgId } }),
+    prisma.workflow.count({ where: { orgId: session.orgId } }),
   ]);
 
   const stats = {
-    total: workflows.length,
+    total: totalWorkflows,
     inProgress: workflows.filter((w) => w.status === 'in_progress').length,
     approved: workflows.filter((w) => w.status === 'approved').length,
     rejected: workflows.filter((w) => w.status === 'rejected').length,

@@ -75,15 +75,20 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T10:15:09Z
-  change: "Commit pending uncommitted changes from previous two cycles (db scripts, health check, STATE updates)"
+  date: 2026-05-24T11:15:10Z
+  change: "Fix dashboard Total stat to use actual workflow count instead of capped recent-10 length"
   files:
-    - package.json
-    - src/app/api/health/route.ts
-    - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 7e5d9db"
+    - src/app/dashboard/page.tsx
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-24T10:15:09Z
+    change: "Commit pending uncommitted changes from previous two cycles (db scripts, health check, STATE updates)"
+    files:
+      - package.json
+      - src/app/api/health/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 7e5d9db"
   - date: 2026-05-24T09:15:09Z
     change: "Add database connectivity check to /api/health — returns 503 + degraded status when DB is unreachable"
     files:
