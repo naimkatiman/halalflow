@@ -18,8 +18,12 @@ function getSessionPassword(): string {
     if (process.env.NODE_ENV === "production" && process.env.NEXT_PHASE !== "phase-production-build") {
       throw new Error("SESSION_SECRET is required in production");
     }
-    // Dev fallback so the app starts without manual env setup
-    return "complex_password_at_least_32_characters_long_halalflow";
+    // In dev, require an explicit secret to prevent accidental deployment
+    // with a predictable fallback. The build phase is exempt so CI/CD works.
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      return "__build_placeholder_do_not_use_in_runtime__";
+    }
+    throw new Error("SESSION_SECRET is required. Set a random 32+ character string in .env");
   }
   if (secret.length < 32) {
     throw new Error("SESSION_SECRET must be at least 32 characters long");
