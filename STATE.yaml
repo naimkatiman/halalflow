@@ -75,13 +75,31 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T09:17:06Z
-  change: "Fix JSX unescaped entities lint errors in invite acceptance page (2x apostrophes)"
+  date: 2026-05-24T18:15:02Z
+  change: "Commit uncommitted feature batch: email invitations, auth rate limiting, list pagination"
   files:
-    - src/app/invites/[token]/page.tsx
-  verification: "npm run lint clean; npm run build green; committed"
+    - prisma/schema.prisma
+    - prisma/migrations/20260524082357_add_invitations/
+    - src/lib/invite-token.ts
+    - src/lib/rate-limit.ts
+    - src/lib/notifications/invite-email.ts
+    - src/app/api/invites/[token]/route.ts
+    - src/app/api/orgs/[id]/members/route.ts
+    - src/app/api/auth/register/route.ts
+    - src/app/api/auth/login/route.ts
+    - src/app/register/RegisterForm.tsx
+    - src/app/register/page.tsx
+    - src/app/settings/InviteMemberForm.tsx
+    - src/app/templates/page.tsx
+    - src/app/workflows/page.tsx
+  verification: "npm run lint clean; npm run build green; committed as 215b789"
 
 previous_cycles:
+  - date: 2026-05-24T09:17:06Z
+    change: "Fix JSX unescaped entities lint errors in invite acceptance page (2x apostrophes)"
+    files:
+      - src/app/invites/[token]/page.tsx
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-24T16:15:03Z
     change: "Remove hardcoded session fallback password in dev; require explicit SESSION_SECRET (add to .env too)"
     files:
