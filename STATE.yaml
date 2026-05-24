@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-23T20:15:08Z
+updated: 2026-05-24T09:15:09Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,13 +75,18 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-23T23:15:09Z
-  change: "Add custom not-found.tsx 404 page with on-brand styling, dashboard link, and ArrowLeft icon"
+  date: 2026-05-24T09:15:09Z
+  change: "Add database connectivity check to /api/health — returns 503 + degraded status when DB is unreachable"
   files:
-    - src/app/not-found.tsx
-  verification: "npm run build green"
+    - src/app/api/health/route.ts
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-24T08:15:10Z
+    change: "Add missing db:migrate and db:seed npm scripts to package.json so README quick-start commands actually work"
+    files:
+      - package.json
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-23T20:15:08Z
     change: "Remove unused default Next.js SVG assets from public/ (file.svg, globe.svg, next.svg, vercel.svg, window.svg) — no src references found"
     files:
