@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-24T19:15:04Z
+updated: 2026-05-24T21:15:04Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,15 +75,25 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T19:15:04Z
-  change: "Add HTML workflow decision emails with direct link and styled template; add NEXT_PUBLIC_BASE_URL to .env.example"
+  date: 2026-05-24T21:15:04Z
+  change: "Add missing /logout page so invite 'Switch account' link works — POSTs to /api/auth/logout then redirects via ?redirect query param"
   files:
-    - src/lib/notifications/email.ts
-    - src/app/api/workflows/[id]/approve/route.ts
-    - .env.example
-  verification: "npm run lint clean; npm run build green; committed"
+    - src/app/logout/page.tsx
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-24T20:15:04Z
+    change: "Sync .env with .env.example — add missing RESEND_API_KEY, HALALFLOW_EMAIL_FROM, and NEXT_PUBLIC_BASE_URL so local dev has full env vars for email features"
+    files:
+      - .env
+    verification: "npm run lint clean; npm run build green"
+  - date: 2026-05-24T19:15:04Z
+    change: "Add HTML workflow decision emails with direct link and styled template; add NEXT_PUBLIC_BASE_URL to .env.example"
+    files:
+      - src/lib/notifications/email.ts
+      - src/app/api/workflows/[id]/approve/route.ts
+      - .env.example
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-24T18:15:02Z
     change: "Commit uncommitted feature batch: email invitations, auth rate limiting, list pagination"
     files:
