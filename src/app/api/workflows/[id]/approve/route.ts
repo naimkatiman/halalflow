@@ -117,6 +117,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       note,
       recipients: recipientEmails,
       orgName: workflow.org.name,
+      workflowId: id,
     });
 
     const deliveries = await Promise.allSettled(
@@ -124,7 +125,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         sendEmail({
           to,
           subject: emailEnvelope.subject,
-          text: `${emailEnvelope.text}\n\nOpen HalalFlow to review the updated workflow status.`,
+          text: emailEnvelope.text,
+          html: emailEnvelope.html,
         })
       )
     );
