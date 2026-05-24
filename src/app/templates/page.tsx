@@ -65,20 +65,20 @@ export default async function TemplatesPage({
           </p>
           <div className="flex items-center gap-2">
             {page > 1 && (
-              <a
+              <Link
                 href={`?page=${page - 1}`}
                 className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
               >
                 Previous
-              </a>
+              </Link>
             )}
             {page < pages && (
-              <a
+              <Link
                 href={`?page=${page + 1}`}
                 className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
               >
                 Next
-              </a>
+              </Link>
             )}
           </div>
         </div>
