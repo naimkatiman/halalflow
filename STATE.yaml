@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-24T15:15:09Z
+updated: 2026-05-24T09:17:06Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,14 +75,19 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T16:15:03Z
-  change: "Remove hardcoded session fallback password in dev; require explicit SESSION_SECRET (add to .env too)"
+  date: 2026-05-24T09:17:06Z
+  change: "Fix JSX unescaped entities lint errors in invite acceptance page (2x apostrophes)"
   files:
-    - src/lib/session.ts
-    - .env
+    - src/app/invites/[token]/page.tsx
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-24T16:15:03Z
+    change: "Remove hardcoded session fallback password in dev; require explicit SESSION_SECRET (add to .env too)"
+    files:
+      - src/lib/session.ts
+      - .env
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-24T15:15:09Z
     change: "Fix dashboard In Progress, Approved, Rejected stats to use real DB counts instead of capped recent-10 filter"
     files:
