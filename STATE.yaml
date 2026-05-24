@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-24T10:15:09Z
+updated: 2026-05-24T15:15:09Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,13 +75,18 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T11:15:10Z
-  change: "Fix dashboard Total stat to use actual workflow count instead of capped recent-10 length"
+  date: 2026-05-24T15:15:09Z
+  change: "Fix dashboard In Progress, Approved, Rejected stats to use real DB counts instead of capped recent-10 filter"
   files:
     - src/app/dashboard/page.tsx
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-24T11:15:10Z
+    change: "Fix dashboard Total stat to use actual workflow count instead of capped recent-10 length"
+    files:
+      - src/app/dashboard/page.tsx
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-24T10:15:09Z
     change: "Commit pending uncommitted changes from previous two cycles (db scripts, health check, STATE updates)"
     files:
