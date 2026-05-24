@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-24T21:15:04Z
+updated: 2026-05-24T22:15:05Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,13 +75,19 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T21:15:04Z
-  change: "Add missing /logout page so invite 'Switch account' link works — POSTs to /api/auth/logout then redirects via ?redirect query param"
+  date: 2026-05-24T22:15:05Z
+  change: "Fix duplicate previous_cycles keys in STATE.yaml (invalid YAML) and commit untracked logout page from prior cycle"
   files:
+    - STATE.yaml
     - src/app/logout/page.tsx
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-24T21:15:04Z
+    change: "Add missing /logout page so invite 'Switch account' link works — POSTs to /api/auth/logout then redirects via ?redirect query param"
+    files:
+      - src/app/logout/page.tsx
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-24T20:15:04Z
     change: "Sync .env with .env.example — add missing RESEND_API_KEY, HALALFLOW_EMAIL_FROM, and NEXT_PUBLIC_BASE_URL so local dev has full env vars for email features"
     files:
