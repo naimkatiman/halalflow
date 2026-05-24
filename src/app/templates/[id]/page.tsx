@@ -40,7 +40,6 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
     cancelled: 'bg-zinc-100 text-zinc-600 border-zinc-200',
   };
 
-  const canEdit = ['owner', 'admin'].includes(session.orgRole);
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -82,14 +81,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
               </div>
             ))}
           </div>
-          {canEdit && (
-            <Link
-              href={`/templates/${template.id}/edit`}
-              className="mt-4 inline-block text-xs text-zinc-500 hover:text-zinc-700 transition-colors"
-            >
-              Edit steps →
-            </Link>
-          )}
+
         </div>
 
         <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
