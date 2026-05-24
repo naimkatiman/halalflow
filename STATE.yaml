@@ -75,13 +75,19 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T15:15:09Z
-  change: "Fix dashboard In Progress, Approved, Rejected stats to use real DB counts instead of capped recent-10 filter"
+  date: 2026-05-24T16:15:03Z
+  change: "Remove hardcoded session fallback password in dev; require explicit SESSION_SECRET (add to .env too)"
   files:
-    - src/app/dashboard/page.tsx
-  verification: "npm run lint clean; npm run build green"
+    - src/lib/session.ts
+    - .env
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-24T15:15:09Z
+    change: "Fix dashboard In Progress, Approved, Rejected stats to use real DB counts instead of capped recent-10 filter"
+    files:
+      - src/app/dashboard/page.tsx
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-24T11:15:10Z
     change: "Fix dashboard Total stat to use actual workflow count instead of capped recent-10 length"
     files:
