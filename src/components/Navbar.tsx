@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X } from '@phosphor-icons/react';
 import clsx from 'clsx';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 interface NavUser {
   id: string;
@@ -27,7 +28,7 @@ export function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
+    await fetchWithCsrf('/api/auth/logout', { method: 'POST' });
     setUser(null);
     router.push('/login');
     router.refresh();

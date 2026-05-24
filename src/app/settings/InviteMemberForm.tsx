@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from '@phosphor-icons/react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 export function InviteMemberForm({ orgId }: { orgId: string }) {
   const router = useRouter();
@@ -18,7 +19,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
     setSuccess('');
     setLoading(true);
     try {
-      const res = await fetch(`/api/orgs/${orgId}/members`, {
+      const res = await fetchWithCsrf(`/api/orgs/${orgId}/members`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, role }),

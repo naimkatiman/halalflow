@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, Trash, ArrowLeft, ArrowUp, ArrowDown } from '@phosphor-icons/react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 interface Step {
   name: string;
@@ -48,7 +49,7 @@ export default function NewTemplatePage() {
     }
     setLoading(true);
     try {
-      const res = await fetch('/api/templates', {
+      const res = await fetchWithCsrf('/api/templates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

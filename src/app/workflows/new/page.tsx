@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from '@phosphor-icons/react';
 import { Suspense } from 'react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 interface Template {
   id: string;
@@ -45,7 +46,7 @@ function NewWorkflowForm() {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('/api/workflows', {
+      const res = await fetchWithCsrf('/api/workflows', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ templateId, title, description: description || undefined }),

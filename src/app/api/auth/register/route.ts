@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { generateCsrfToken } from "@/lib/csrf";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 
@@ -73,6 +74,7 @@ export async function POST(request: NextRequest) {
     session.orgId = orgId;
     session.orgRole = orgRole;
     session.isLoggedIn = true;
+    session.csrfToken = generateCsrfToken();
     await session.save();
 
     return NextResponse.json(

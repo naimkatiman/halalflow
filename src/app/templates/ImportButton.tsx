@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { UploadSimple } from '@phosphor-icons/react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 export function ImportButton() {
   const [importing, setImporting] = useState(false);
@@ -18,7 +19,7 @@ export function ImportButton() {
     try {
       const text = await file.text();
       const json = JSON.parse(text);
-      const res = await fetch('/api/templates/import', {
+      const res = await fetchWithCsrf('/api/templates/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(json),

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PaperPlaneTilt } from '@phosphor-icons/react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 export function CommentForm({ workflowId }: { workflowId: string }) {
   const router = useRouter();
@@ -16,7 +17,7 @@ export function CommentForm({ workflowId }: { workflowId: string }) {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch(`/api/workflows/${workflowId}/comments`, {
+      const res = await fetchWithCsrf(`/api/workflows/${workflowId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ body }),

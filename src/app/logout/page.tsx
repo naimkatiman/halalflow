@@ -2,13 +2,14 @@
 
 import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 function LogoutHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    fetch('/api/auth/logout', { method: 'POST' })
+    fetchWithCsrf('/api/auth/logout', { method: 'POST' })
       .finally(() => {
         const redirect = searchParams.get('redirect') || '/login';
         router.replace(redirect);

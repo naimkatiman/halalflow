@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Buildings } from '@phosphor-icons/react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function OnboardingPage() {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('/api/orgs', {
+      const res = await fetchWithCsrf('/api/orgs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),

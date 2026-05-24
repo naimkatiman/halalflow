@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { defaultTemplates } from "./seed-templates";
 
 const prisma = new PrismaClient();
 
@@ -59,6 +60,7 @@ async function main() {
         { name: "Finance Officer Confirmation", description: "Confirm receipt and issue acknowledgment", order: 0 },
       ],
     },
+    ...defaultTemplates,
   ];
 
   for (const t of templates) {
@@ -75,7 +77,7 @@ async function main() {
     }
   }
 
-  console.log("Seed complete: 2 users, 1 org, 3 templates");
+  console.log("Seed complete: 2 users, 1 org, 6 templates");
   console.log("Login: admin@halalflow.app / changeme123");
 }
 

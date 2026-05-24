@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 export function ApprovalActions({ workflowId, stepName }: { workflowId: string; stepName: string }) {
   const router = useRouter();
@@ -14,7 +15,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
     setError('');
     setLoading(true);
     try {
-      const res = await fetch(`/api/workflows/${workflowId}/approve`, {
+      const res = await fetchWithCsrf(`/api/workflows/${workflowId}/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, note: note || undefined }),

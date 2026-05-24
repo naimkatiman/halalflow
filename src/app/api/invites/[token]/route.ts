@@ -3,6 +3,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { validateCsrfToken } from "@/lib/csrf";
 
 export async function GET(
   _request: NextRequest,
@@ -41,6 +42,9 @@ export async function POST(
     if (!session.isLoggedIn) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const csrf = await validateCsrfToken(request);
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
 
     const { token } = await params;
     const invite = await prisma.invitation.findUnique({
@@ -82,7 +86,7 @@ export async function POST(
     session.orgRole = invite.role;
     await session.save();
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true }, { headers: { "X-CSRF-Token": csrf.newToken } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

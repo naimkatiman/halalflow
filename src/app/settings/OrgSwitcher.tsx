@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Buildings, CheckCircle } from '@phosphor-icons/react';
+import { fetchWithCsrf } from '@/lib/csrf-client';
 
 interface Org {
   id: string;
@@ -17,7 +18,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
     if (orgId === currentOrgId) return;
     setSwitching(orgId);
     try {
-      const res = await fetch(`/api/orgs/${orgId}/switch`, { method: 'POST' });
+      const res = await fetchWithCsrf(`/api/orgs/${orgId}/switch`, { method: 'POST' });
       if (res.ok) {
         window.location.reload();
       } else {
