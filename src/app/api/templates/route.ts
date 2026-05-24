@@ -17,19 +17,33 @@ const createSchema = z.object({
   steps: z.array(stepSchema).min(1),
 });
 
-export async function GET() {
+const DEFAULT_PAGE_SIZE = 20;
+const MAX_PAGE_SIZE = 100;
+
+export async function GET(request: NextRequest) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
 
-    const templates = await prisma.workflowTemplate.findMany({
-      where: { orgId: session.orgId },
-      include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
-      orderBy: { createdAt: "desc" },
-    });
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
+    const limit = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(searchParams.get("limit") ?? String(DEFAULT_PAGE_SIZE))));
 
-    return NextResponse.json({ templates });
+    const [templates, total] = await Promise.all([
+      prisma.workflowTemplate.findMany({
+        where: { orgId: session.orgId },
+        include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.workflowTemplate.count({
+        where: { orgId: session.orgId },
+      }),
+    ]);
+
+    return NextResponse.json({ templates, pagination: { page, limit, total, pages: Math.ceil(total / limit) } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

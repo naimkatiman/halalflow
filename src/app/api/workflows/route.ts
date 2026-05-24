@@ -11,6 +11,9 @@ const createSchema = z.object({
   description: z.string().optional(),
 });
 
+const DEFAULT_PAGE_SIZE = 20;
+const MAX_PAGE_SIZE = 100;
+
 export async function GET(request: NextRequest) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
@@ -19,25 +22,34 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
+    const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
+    const limit = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(searchParams.get("limit") ?? String(DEFAULT_PAGE_SIZE))));
 
-    const workflows = await prisma.workflow.findMany({
-      where: { orgId: session.orgId, ...(status ? { status } : {}) },
-      include: {
-        template: { select: { id: true, name: true } },
-        createdBy: { select: { id: true, name: true, email: true } },
-        approvals: {
-          include: {
-            step: { select: { order: true, name: true } },
-            approver: { select: { id: true, name: true } },
+    const [workflows, total] = await Promise.all([
+      prisma.workflow.findMany({
+        where: { orgId: session.orgId, ...(status ? { status } : {}) },
+        include: {
+          template: { select: { id: true, name: true } },
+          createdBy: { select: { id: true, name: true, email: true } },
+          approvals: {
+            include: {
+              step: { select: { order: true, name: true } },
+              approver: { select: { id: true, name: true } },
+            },
+            orderBy: { createdAt: "asc" },
           },
-          orderBy: { createdAt: "asc" },
+          _count: { select: { comments: true } },
         },
-        _count: { select: { comments: true } },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.workflow.count({
+        where: { orgId: session.orgId, ...(status ? { status } : {}) },
+      }),
+    ]);
 
-    return NextResponse.json({ workflows });
+    return NextResponse.json({ workflows, pagination: { page, limit, total, pages: Math.ceil(total / limit) } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

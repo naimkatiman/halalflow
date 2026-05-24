@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -13,8 +14,18 @@ const loginSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit by IP + email combination
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
     const body = await request.json();
     const { email, password } = loginSchema.parse(body);
+    const rateLimitKey = `login:${ip}:${email.toLowerCase()}`;
+    const rateLimit = checkRateLimit(rateLimitKey);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Too many attempts. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+      );
+    }
 
     const user = await prisma.user.findUnique({
       where: { email },

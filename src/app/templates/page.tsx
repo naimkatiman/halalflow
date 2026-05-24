@@ -7,19 +7,37 @@ import { prisma } from '@/lib/db';
 import { Plus, Clipboard } from '@phosphor-icons/react/dist/ssr';
 import { ImportButton } from './ImportButton';
 
-export default async function TemplatesPage() {
+const PAGE_SIZE = 20;
+
+export default async function TemplatesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
 
-  const templates = await prisma.workflowTemplate.findMany({
-    where: { orgId: session.orgId },
-    include: {
-      steps: { orderBy: { order: 'asc' } },
-      _count: { select: { workflows: true } },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
+  const { page: pageRaw } = await searchParams;
+  const page = Math.max(1, Number(pageRaw ?? '1'));
+
+  const [templates, total] = await Promise.all([
+    prisma.workflowTemplate.findMany({
+      where: { orgId: session.orgId },
+      include: {
+        steps: { orderBy: { order: 'asc' } },
+        _count: { select: { workflows: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+    prisma.workflowTemplate.count({
+      where: { orgId: session.orgId },
+    }),
+  ]);
+
+  const pages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <div className="space-y-6">
@@ -39,6 +57,32 @@ export default async function TemplatesPage() {
           </Link>
         </div>
       </div>
+
+      {pages > 1 && (
+        <div className="flex items-center justify-between bg-white border border-zinc-200 rounded-xl px-4 py-3">
+          <p className="text-sm text-zinc-500">
+            Page {page} of {pages} · {total} total
+          </p>
+          <div className="flex items-center gap-2">
+            {page > 1 && (
+              <a
+                href={`?page=${page - 1}`}
+                className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
+              >
+                Previous
+              </a>
+            )}
+            {page < pages && (
+              <a
+                href={`?page=${page + 1}`}
+                className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
+              >
+                Next
+              </a>
+            )}
+          </div>
+        </div>
+      )}
 
       {templates.length === 0 ? (
         <div className="bg-white border border-zinc-200/70 border-dashed rounded-xl p-12 text-center">

@@ -29,7 +29,11 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
         return;
       }
       setEmail('');
-      setSuccess(`${data.member.user.name} added as ${role}`);
+      if (data.type === 'invitation') {
+        setSuccess(`Invitation sent to ${data.invite.email}`);
+      } else {
+        setSuccess(`${data.member.user.name} added as ${role}`);
+      }
       router.refresh();
     } catch {
       setError('Something went wrong');
