@@ -106,9 +106,9 @@ SESSION_SECRET="your-32-char-secret"
 
 ## Roadmap
 
-- [ ] Email notifications on approval/rejection
-- [ ] Multi-org switching
-- [ ] Workflow template export/import
+- [x] Email notifications on approval/rejection
+- [x] Multi-org switching
+- [x] Workflow template export/import
 - [ ] Per-step role assignment enforcement
 - [ ] PDF receipt generation
 - [ ] Hosted SaaS (cloud.halalflow.app)

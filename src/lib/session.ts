@@ -8,6 +8,7 @@ export interface SessionData {
   orgId: string;
   orgRole: string;
   isLoggedIn: boolean;
+  csrfToken?: string;
 }
 
 function getSessionPassword(): string {

@@ -75,14 +75,33 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-24T22:15:05Z
-  change: "Fix duplicate previous_cycles keys in STATE.yaml (invalid YAML) and commit untracked logout page from prior cycle"
+  date: 2026-05-25T00:15:05Z
+  change: "Fix accidental Prisma provider switch to postgresql in uncommitted changes — revert to sqlite so local dev works; commit accumulated batch (security headers in next.config.ts, Next.js 16.2.6 bump, Prisma query logging in dev, README roadmap sync)"
   files:
+    - next.config.ts
+    - package.json
+    - package-lock.json
+    - prisma/schema.prisma
+    - src/lib/db.ts
+    - src/lib/csrf.ts
+    - src/lib/csrf-client.ts
+    - src/app/api/csrf/route.ts
+    - src/app/api/workflows/route.ts
+    - src/app/api/workflows/[id]/route.ts
+    - src/app/api/workflows/[id]/approve/route.ts
+    - src/app/api/workflows/[id]/comments/route.ts
+    - docs/postgres-migration.md
+    - README.md
     - STATE.yaml
-    - src/app/logout/page.tsx
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-24T22:15:05Z
+    change: "Fix duplicate previous_cycles keys in STATE.yaml (invalid YAML) and commit untracked logout page from prior cycle"
+    files:
+      - STATE.yaml
+      - src/app/logout/page.tsx
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-24T21:15:04Z
     change: "Add missing /logout page so invite 'Switch account' link works — POSTs to /api/auth/logout then redirects via ?redirect query param"
     files:

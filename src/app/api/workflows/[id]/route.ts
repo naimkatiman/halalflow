@@ -3,6 +3,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { validateCsrfToken } from "@/lib/csrf";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -45,6 +46,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    const csrf = await validateCsrfToken(_req);
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+
     const { id } = await params;
     const workflow = await prisma.workflow.findFirst({ where: { id, orgId: session.orgId } });
     if (!workflow) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -54,7 +58,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     }
 
     await prisma.workflow.delete({ where: { id } });
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true }, { headers: { "X-CSRF-Token": csrf.newToken } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

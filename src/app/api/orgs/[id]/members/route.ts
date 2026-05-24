@@ -3,6 +3,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
 import { generateInviteToken, getInviteExpiryDate } from "@/lib/invite-token";
 import { sendInviteEmail } from "@/lib/notifications/invite-email";
@@ -47,6 +48,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const csrf = await validateCsrfToken(request);
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
 
     const { id } = await params;
     const callerMember = await prisma.orgMember.findUnique({
@@ -104,7 +108,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       await sendInviteEmail(normalizedEmail, org.name, inviteUrl, caller.name || caller.email);
     }
 
-    return NextResponse.json({ invite, type: "invitation" }, { status: 201 });
+    return NextResponse.json(
+      { invite, type: "invitation" },
+      { status: 201, headers: { "X-CSRF-Token": csrf.newToken } }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

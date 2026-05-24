@@ -3,6 +3,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
 
 const createSchema = z.object({
@@ -61,6 +62,9 @@ export async function POST(request: NextRequest) {
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
 
+    const csrf = await validateCsrfToken(request);
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+
     const body = await request.json();
     const { templateId, title, description } = createSchema.parse(body);
 
@@ -97,7 +101,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ workflow }, { status: 201 });
+    return NextResponse.json(
+      { workflow },
+      { status: 201, headers: { "X-CSRF-Token": csrf.newToken } }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
