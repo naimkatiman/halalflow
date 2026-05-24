@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-25T01:15:06Z
+updated: 2026-05-25T02:15:05Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,36 +75,43 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T01:15:06Z
-  change: "Complete CSRF protection rollout — validate tokens on all mutating API endpoints, switch client fetches to fetchWithCsrf, extract defaultTemplates into seed-templates.ts, add docs/templates.md"
+  date: 2026-05-25T02:15:05Z
+  change: "Replace pagination raw <a> tags with Next.js Link in /templates and /workflows for client-side navigation and prefetching"
   files:
-    - src/app/api/auth/login/route.ts
-    - src/app/api/auth/logout/route.ts
-    - src/app/api/auth/register/route.ts
-    - src/app/api/invites/[token]/route.ts
-    - src/app/api/orgs/[id]/switch/route.ts
-    - src/app/api/orgs/route.ts
-    - src/app/api/templates/[id]/route.ts
-    - src/app/api/templates/[id]/steps/route.ts
-    - src/app/api/templates/import/route.ts
-    - src/app/api/templates/route.ts
-    - src/app/logout/page.tsx
-    - src/app/onboarding/page.tsx
-    - src/app/settings/InviteMemberForm.tsx
-    - src/app/settings/OrgSwitcher.tsx
-    - src/app/templates/ImportButton.tsx
-    - src/app/templates/new/page.tsx
-    - src/app/workflows/[id]/ApprovalActions.tsx
-    - src/app/workflows/[id]/CommentForm.tsx
-    - src/app/workflows/new/page.tsx
-    - src/components/Navbar.tsx
-    - prisma/seed.ts
-    - prisma/seed-templates.ts
-    - docs/templates.md
+    - src/app/templates/page.tsx
+    - src/app/workflows/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-25T01:15:06Z
+    change: "Complete CSRF protection rollout — validate tokens on all mutating API endpoints, switch client fetches to fetchWithCsrf, extract defaultTemplates into seed-templates.ts, add docs/templates.md"
+    files:
+      - src/app/api/auth/login/route.ts
+      - src/app/api/auth/logout/route.ts
+      - src/app/api/auth/register/route.ts
+      - src/app/api/invites/[token]/route.ts
+      - src/app/api/orgs/[id]/switch/route.ts
+      - src/app/api/orgs/route.ts
+      - src/app/api/templates/[id]/route.ts
+      - src/app/api/templates/[id]/steps/route.ts
+      - src/app/api/templates/import/route.ts
+      - src/app/api/templates/route.ts
+      - src/app/logout/page.tsx
+      - src/app/onboarding/page.tsx
+      - src/app/settings/InviteMemberForm.tsx
+      - src/app/settings/OrgSwitcher.tsx
+      - src/app/templates/ImportButton.tsx
+      - src/app/templates/new/page.tsx
+      - src/app/workflows/[id]/ApprovalActions.tsx
+      - src/app/workflows/[id]/CommentForm.tsx
+      - src/app/workflows/new/page.tsx
+      - src/components/Navbar.tsx
+      - prisma/seed.ts
+      - prisma/seed-templates.ts
+      - docs/templates.md
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-24T22:15:05Z
     change: "Fix duplicate previous_cycles keys in STATE.yaml (invalid YAML) and commit untracked logout page from prior cycle"
     files:
