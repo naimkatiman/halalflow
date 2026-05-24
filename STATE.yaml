@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-25T02:15:05Z
+updated: 2026-05-25T03:15:05Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,15 +75,26 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T02:15:05Z
-  change: "Replace pagination raw <a> tags with Next.js Link in /templates and /workflows for client-side navigation and prefetching"
+  date: 2026-05-25T03:15:05Z
+  change: "Add page-specific metadata titles to all server-rendered app pages (dashboard, templates, workflows, settings, register, invites) for better browser tab UX and SEO"
   files:
+    - src/app/dashboard/page.tsx
     - src/app/templates/page.tsx
     - src/app/workflows/page.tsx
+    - src/app/settings/page.tsx
+    - src/app/register/page.tsx
+    - src/app/invites/[token]/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-25T02:15:05Z
+    change: "Replace pagination raw <a> tags with Next.js Link in /templates and /workflows for client-side navigation and prefetching"
+    files:
+      - src/app/templates/page.tsx
+      - src/app/workflows/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-25T01:15:06Z
     change: "Complete CSRF protection rollout — validate tokens on all mutating API endpoints, switch client fetches to fetchWithCsrf, extract defaultTemplates into seed-templates.ts, add docs/templates.md"
     files:

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -5,6 +6,10 @@ import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { CheckCircle, XCircle, Clock, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
+
+export const metadata: Metadata = {
+  title: 'Dashboard — HalalFlow',
+};
 
 export default async function DashboardPage() {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);

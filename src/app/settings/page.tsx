@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -6,6 +7,10 @@ import { prisma } from '@/lib/db';
 import { InviteMemberForm } from './InviteMemberForm';
 import { OrgSwitcher } from './OrgSwitcher';
 import { Buildings, Users } from '@phosphor-icons/react/dist/ssr';
+
+export const metadata: Metadata = {
+  title: 'Settings — HalalFlow',
+};
 
 export default async function SettingsPage() {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);

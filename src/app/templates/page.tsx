@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -6,6 +7,10 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { Plus, Clipboard } from '@phosphor-icons/react/dist/ssr';
 import { ImportButton } from './ImportButton';
+
+export const metadata: Metadata = {
+  title: 'Templates — HalalFlow',
+};
 
 const PAGE_SIZE = 20;
 
