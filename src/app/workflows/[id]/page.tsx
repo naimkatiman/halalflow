@@ -6,6 +6,11 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle } from '@phosphor-icons/react/dist/ssr';
 import { ApprovalActions } from './ApprovalActions';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Workflow Details · HalalFlow',
+};
 import { CommentForm } from './CommentForm';
 
 const STATUS_CLS: Record<string, string> = {

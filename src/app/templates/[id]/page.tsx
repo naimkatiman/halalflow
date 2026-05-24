@@ -6,6 +6,11 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { ArrowLeft, Plus } from '@phosphor-icons/react/dist/ssr';
 import { ExportButton } from './ExportButton';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Template Details · HalalFlow',
+};
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);

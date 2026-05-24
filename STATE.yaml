@@ -75,17 +75,26 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T03:15:05Z
-  change: "Add page-specific metadata titles to all server-rendered app pages (dashboard, templates, workflows, settings, register, invites) for better browser tab UX and SEO"
+  date: 2026-05-25T04:15:04Z
+  change: "Add page-specific metadata titles to dynamic detail pages (templates/[id], workflows/[id]) for consistent browser tab UX"
   files:
-    - src/app/dashboard/page.tsx
-    - src/app/templates/page.tsx
-    - src/app/workflows/page.tsx
-    - src/app/settings/page.tsx
-    - src/app/register/page.tsx
-    - src/app/invites/[token]/page.tsx
+    - src/app/templates/[id]/page.tsx
+    - src/app/workflows/[id]/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-25T03:15:05Z
+    change: "Add page-specific metadata titles to all server-rendered app pages (dashboard, templates, workflows, settings, register, invites) for better browser tab UX and SEO"
+    files:
+      - src/app/dashboard/page.tsx
+      - src/app/templates/page.tsx
+      - src/app/workflows/page.tsx
+      - src/app/settings/page.tsx
+      - src/app/register/page.tsx
+      - src/app/invites/[token]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-25T02:15:05Z
