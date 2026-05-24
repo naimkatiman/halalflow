@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-25T05:15:07Z
+updated: 2026-05-25T06:15:07Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,14 +75,21 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T05:15:07Z
-  change: "Remove broken 'Edit steps' link from template detail page — /templates/[id]/edit page does not exist"
+  date: 2026-05-25T06:15:07Z
+  change: "Extract login form into LoginForm.tsx and add metadata title to /login page for consistent browser tab UX"
   files:
-    - src/app/templates/[id]/page.tsx
+    - src/app/login/page.tsx
+    - src/app/login/LoginForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-25T05:15:07Z
+    change: "Remove broken 'Edit steps' link from template detail page — /templates/[id]/edit page does not exist"
+    files:
+      - src/app/templates/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-25T04:15:04Z
     change: "Add page-specific metadata titles to dynamic detail pages (templates/[id], workflows/[id]) for consistent browser tab UX"
     files:
