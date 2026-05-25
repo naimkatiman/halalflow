@@ -64,3 +64,13 @@ body {
   animation-delay: calc(var(--index, 0) * 100ms);
   opacity: 0;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-fade-up {
+    animation: none;
+    opacity: 1;
+  }
+}
