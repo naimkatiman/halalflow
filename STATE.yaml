@@ -75,10 +75,11 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T13:15:07Z
-  change: "Add metadata title to root landing page (/) for SEO and consistent browser tab UX"
+  date: 2026-05-25T15:15:07Z
+  change: "Add autoComplete attributes to login and register form inputs for better browser autofill and password manager UX"
   files:
-    - src/app/page.tsx
+    - src/app/login/LoginForm.tsx
+    - src/app/register/RegisterForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
