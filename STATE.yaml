@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-25T11:15:07Z
+updated: 2026-05-25T18:15:07Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,14 +75,20 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T17:15:07Z
-  change: "Add root loading.tsx for global Suspense fallback during route transitions"
+  date: 2026-05-25T18:15:07Z
+  change: "Add root error.tsx for graceful runtime error recovery with reset button"
   files:
-    - src/app/loading.tsx
+    - src/app/error.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-05-25T17:15:07Z
+    change: "Add root loading.tsx for global Suspense fallback during route transitions"
+    files:
+      - src/app/loading.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-25T16:15:07Z
     change: "Add robots.ts to disallow crawling of authenticated app routes while allowing the public landing page"
     files:
