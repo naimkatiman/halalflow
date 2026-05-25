@@ -123,10 +123,10 @@ export function NewTemplateForm() {
             {steps.map((step, i) => (
               <div key={i} className="flex gap-3 items-start">
                 <div className="flex flex-col gap-1 pt-2">
-                  <button type="button" onClick={() => moveStep(i, -1)} disabled={i === 0} className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
+                  <button type="button" onClick={() => moveStep(i, -1)} disabled={i === 0} aria-label="Move step up" className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
                     <ArrowUp className="w-3.5 h-3.5" />
                   </button>
-                  <button type="button" onClick={() => moveStep(i, 1)} disabled={i === steps.length - 1} className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
+                  <button type="button" onClick={() => moveStep(i, 1)} disabled={i === steps.length - 1} aria-label="Move step down" className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
                     <ArrowDown className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -145,6 +145,7 @@ export function NewTemplateForm() {
                       type="button"
                       onClick={() => removeStep(i)}
                       disabled={steps.length === 1}
+                      aria-label="Remove step"
                       className="text-zinc-300 hover:text-red-500 disabled:opacity-30 transition-colors p-1"
                     >
                       <Trash className="w-3.5 h-3.5" />
