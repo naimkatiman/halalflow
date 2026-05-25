@@ -25,7 +25,7 @@ export default function RootLayout({
           <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-zinc-400">
             <span>HalalFlow — Islamic Finance Workflow Engine</span>
             <div className="flex items-center gap-4">
-              <a href="https://github.com/naimkatiman/halalflow" className="hover:text-zinc-600 transition-colors">GitHub</a>
+              <a href="https://github.com/naimkatiman/halalflow" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-600 transition-colors">GitHub</a>
               <span>Open Source</span>
             </div>
           </div>
