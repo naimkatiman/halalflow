@@ -75,13 +75,21 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T15:15:07Z
-  change: "Add autoComplete attributes to login and register form inputs for better browser autofill and password manager UX"
+  date: 2026-05-25T16:15:07Z
+  change: "Add robots.ts to disallow crawling of authenticated app routes while allowing the public landing page"
   files:
-    - src/app/login/LoginForm.tsx
-    - src/app/register/RegisterForm.tsx
+    - src/app/robots.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-25T15:15:07Z
+    change: "Add autoComplete attributes to login and register form inputs for better browser autofill and password manager UX"
+    files:
+      - src/app/login/LoginForm.tsx
+      - src/app/register/RegisterForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-25T11:15:07Z
