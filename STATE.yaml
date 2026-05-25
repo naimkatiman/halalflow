@@ -75,12 +75,20 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T16:15:07Z
-  change: "Add robots.ts to disallow crawling of authenticated app routes while allowing the public landing page"
+  date: 2026-05-25T17:15:07Z
+  change: "Add root loading.tsx for global Suspense fallback during route transitions"
   files:
-    - src/app/robots.ts
+    - src/app/loading.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-25T16:15:07Z
+    change: "Add robots.ts to disallow crawling of authenticated app routes while allowing the public landing page"
+    files:
+      - src/app/robots.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-25T15:15:07Z
