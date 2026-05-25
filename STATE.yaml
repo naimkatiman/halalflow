@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-25T09:15:07Z
+updated: 2026-05-25T10:15:05Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,13 +75,22 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T09:15:07Z
-  change: "Extract onboarding form into OnboardingForm.tsx and add metadata title to /onboarding page for consistent browser tab UX"
+  date: 2026-05-25T10:15:05Z
+  change: "Extract new-template form into NewTemplateForm.tsx and add metadata title to /templates/new page for consistent browser tab UX"
   files:
-    - src/app/onboarding/page.tsx
-    - src/app/onboarding/OnboardingForm.tsx
+    - src/app/templates/new/page.tsx
+    - src/app/templates/new/NewTemplateForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-25T09:15:07Z
+    change: "Extract onboarding form into OnboardingForm.tsx and add metadata title to /onboarding page for consistent browser tab UX"
+    files:
+      - src/app/onboarding/page.tsx
+      - src/app/onboarding/OnboardingForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-25T07:15:07Z
