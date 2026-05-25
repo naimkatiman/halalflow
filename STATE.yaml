@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-25T18:15:07Z
+updated: 2026-05-25T19:15:04Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,12 +75,20 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T18:15:07Z
-  change: "Add root error.tsx for graceful runtime error recovery with reset button"
+  date: 2026-05-25T19:15:04Z
+  change: "Add aria-current=page to active Navbar nav link for screen-reader accessibility"
   files:
-    - src/app/error.tsx
+    - src/components/Navbar.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-25T18:15:07Z
+    change: "Add root error.tsx for graceful runtime error recovery with reset button"
+    files:
+      - src/app/error.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-25T17:15:07Z
