@@ -75,13 +75,21 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T11:15:07Z
-  change: "Extract new-workflow form into NewWorkflowForm.tsx and add metadata title to /workflows/new page for consistent browser tab UX"
+  date: 2026-05-25T13:15:07Z
+  change: "Add metadata title to root landing page (/) for SEO and consistent browser tab UX"
   files:
-    - src/app/workflows/new/page.tsx
-    - src/app/workflows/new/NewWorkflowForm.tsx
+    - src/app/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-25T11:15:07Z
+    change: "Extract new-workflow form into NewWorkflowForm.tsx and add metadata title to /workflows/new page for consistent browser tab UX"
+    files:
+      - src/app/workflows/new/page.tsx
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-25T10:15:05Z
