@@ -84,6 +84,7 @@ export default async function WorkflowsPage({
           <Link
             key={f}
             href={f ? `/workflows?status=${f}` : '/workflows'}
+            aria-current={status === f || (!status && !f) ? 'true' : undefined}
             className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
               status === f || (!status && !f)
                 ? 'bg-zinc-900 text-white'

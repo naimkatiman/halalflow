@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-26T20:15:03Z
+updated: 2026-05-26T21:15:04Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,17 +75,23 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-26T20:15:03Z
-  change: "Add aria-label attributes to icon-only back arrow links in template and workflow pages for screen-reader accessibility"
+  date: 2026-05-26T21:15:04Z
+  change: "Add aria-current='true' to active workflow status filter links so screen readers announce the current filter"
   files:
-    - src/app/templates/new/NewTemplateForm.tsx
-    - src/app/templates/[id]/page.tsx
-    - src/app/workflows/new/NewWorkflowForm.tsx
-    - src/app/workflows/[id]/page.tsx
+    - src/app/workflows/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-26T20:15:03Z
+    change: "Add aria-label attributes to icon-only back arrow links in template and workflow pages for screen-reader accessibility"
+    files:
+      - src/app/templates/new/NewTemplateForm.tsx
+      - src/app/templates/[id]/page.tsx
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - src/app/workflows/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-26T19:15:04Z
     change: "Add aria-label to comment input and sr-only text to icon-only submit button in CommentForm for screen-reader accessibility"
     files:
