@@ -17,8 +17,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <body className="min-h-[100dvh] flex flex-col bg-[var(--background)] text-[var(--foreground)] antialiased">
+        <a
+          href="#main-content"
+          className="absolute -top-10 left-4 z-50 bg-white text-zinc-900 px-4 py-2 rounded-lg shadow-lg ring-2 ring-emerald-500 font-medium text-sm transition-all focus:top-4"
+        >
+          Skip to content
+        </a>
         <Navbar />
-        <main className="flex-1 max-w-screen-xl mx-auto w-full px-6 py-8">
+        <main id="main-content" tabIndex={-1} className="flex-1 max-w-screen-xl mx-auto w-full px-6 py-8 outline-none">
           {children}
         </main>
         <footer className="border-t border-zinc-200/50 py-5 px-6">

@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-27T06:15:08Z
+updated: 2026-05-26T23:17:33Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,13 +75,21 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-27T06:15:08Z
-  change: "Add aria-hidden to decorative icons in error and not-found boundary pages so screen readers skip them"
+  date: 2026-05-26T23:17:33Z
+  change: "Add skip-to-content link in root layout for keyboard users (WCAG 2.4.1 Bypass Blocks)"
   files:
-    - src/app/error.tsx
-    - src/app/not-found.tsx
+    - src/app/layout.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-27T06:15:08Z
+    change: "Add aria-hidden to decorative icons in error and not-found boundary pages so screen readers skip them"
+    files:
+      - src/app/error.tsx
+      - src/app/not-found.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-27T05:15:07Z
