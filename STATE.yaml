@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-26T23:15:05Z
+updated: 2026-05-27T00:15:05Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,13 +75,21 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-26T23:15:05Z
-  change: "Add role=alert to login and register form error messages so screen readers announce auth failures immediately"
+  date: 2026-05-27T00:15:05Z
+  change: "Add aria-expanded and aria-controls to mobile menu toggle in Navbar so screen readers know menu state and association"
   files:
-    - src/app/login/LoginForm.tsx
-    - src/app/register/RegisterForm.tsx
+    - src/components/Navbar.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-26T23:15:05Z
+    change: "Add role=alert to login and register form error messages so screen readers announce auth failures immediately"
+    files:
+      - src/app/login/LoginForm.tsx
+      - src/app/register/RegisterForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-26T22:15:05Z

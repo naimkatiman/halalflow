@@ -74,13 +74,15 @@ export function Navbar() {
               className="sm:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav-menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <List className="w-5 h-5" />}
             </button>
           </div>
         </div>
         {mobileOpen && (
-          <div className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-2">
+          <div id="mobile-nav-menu" className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-2">
             <a
               href="#use-cases"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
