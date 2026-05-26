@@ -75,14 +75,20 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-26T18:15:03Z
-  change: "Add htmlFor/id and aria-label associations to invite member form inputs for screen-reader accessibility"
+  date: 2026-05-26T19:15:04Z
+  change: "Add aria-label to comment input and sr-only text to icon-only submit button in CommentForm for screen-reader accessibility"
   files:
-    - src/app/settings/InviteMemberForm.tsx
+    - src/app/workflows/[id]/CommentForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-26T18:15:03Z
+    change: "Add htmlFor/id and aria-label associations to invite member form inputs for screen-reader accessibility"
+    files:
+      - src/app/settings/InviteMemberForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-26T17:15:02Z
     change: "Add htmlFor/id associations to new-template form labels and inputs for screen-reader accessibility"
     files:
