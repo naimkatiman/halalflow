@@ -62,8 +62,9 @@ export function RegisterForm() {
           <p className="text-sm text-zinc-500 mb-6">Start managing workflows with your team</p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Full name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-zinc-700 mb-1.5">Full name</label>
               <input
+                id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -74,8 +75,9 @@ export function RegisterForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-zinc-700 mb-1.5">Email</label>
               <input
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -86,8 +88,9 @@ export function RegisterForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-zinc-700 mb-1.5">Password</label>
               <input
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
