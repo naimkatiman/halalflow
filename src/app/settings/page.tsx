@@ -56,7 +56,7 @@ export default async function SettingsPage() {
 
       <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-3">
         <div className="flex items-center gap-2 mb-1">
-          <Buildings className="w-4 h-4 text-zinc-400" />
+          <Buildings className="w-4 h-4 text-zinc-400" aria-hidden />
           <h2 className="font-semibold text-zinc-950 text-sm">Organization</h2>
         </div>
         <div className="space-y-1">
@@ -79,7 +79,7 @@ export default async function SettingsPage() {
 
       <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <Users className="w-4 h-4 text-zinc-400" />
+          <Users className="w-4 h-4 text-zinc-400" aria-hidden />
           <h2 className="font-semibold text-zinc-950 text-sm">Members ({org.members.length})</h2>
         </div>
         <div className="divide-y divide-zinc-100">

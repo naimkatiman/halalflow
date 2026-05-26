@@ -73,13 +73,13 @@ export default async function WorkflowsPage({
           href="/workflows/new"
           className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-colors"
         >
-          <Plus className="w-4 h-4" weight="bold" />
+          <Plus className="w-4 h-4" weight="bold" aria-hidden />
           New workflow
         </Link>
       </div>
 
       <div className="flex items-center gap-2">
-        <FunnelSimple className="w-3.5 h-3.5 text-zinc-400" />
+        <FunnelSimple className="w-3.5 h-3.5 text-zinc-400" aria-hidden />
         {filters.map((f) => (
           <Link
             key={f}
@@ -133,7 +133,7 @@ export default async function WorkflowsPage({
               href="/workflows/new"
               className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-colors"
             >
-              <Plus className="w-3.5 h-3.5" weight="bold" />
+              <Plus className="w-3.5 h-3.5" weight="bold" aria-hidden />
               New workflow
             </Link>
           )}
