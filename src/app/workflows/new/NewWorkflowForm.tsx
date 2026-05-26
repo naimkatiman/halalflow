@@ -84,8 +84,9 @@ export function NewWorkflowForm() {
           <div className="bg-white border border-zinc-200/70 rounded-xl p-6 space-y-4">
             <h2 className="font-semibold text-zinc-950 text-sm">Workflow details</h2>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Title</label>
+              <label htmlFor="workflow-title" className="block text-sm font-medium text-zinc-700 mb-1.5">Title</label>
               <input
+                id="workflow-title"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -95,8 +96,9 @@ export function NewWorkflowForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-400 font-normal">(optional)</span></label>
+              <label htmlFor="workflow-description" className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-400 font-normal">(optional)</span></label>
               <textarea
+                id="workflow-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
@@ -105,8 +107,9 @@ export function NewWorkflowForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Template</label>
+              <label htmlFor="workflow-template" className="block text-sm font-medium text-zinc-700 mb-1.5">Template</label>
               <select
+                id="workflow-template"
                 value={templateId}
                 onChange={(e) => setTemplateId(e.target.value)}
                 required
