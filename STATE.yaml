@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-25T22:15:04Z
+updated: 2026-05-26T02:15:09Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,15 +75,21 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T23:15:06Z
-  change: "Add sitemap.ts for public routes and reference it in robots.ts for SEO"
+  date: 2026-05-26T02:15:09Z
+  change: "Add htmlFor/id associations to login form labels and inputs for screen-reader accessibility"
   files:
-    - src/app/sitemap.ts
-    - src/app/robots.ts
+    - src/app/login/LoginForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-25T23:15:06Z
+    change: "Add sitemap.ts for public routes and reference it in robots.ts for SEO"
+    files:
+      - src/app/sitemap.ts
+      - src/app/robots.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-05-25T21:15:04Z
     change: "Add aria-label attributes to icon-only step reorder and remove buttons in NewTemplateForm for screen-reader accessibility"
     files:
