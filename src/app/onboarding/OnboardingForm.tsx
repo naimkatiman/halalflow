@@ -48,8 +48,9 @@ export default function OnboardingForm() {
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Organization name</label>
+              <label htmlFor="org-name" className="block text-sm font-medium text-zinc-700 mb-1.5">Organization name</label>
               <input
+                id="org-name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
