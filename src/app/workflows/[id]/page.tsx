@@ -71,7 +71,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
   return (
     <div className="max-w-3xl space-y-6">
       <div className="flex items-start gap-3">
-        <Link href="/workflows" className="text-zinc-400 hover:text-zinc-700 transition-colors mt-1">
+        <Link href="/workflows" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors mt-1">
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div className="flex-1 min-w-0">
