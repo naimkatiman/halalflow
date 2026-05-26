@@ -85,8 +85,9 @@ export function NewTemplateForm() {
         <div className="bg-white border border-zinc-200/70 rounded-xl p-6 space-y-4">
           <h2 className="font-semibold text-zinc-950 text-sm">Details</h2>
           <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Template name</label>
+            <label htmlFor="template-name" className="block text-sm font-medium text-zinc-700 mb-1.5">Template name</label>
             <input
+              id="template-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -96,8 +97,9 @@ export function NewTemplateForm() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-400 font-normal">(optional)</span></label>
+            <label htmlFor="template-description" className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-400 font-normal">(optional)</span></label>
             <textarea
+              id="template-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
