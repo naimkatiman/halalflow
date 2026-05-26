@@ -59,9 +59,9 @@ export function Hero() {
               className="flex items-center gap-2.5 border-t border-zinc-100 py-2.5"
             >
               {step.done ? (
-                <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" weight="fill" />
+                <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" weight="fill" aria-hidden />
               ) : (
-                <Circle className="h-4 w-4 shrink-0 text-amber-500" weight="bold" />
+                <Circle className="h-4 w-4 shrink-0 text-amber-500" weight="bold" aria-hidden />
               )}
               <span className="flex-1 text-xs text-zinc-900">{step.name}</span>
               <span

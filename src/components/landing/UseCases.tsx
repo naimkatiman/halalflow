@@ -59,6 +59,7 @@ export function UseCases() {
             <Icon
               className={featured ? "h-6 w-6 text-emerald-600" : "h-6 w-6 text-zinc-400"}
               weight="duotone"
+              aria-hidden
             />
             <h3
               className={

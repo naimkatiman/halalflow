@@ -75,8 +75,8 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
           Add
         </button>
       </div>
-      {error && <p className="text-xs text-red-600">{error}</p>}
-      {success && <p className="text-xs text-emerald-600">{success}</p>}
+      {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
+      {success && <p className="text-xs text-emerald-600" role="status">{success}</p>}
     </form>
   );
 }
