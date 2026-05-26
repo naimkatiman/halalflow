@@ -75,14 +75,21 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-26T21:15:04Z
-  change: "Add aria-current='true' to active workflow status filter links so screen readers announce the current filter"
+  date: 2026-05-26T22:15:05Z
+  change: "Add aria-label to approval note textarea and role=alert to error messages in ApprovalActions and CommentForm for screen-reader accessibility"
   files:
-    - src/app/workflows/page.tsx
+    - src/app/workflows/[id]/ApprovalActions.tsx
+    - src/app/workflows/[id]/CommentForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-26T21:15:04Z
+    change: "Add aria-current='true' to active workflow status filter links so screen readers announce the current filter"
+    files:
+      - src/app/workflows/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-26T20:15:03Z
     change: "Add aria-label attributes to icon-only back arrow links in template and workflow pages for screen-reader accessibility"
     files:

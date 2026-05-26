@@ -54,7 +54,7 @@ export function CommentForm({ workflowId }: { workflowId: string }) {
         <PaperPlaneTilt className="w-3.5 h-3.5" weight="bold" />
         <span className="sr-only">Post comment</span>
       </button>
-      {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+      {error && <p className="text-xs text-red-600 mt-1" role="alert">{error}</p>}
     </form>
   );
 }
