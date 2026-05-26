@@ -75,12 +75,13 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-25T22:15:04Z
-  change: "Add target=_blank and rel=noopener noreferrer to GitHub footer link for security and UX"
+  date: 2026-05-25T23:15:06Z
+  change: "Add sitemap.ts for public routes and reference it in robots.ts for SEO"
   files:
-    - src/app/layout.tsx
+    - src/app/sitemap.ts
+    - src/app/robots.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-25T21:15:04Z
