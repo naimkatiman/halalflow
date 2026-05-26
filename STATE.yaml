@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-27T05:15:07Z
+updated: 2026-05-27T06:15:08Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,15 +75,24 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-27T05:15:07Z
-  change: "Add aria-hidden to decorative Phosphor icons in app pages (dashboard, settings, templates, workflows) so screen readers skip them"
+  date: 2026-05-27T06:15:08Z
+  change: "Add aria-hidden to decorative icons in error and not-found boundary pages so screen readers skip them"
   files:
-    - src/app/dashboard/page.tsx
-    - src/app/settings/page.tsx
-    - src/app/templates/page.tsx
-    - src/app/workflows/page.tsx
+    - src/app/error.tsx
+    - src/app/not-found.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-27T05:15:07Z
+    change: "Add aria-hidden to decorative Phosphor icons in app pages (dashboard, settings, templates, workflows) so screen readers skip them"
+    files:
+      - src/app/dashboard/page.tsx
+      - src/app/settings/page.tsx
+      - src/app/templates/page.tsx
+      - src/app/workflows/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-27T04:15:07Z
