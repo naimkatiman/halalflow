@@ -45,9 +45,10 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3 pt-2 border-t border-zinc-100">
-      <p className="text-xs font-semibold text-zinc-700">Add member by email</p>
+      <label htmlFor="invite-email" className="text-xs font-semibold text-zinc-700">Add member by email</label>
       <div className="flex gap-2">
         <input
+          id="invite-email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -56,6 +57,8 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
           className="flex-1 px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
         />
         <select
+          id="invite-role"
+          aria-label="Role"
           value={role}
           onChange={(e) => setRole(e.target.value as 'admin' | 'member')}
           className="px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors bg-white"
