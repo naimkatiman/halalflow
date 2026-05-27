@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-27T11:15:09Z
+updated: 2026-05-27T16:15:03Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,14 +75,20 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-27T11:15:09Z
-  change: "Add aria-hidden to decorative Phosphor icons in Navbar (logo, nav items, mobile toggle, sign-out) so screen readers skip them"
+  date: 2026-05-27T16:15:03Z
+  change: "Add role=progressbar with aria-valuenow, aria-valuemax, and aria-label to workflow detail progress bar so screen readers announce completion status"
   files:
-    - src/components/Navbar.tsx
+    - src/app/workflows/[id]/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-27T11:15:09Z
+    change: "Add aria-hidden to decorative Phosphor icons in Navbar (logo, nav items, mobile toggle, sign-out) so screen readers skip them"
+    files:
+      - src/components/Navbar.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-27T10:15:09Z
     change: "Add aria-hidden to decorative Phosphor icons in template and workflow detail/create pages (NewTemplateForm, template detail, NewWorkflowForm, workflow detail, ApprovalActions, CommentForm) so screen readers skip them"
     files:

@@ -209,7 +209,14 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
               <span className="text-sm font-normal text-zinc-400"> / {workflow.approvals.length}</span>
             </div>
             <p className="text-xs text-zinc-500">steps completed</p>
-            <div className="mt-3 h-2 bg-zinc-100 rounded-full overflow-hidden">
+            <div
+              className="mt-3 h-2 bg-zinc-100 rounded-full overflow-hidden"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={workflow.approvals.length}
+              aria-valuenow={workflow.approvals.filter((a) => a.status === 'approved').length}
+              aria-label="Workflow approval progress"
+            >
               <div
                 className="h-full bg-emerald-500 rounded-full transition-all"
                 style={{
