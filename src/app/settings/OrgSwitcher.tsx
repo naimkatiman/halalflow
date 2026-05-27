@@ -32,7 +32,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
   return (
     <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2 mb-1">
-        <Buildings className="w-4 h-4 text-zinc-400" />
+        <Buildings className="w-4 h-4 text-zinc-400" aria-hidden="true" />
         <h2 className="font-semibold text-zinc-950 text-sm">Your Organizations</h2>
       </div>
       <div className="divide-y divide-zinc-100">
@@ -45,7 +45,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
                   <div className="text-sm font-medium text-zinc-950 truncate">{org.name}</div>
                   {isCurrent && (
                     <span className="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded-full">
-                      <CheckCircle className="w-3 h-3" weight="fill" />
+                      <CheckCircle className="w-3 h-3" weight="fill" aria-hidden="true" />
                       Active
                     </span>
                   )}

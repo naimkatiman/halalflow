@@ -71,7 +71,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
           disabled={loading}
           className="flex items-center gap-1 bg-zinc-900 hover:bg-zinc-800 disabled:opacity-50 text-white text-sm font-medium px-3 py-2 rounded-lg transition-colors"
         >
-          <Plus className="w-3.5 h-3.5" weight="bold" />
+          <Plus className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
           Add
         </button>
       </div>

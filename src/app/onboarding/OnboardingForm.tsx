@@ -40,7 +40,7 @@ export default function OnboardingForm() {
       <div className="w-full max-w-sm">
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm">
           <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-5">
-            <Buildings className="w-5 h-5 text-emerald-600" weight="duotone" />
+            <Buildings className="w-5 h-5 text-emerald-600" weight="duotone" aria-hidden="true" />
           </div>
           <h1 className="text-xl font-bold text-zinc-950 mb-1">Create your workspace</h1>
           <p className="text-sm text-zinc-500 mb-6">

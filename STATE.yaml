@@ -75,12 +75,25 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-26T23:17:33Z
-  change: "Add skip-to-content link in root layout for keyboard users (WCAG 2.4.1 Bypass Blocks)"
+  date: 2026-05-27T08:15:05Z
+  change: "Add aria-hidden to decorative Phosphor icons in invites, onboarding, import/export buttons, org switcher, and invite member form for screen-reader accessibility"
   files:
-    - src/app/layout.tsx
+    - src/app/invites/[token]/page.tsx
+    - src/app/onboarding/OnboardingForm.tsx
+    - src/app/templates/ImportButton.tsx
+    - src/app/templates/[id]/ExportButton.tsx
+    - src/app/settings/OrgSwitcher.tsx
+    - src/app/settings/InviteMemberForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-26T23:17:33Z
+    change: "Add skip-to-content link in root layout for keyboard users (WCAG 2.4.1 Bypass Blocks)"
+    files:
+      - src/app/layout.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-27T06:15:08Z

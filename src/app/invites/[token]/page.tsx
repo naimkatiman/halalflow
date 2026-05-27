@@ -28,7 +28,7 @@ export default async function InvitePage({
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
         <div className="w-full max-w-sm text-center">
-          <XCircle className="w-10 h-10 text-red-500 mx-auto mb-4" weight="duotone" />
+          <XCircle className="w-10 h-10 text-red-500 mx-auto mb-4" weight="duotone" aria-hidden="true" />
           <h1 className="text-lg font-bold text-zinc-950 mb-1">Invitation expired</h1>
           <p className="text-sm text-zinc-500 mb-6">
             This link is no longer valid. Ask the organization admin for a new invite.
@@ -70,11 +70,11 @@ export default async function InvitePage({
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" />
+          <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" aria-hidden="true" />
           <span className="font-bold text-zinc-950">HalalFlow</span>
         </div>
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm text-center">
-          <CheckCircle className="w-10 h-10 text-emerald-500 mx-auto mb-4" weight="duotone" />
+          <CheckCircle className="w-10 h-10 text-emerald-500 mx-auto mb-4" weight="duotone" aria-hidden="true" />
           <h1 className="text-lg font-bold text-zinc-950 mb-1">You&apos;re invited</h1>
           <p className="text-sm text-zinc-500 mb-6">
             <strong>{invite.org.name}</strong> has invited you to join as a{' '}
