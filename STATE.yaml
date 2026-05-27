@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-27T10:15:09Z
+updated: 2026-05-27T11:15:09Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,17 +75,25 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-27T10:15:09Z
-  change: "Add aria-hidden to decorative Phosphor icons in template and workflow detail/create pages (NewTemplateForm, template detail, NewWorkflowForm, workflow detail, ApprovalActions, CommentForm) so screen readers skip them"
+  date: 2026-05-27T11:15:09Z
+  change: "Add aria-hidden to decorative Phosphor icons in Navbar (logo, nav items, mobile toggle, sign-out) so screen readers skip them"
   files:
-    - src/app/templates/new/NewTemplateForm.tsx
-    - src/app/templates/[id]/page.tsx
-    - src/app/workflows/new/NewWorkflowForm.tsx
-    - src/app/workflows/[id]/page.tsx
-    - src/app/workflows/[id]/ApprovalActions.tsx
-    - src/app/workflows/[id]/CommentForm.tsx
+    - src/components/Navbar.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-27T10:15:09Z
+    change: "Add aria-hidden to decorative Phosphor icons in template and workflow detail/create pages (NewTemplateForm, template detail, NewWorkflowForm, workflow detail, ApprovalActions, CommentForm) so screen readers skip them"
+    files:
+      - src/app/templates/new/NewTemplateForm.tsx
+      - src/app/templates/[id]/page.tsx
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - src/app/workflows/[id]/page.tsx
+      - src/app/workflows/[id]/ApprovalActions.tsx
+      - src/app/workflows/[id]/CommentForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-27T09:15:06Z

@@ -40,7 +40,7 @@ export function Navbar() {
       <header className="border-b border-zinc-200/50 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 font-bold text-zinc-950 text-sm">
-            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" />
+            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
             HalalFlow
           </Link>
         </div>
@@ -53,7 +53,7 @@ export function Navbar() {
       <header className="border-b border-zinc-200/50 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
-            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" />
+            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
             HalalFlow
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
@@ -77,7 +77,7 @@ export function Navbar() {
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav-menu"
             >
-              {mobileOpen ? <X className="w-5 h-5" /> : <List className="w-5 h-5" />}
+              {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <List className="w-5 h-5" aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -131,7 +131,7 @@ export function Navbar() {
       <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
-            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" />
+            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
             HalalFlow
           </Link>
           <nav className="hidden sm:flex items-center gap-1">
@@ -147,7 +147,7 @@ export function Navbar() {
                     : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50'
                 )}
               >
-                <Icon className="w-3.5 h-3.5" weight={pathname.startsWith(href) ? 'fill' : 'regular'} />
+                <Icon className="w-3.5 h-3.5" weight={pathname.startsWith(href) ? 'fill' : 'regular'} aria-hidden="true" />
                 {label}
               </Link>
             ))}
@@ -160,7 +160,7 @@ export function Navbar() {
               onClick={handleLogout}
               className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
             >
-              <SignOut className="w-3.5 h-3.5" />
+              <SignOut className="w-3.5 h-3.5" aria-hidden="true" />
               <span className="hidden sm:block">Sign out</span>
             </button>
           </div>
