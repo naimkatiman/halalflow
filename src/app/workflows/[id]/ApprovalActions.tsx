@@ -55,7 +55,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
           disabled={loading}
           className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
         >
-          <CheckCircle className="w-4 h-4" weight="bold" />
+          <CheckCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
           Approve
         </button>
         <button
@@ -63,7 +63,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
           disabled={loading}
           className="flex items-center gap-1.5 border border-red-200 bg-white hover:bg-red-50 disabled:opacity-50 text-red-600 font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
         >
-          <XCircle className="w-4 h-4" weight="bold" />
+          <XCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
           Reject
         </button>
       </div>

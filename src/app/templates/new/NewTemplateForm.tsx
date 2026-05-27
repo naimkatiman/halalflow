@@ -76,7 +76,7 @@ export function NewTemplateForm() {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/templates" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors">
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">New Template</h1>
       </div>
@@ -117,7 +117,7 @@ export function NewTemplateForm() {
               onClick={addStep}
               className="flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
             >
-              <Plus className="w-3.5 h-3.5" weight="bold" />
+              <Plus className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
               Add step
             </button>
           </div>
@@ -126,10 +126,10 @@ export function NewTemplateForm() {
               <div key={i} className="flex gap-3 items-start">
                 <div className="flex flex-col gap-1 pt-2">
                   <button type="button" onClick={() => moveStep(i, -1)} disabled={i === 0} aria-label="Move step up" className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
-                    <ArrowUp className="w-3.5 h-3.5" />
+                    <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
                   <button type="button" onClick={() => moveStep(i, 1)} disabled={i === steps.length - 1} aria-label="Move step down" className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
-                    <ArrowDown className="w-3.5 h-3.5" />
+                    <ArrowDown className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
                 </div>
                 <div className="flex-1 space-y-2">
@@ -150,7 +150,7 @@ export function NewTemplateForm() {
                       aria-label="Remove step"
                       className="text-zinc-300 hover:text-red-500 disabled:opacity-30 transition-colors p-1"
                     >
-                      <Trash className="w-3.5 h-3.5" />
+                      <Trash className="w-3.5 h-3.5" aria-hidden="true" />
                     </button>
                   </div>
                   <input

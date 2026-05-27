@@ -67,7 +67,7 @@ export function NewWorkflowForm() {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/workflows" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors">
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">New Workflow</h1>
       </div>

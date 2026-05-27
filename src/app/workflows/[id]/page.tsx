@@ -72,7 +72,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
     <div className="max-w-3xl space-y-6">
       <div className="flex items-start gap-3">
         <Link href="/workflows" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors mt-1">
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
@@ -116,11 +116,11 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
                   >
                     <div className="mt-0.5">
                       {isDone ? (
-                        <CheckCircle className="w-4 h-4 text-emerald-600" weight="fill" />
+                        <CheckCircle className="w-4 h-4 text-emerald-600" weight="fill" aria-hidden="true" />
                       ) : isRejected ? (
-                        <XCircle className="w-4 h-4 text-red-500" weight="fill" />
+                        <XCircle className="w-4 h-4 text-red-500" weight="fill" aria-hidden="true" />
                       ) : (
-                        <Clock className={`w-4 h-4 ${isCurrent ? 'text-blue-500' : 'text-zinc-300'}`} weight="fill" />
+                        <Clock className={`w-4 h-4 ${isCurrent ? 'text-blue-500' : 'text-zinc-300'}`} weight="fill" aria-hidden="true" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -153,7 +153,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
 
           <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
             <h2 className="font-semibold text-zinc-950 text-sm mb-4 flex items-center gap-1.5">
-              <ChatCircle className="w-4 h-4 text-zinc-400" />
+              <ChatCircle className="w-4 h-4 text-zinc-400" aria-hidden="true" />
               Comments
               {workflow.comments.length > 0 && (
                 <span className="text-zinc-400 font-normal">({workflow.comments.length})</span>

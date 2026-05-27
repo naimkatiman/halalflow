@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-27T09:15:06Z
+updated: 2026-05-27T10:15:09Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,16 +75,27 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-27T09:15:06Z
-  change: "Add role=alert to form error messages in onboarding, new-template, and new-workflow forms so screen readers announce validation errors immediately"
+  date: 2026-05-27T10:15:09Z
+  change: "Add aria-hidden to decorative Phosphor icons in template and workflow detail/create pages (NewTemplateForm, template detail, NewWorkflowForm, workflow detail, ApprovalActions, CommentForm) so screen readers skip them"
   files:
-    - src/app/onboarding/OnboardingForm.tsx
     - src/app/templates/new/NewTemplateForm.tsx
+    - src/app/templates/[id]/page.tsx
     - src/app/workflows/new/NewWorkflowForm.tsx
+    - src/app/workflows/[id]/page.tsx
+    - src/app/workflows/[id]/ApprovalActions.tsx
+    - src/app/workflows/[id]/CommentForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-27T09:15:06Z
+    change: "Add role=alert to form error messages in onboarding, new-template, and new-workflow forms so screen readers announce validation errors immediately"
+    files:
+      - src/app/onboarding/OnboardingForm.tsx
+      - src/app/templates/new/NewTemplateForm.tsx
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-27T08:15:05Z
     change: "Add aria-hidden to decorative Phosphor icons in invites, onboarding, import/export buttons, org switcher, and invite member form for screen-reader accessibility"
     files:

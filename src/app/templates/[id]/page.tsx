@@ -45,7 +45,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
     <div className="max-w-3xl space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/templates" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors">
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">{template.name}</h1>
@@ -57,7 +57,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
             href={`/workflows/new?templateId=${template.id}`}
             className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-3 py-2 rounded-lg transition-colors"
           >
-            <Plus className="w-3.5 h-3.5" weight="bold" />
+            <Plus className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
             Use template
           </Link>
         </div>

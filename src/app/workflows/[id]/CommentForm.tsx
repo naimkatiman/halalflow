@@ -51,7 +51,7 @@ export function CommentForm({ workflowId }: { workflowId: string }) {
         disabled={loading || !body.trim()}
         className="flex items-center gap-1.5 bg-zinc-900 hover:bg-zinc-800 disabled:opacity-40 text-white font-medium text-sm px-3 py-2 rounded-lg transition-colors"
       >
-        <PaperPlaneTilt className="w-3.5 h-3.5" weight="bold" />
+        <PaperPlaneTilt className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
         <span className="sr-only">Post comment</span>
       </button>
       {error && <p className="text-xs text-red-600 mt-1" role="alert">{error}</p>}
