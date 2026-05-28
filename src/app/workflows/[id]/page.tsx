@@ -96,13 +96,13 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
         <div className="md:col-span-2 space-y-6">
           <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
             <h2 className="font-semibold text-zinc-950 text-sm mb-4">Approval Steps</h2>
-            <div className="space-y-3">
+            <ol className="space-y-3">
               {workflow.approvals.map((approval) => {
                 const isCurrent = approval.step.order === workflow.currentStep && isActive;
                 const isDone = approval.status === 'approved';
                 const isRejected = approval.status === 'rejected';
                 return (
-                  <div
+                  <li
                     key={approval.id}
                     className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${
                       isCurrent
@@ -141,10 +141,10 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
                         <p className="text-xs text-blue-600 font-medium mt-1">Awaiting approval</p>
                       )}
                     </div>
-                  </div>
+                  </li>
                 );
               })}
-            </div>
+            </ol>
           </div>
 
           {currentApproval && isActive && workflow.createdById !== session.userId && (
