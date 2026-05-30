@@ -10,6 +10,8 @@ import { Buildings, Users } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
   title: 'Settings — HalalFlow',
+  description:
+    "Manage your organization's members, switch workspaces, and configure HalalFlow preferences.",
 };
 
 export default async function SettingsPage() {
