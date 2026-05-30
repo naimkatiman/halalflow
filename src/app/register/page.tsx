@@ -4,6 +4,8 @@ import { RegisterForm } from './RegisterForm';
 
 export const metadata: Metadata = {
   title: 'Register — HalalFlow',
+  description:
+    'Create a HalalFlow account to start managing structured approval workflows for your organization.',
 };
 
 export default function RegisterPage() {

@@ -1,5 +1,5 @@
 project: halalflow
-updated: 2026-05-27T21:15:05Z
+updated: 2026-05-30T07:15:09Z
 product: Islamic Finance Workflow Engine
 
 merge_consolidation:
@@ -75,14 +75,25 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-27T21:15:05Z
-  change: "Convert approval steps container from generic divs to semantic ordered list (ol/li) in workflow detail page so screen readers announce step sequence and count"
+  date: 2026-05-30T07:15:09Z
+  change: "Add meta description tags to public landing page and core app pages (dashboard, workflows, templates, login, register) for SEO and social sharing"
   files:
-    - src/app/workflows/[id]/page.tsx
+    - src/app/page.tsx
+    - src/app/dashboard/page.tsx
+    - src/app/workflows/page.tsx
+    - src/app/templates/page.tsx
+    - src/app/login/page.tsx
+    - src/app/register/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-27T21:15:05Z
+    change: "Convert approval steps container from generic divs to semantic ordered list (ol/li) in workflow detail page so screen readers announce step sequence and count"
+    files:
+      - src/app/workflows/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-27T16:15:03Z
     change: "Add role=progressbar with aria-valuenow, aria-valuemax, and aria-label to workflow detail progress bar so screen readers announce completion status"
     files:

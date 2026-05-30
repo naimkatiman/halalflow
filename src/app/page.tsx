@@ -7,6 +7,8 @@ import { LandingPage } from '@/components/landing/LandingPage';
 
 export const metadata: Metadata = {
   title: 'HalalFlow — Islamic Finance Workflow Engine',
+  description:
+    'Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs. Manage structured approval workflows with transparency and accountability.',
 };
 
 export default async function RootPage() {

@@ -9,6 +9,8 @@ import { CheckCircle, XCircle, Clock, ArrowRight, Plus } from '@phosphor-icons/r
 
 export const metadata: Metadata = {
   title: 'Dashboard — HalalFlow',
+  description:
+    'Overview of your organization\'s workflows, recent activity, and key statistics.',
 };
 
 export default async function DashboardPage() {

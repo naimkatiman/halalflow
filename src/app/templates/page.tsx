@@ -10,6 +10,8 @@ import { ImportButton } from './ImportButton';
 
 export const metadata: Metadata = {
   title: 'Templates — HalalFlow',
+  description:
+    'Create and manage reusable workflow templates for your organization. Define multi-step approval processes.',
 };
 
 const PAGE_SIZE = 20;
