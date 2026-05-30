@@ -54,6 +54,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
               </div>
               {!isCurrent && (
                 <button
+                  type="button"
                   onClick={() => handleSwitch(org.id)}
                   disabled={switching === org.id}
                   className="text-xs font-medium text-emerald-600 hover:text-emerald-700 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-emerald-50"

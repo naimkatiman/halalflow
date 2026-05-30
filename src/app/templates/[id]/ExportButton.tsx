@@ -22,6 +22,7 @@ export function ExportButton({ templateId, templateName }: { templateId: string;
 
   return (
     <button
+      type="button"
       onClick={handleExport}
       className="flex items-center gap-1.5 border border-zinc-200 hover:border-zinc-300 text-zinc-600 hover:text-zinc-800 font-medium text-sm px-3 py-2 rounded-lg transition-colors"
     >

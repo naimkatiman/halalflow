@@ -46,6 +46,7 @@ export function ImportButton() {
         onChange={handleFile}
       />
       <button
+        type="button"
         onClick={handleClick}
         disabled={importing}
         className="flex items-center gap-1.5 border border-zinc-200 hover:border-zinc-300 text-zinc-600 hover:text-zinc-800 font-medium text-sm px-3 py-2 rounded-lg transition-colors disabled:opacity-50"

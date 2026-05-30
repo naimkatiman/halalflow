@@ -1,14 +1,42 @@
 project: halalflow
-updated: 2026-05-30T21:15:04Z
+updated: 2026-05-31T00:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-30T22:15:04Z
-  change: "Add metadata title to 404 not-found page for consistent browser tab UX"
+  date: 2026-05-31T00:15:07Z
+  change: "Add explicit type=button to remaining non-submit buttons (import, export, approve, reject, org switch) for semantic correctness and accessibility"
   files:
-    - src/app/not-found.tsx
+    - src/app/templates/ImportButton.tsx
+    - src/app/templates/[id]/ExportButton.tsx
+    - src/app/workflows/[id]/ApprovalActions.tsx
+    - src/app/settings/OrgSwitcher.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T00:15:07Z
+    change: "Add explicit type=button to non-submit buttons (error reset, navbar mobile toggle, navbar sign-out) for accessibility and semantic correctness"
+    files:
+      - src/app/error.tsx
+      - src/components/Navbar.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T00:15:07Z
+    change: "Add Metadata type import and description to not-found page for SEO consistency"
+    files:
+      - src/app/not-found.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-30T22:15:04Z
+    change: "Add metadata title to 404 not-found page for consistent browser tab UX"
+    files:
+      - src/app/not-found.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-05-30T21:15:04Z

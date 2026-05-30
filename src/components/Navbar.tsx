@@ -71,6 +71,7 @@ export function Navbar() {
               Get started
             </Link>
             <button
+              type="button"
               className="sm:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
@@ -157,6 +158,7 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             <span className="text-xs text-zinc-500 hidden sm:block truncate max-w-[160px]">{user.name}</span>
             <button
+              type="button"
               onClick={handleLogout}
               className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
             >

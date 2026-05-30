@@ -51,6 +51,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
       <div className="flex items-center gap-2">
         <button
+          type="button"
           onClick={() => act('approved')}
           disabled={loading}
           className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
@@ -59,6 +60,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
           Approve
         </button>
         <button
+          type="button"
           onClick={() => act('rejected')}
           disabled={loading}
           className="flex items-center gap-1.5 border border-red-200 bg-white hover:bg-red-50 disabled:opacity-50 text-red-600 font-semibold text-sm px-4 py-2 rounded-lg transition-colors"

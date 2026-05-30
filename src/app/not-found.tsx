@@ -1,8 +1,10 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Page Not Found — HalalFlow",
+  description: "The page you are looking for does not exist on HalalFlow.",
 };
 
 export default function NotFound() {
