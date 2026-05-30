@@ -18,7 +18,7 @@ export default function Error({
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
       <h1 className="text-6xl font-bold text-zinc-200 tabular-nums">Error</h1>
-      <p className="mt-4 text-lg font-medium text-zinc-950">
+      <p role="alert" className="mt-4 text-lg font-medium text-zinc-950">
         Something went wrong
       </p>
       <p className="mt-1 text-sm text-zinc-500 max-w-sm">

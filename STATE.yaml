@@ -3,32 +3,26 @@ updated: 2026-05-31T00:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T00:15:07Z
-  change: "Add explicit type=button to remaining non-submit buttons (import, export, approve, reject, org switch) for semantic correctness and accessibility"
+  date: 2026-05-31T01:15:10Z
+  change: "Add role=alert to error boundary message so screen readers announce runtime errors immediately"
   files:
-    - src/app/templates/ImportButton.tsx
-    - src/app/templates/[id]/ExportButton.tsx
-    - src/app/workflows/[id]/ApprovalActions.tsx
-    - src/app/settings/OrgSwitcher.tsx
+    - src/app/error.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-31T00:15:07Z
-    change: "Add explicit type=button to non-submit buttons (error reset, navbar mobile toggle, navbar sign-out) for accessibility and semantic correctness"
-    files:
-      - src/app/error.tsx
-      - src/components/Navbar.tsx
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green"
-
-previous_cycles:
-  - date: 2026-05-31T00:15:07Z
-    change: "Add Metadata type import and description to not-found page for SEO consistency"
+    change: "Commit accumulated cycle batch: not-found metadata + button type consistency across 8 files"
     files:
       - src/app/not-found.tsx
+      - src/app/error.tsx
+      - src/components/Navbar.tsx
+      - src/app/templates/ImportButton.tsx
+      - src/app/templates/[id]/ExportButton.tsx
+      - src/app/workflows/[id]/ApprovalActions.tsx
+      - src/app/settings/OrgSwitcher.tsx
       - STATE.yaml
-    verification: "npm run lint clean; npm run build green"
+    verification: "npm run lint clean; npm run build green; committed as 670f1fe"
 
 previous_cycles:
   - date: 2026-05-30T22:15:04Z
