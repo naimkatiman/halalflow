@@ -75,11 +75,19 @@ next_actions:
   - "Roadmap complete — no pending items"
 
 latest_cycle:
-  date: 2026-05-30T09:15:07Z
-  change: "Commit meta description tags from prior cycle — all uncommitted changes now on main"
+  date: 2026-05-30T10:15:08Z
+  change: "Replace raw <a> tag with Next.js <Link> for Switch account button on invite page so client-side navigation avoids full page reload"
   files:
+    - src/app/invites/[token]/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 01df95a"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-30T09:15:07Z
+    change: "Commit meta description tags from prior cycle — all uncommitted changes now on main"
+    files:
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 01df95a"
 
 previous_cycles:
   - date: 2026-05-30T07:15:09Z

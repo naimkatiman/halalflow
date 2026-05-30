@@ -87,12 +87,12 @@ export default async function InvitePage({
                 You&apos;re signed in as <strong>{session.email}</strong>, but this invite is for{' '}
                 <strong>{invite.email}</strong>.
               </p>
-              <a
+              <Link
                 href={`/logout?redirect=/invites/${token}`}
-                className="inline-block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors"
+                className="inline-block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors text-center"
               >
                 Switch account
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="space-y-3">
