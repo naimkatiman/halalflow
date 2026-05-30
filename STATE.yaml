@@ -3,12 +3,20 @@ updated: 2026-05-31T04:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T04:15:09Z
-  change: "Add Cache-Control: no-store headers to /api/health responses so CDNs and reverse proxies never cache health status"
+  date: 2026-05-31T05:15:06Z
+  change: "Add Cache-Control: no-store headers to /api/csrf responses so browsers and CDNs never cache CSRF tokens"
   files:
-    - src/app/api/health/route.ts
+    - src/app/api/csrf/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T04:15:09Z
+    change: "Add Cache-Control: no-store headers to /api/health responses so CDNs and reverse proxies never cache health status"
+    files:
+      - src/app/api/health/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-31T02:15:09Z
