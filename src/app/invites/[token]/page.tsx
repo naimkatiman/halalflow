@@ -9,6 +9,8 @@ import { GitBranch, CheckCircle, XCircle } from '@phosphor-icons/react/dist/ssr'
 
 export const metadata: Metadata = {
   title: 'Invitation — HalalFlow',
+  description:
+    'Accept your invitation to join a HalalFlow organization and start managing structured approval workflows.',
 };
 
 export default async function InvitePage({
