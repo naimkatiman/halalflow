@@ -9,7 +9,7 @@ import { ApprovalActions } from './ApprovalActions';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Workflow Details · HalalFlow',
+  title: 'Workflow Details — HalalFlow',
   description:
     'Track the status of a submitted workflow, view approval steps, add comments, and see the full audit log.',
 };

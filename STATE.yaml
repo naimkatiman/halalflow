@@ -1,16 +1,23 @@
 project: halalflow
-updated: 2026-05-30T19:15:04Z
+updated: 2026-05-30T21:15:04Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-30T19:15:04Z
-  change: "Add meta description to New Template page for SEO consistency"
+  date: 2026-05-30T21:15:04Z
+  change: "Standardize page title separators in template and workflow detail pages from middle dot (·) to em dash (—) for consistency with all other app pages"
   files:
-    - src/app/templates/new/page.tsx
+    - src/app/templates/[id]/page.tsx
+    - src/app/workflows/[id]/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-05-30T19:15:04Z
+    change: "Add meta description to New Template page for SEO consistency"
+    files:
+      - src/app/templates/new/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-05-30T18:15:04Z
     change: "Add meta description to Workflow Details page for SEO consistency"
     files:
