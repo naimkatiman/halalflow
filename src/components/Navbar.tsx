@@ -160,6 +160,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={handleLogout}
+              aria-label="Sign out"
               className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
             >
               <SignOut className="w-3.5 h-3.5" aria-hidden="true" />

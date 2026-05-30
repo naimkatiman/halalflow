@@ -1,14 +1,30 @@
 project: halalflow
-updated: 2026-05-31T00:15:07Z
+updated: 2026-05-31T02:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T01:15:10Z
-  change: "Add role=alert to error boundary message so screen readers announce runtime errors immediately"
+  date: 2026-05-31T03:15:05Z
+  change: "Add aria-label to Navbar sign-out button so mobile screen readers announce it correctly (visible text is hidden below sm breakpoint)"
   files:
-    - src/app/error.tsx
+    - src/components/Navbar.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-05-31T02:15:09Z
+    change: "Add aria-hidden to decorative ArrowRight icon in landing page Hero CTA so screen readers skip it"
+    files:
+      - src/components/landing/Hero.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T01:15:10Z
+    change: "Add role=alert to error boundary message so screen readers announce runtime errors immediately"
+    files:
+      - src/app/error.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-31T00:15:07Z

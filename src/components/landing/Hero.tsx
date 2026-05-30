@@ -36,7 +36,7 @@ export function Hero() {
               href="/register"
               className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 active:translate-y-px"
             >
-              Get started <ArrowRight className="h-4 w-4" weight="bold" />
+              Get started <ArrowRight className="h-4 w-4" weight="bold" aria-hidden />
             </Link>
             <Link
               href="/login"
