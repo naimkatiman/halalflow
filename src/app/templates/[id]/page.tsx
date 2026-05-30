@@ -10,6 +10,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Template Details · HalalFlow',
+  description:
+    'View a reusable workflow template with its defined approval steps, export it as JSON, or create a new workflow from it.',
 };
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
