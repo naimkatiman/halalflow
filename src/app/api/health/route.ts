@@ -9,14 +9,17 @@ export async function GET() {
     db = err instanceof Error ? err.message : "unreachable";
     return NextResponse.json(
       { status: "degraded", db, uptime: process.uptime(), timestamp: Date.now() },
-      { status: 503 }
+      { status: 503, headers: { "Cache-Control": "no-store, max-age=0" } }
     );
   }
 
-  return NextResponse.json({
-    status: "ok",
-    db,
-    uptime: process.uptime(),
-    timestamp: Date.now(),
-  });
+  return NextResponse.json(
+    {
+      status: "ok",
+      db,
+      uptime: process.uptime(),
+      timestamp: Date.now(),
+    },
+    { headers: { "Cache-Control": "no-store, max-age=0" } }
+  );
 }

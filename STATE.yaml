@@ -1,14 +1,14 @@
 project: halalflow
-updated: 2026-05-31T02:15:09Z
+updated: 2026-05-31T04:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T03:15:05Z
-  change: "Add aria-label to Navbar sign-out button so mobile screen readers announce it correctly (visible text is hidden below sm breakpoint)"
+  date: 2026-05-31T04:15:09Z
+  change: "Add Cache-Control: no-store headers to /api/health responses so CDNs and reverse proxies never cache health status"
   files:
-    - src/components/Navbar.tsx
+    - src/app/api/health/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-31T02:15:09Z
