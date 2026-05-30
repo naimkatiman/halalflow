@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 
+export const metadata = {
+  title: "Page Not Found — HalalFlow",
+};
+
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
