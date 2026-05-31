@@ -24,7 +24,10 @@ export async function GET() {
       include: { org: true },
     });
 
-    return NextResponse.json({ orgs: memberships.map((m) => ({ ...m.org, role: m.role })) });
+    return NextResponse.json(
+      { orgs: memberships.map((m) => ({ ...m.org, role: m.role })) },
+      { headers: { "Cache-Control": "no-store" } }
+    );
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
@@ -59,7 +62,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { org },
-      { status: 201, headers: { "X-CSRF-Token": csrf.newToken } }
+      { status: 201, headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });

@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-05-31T06:15:10Z
+updated: 2026-05-31T13:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T12:15:08Z
-  change: "Add Cache-Control: no-store headers to /api/invites/[token] GET and POST responses so browsers and CDNs never cache invitation tokens or membership state"
+  date: 2026-05-31T14:15:05Z
+  change: "Add Cache-Control: no-store headers to /api/workflows GET and POST responses so browsers and CDNs never cache authenticated workflow lists or newly created workflows"
   files:
-    - src/app/api/invites/[token]/route.ts
+    - src/app/api/workflows/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T13:15:09Z
+    change: "Add Cache-Control: no-store headers to /api/orgs GET and POST responses so browsers and CDNs never cache authenticated org memberships or session-updating org creation"
+    files:
+      - src/app/api/orgs/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-31T10:15:07Z
