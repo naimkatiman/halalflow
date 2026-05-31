@@ -20,7 +20,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       include: { members: { include: { user: { select: { id: true, name: true, email: true } } } } },
     });
 
-    return NextResponse.json({ org });
+    return NextResponse.json({ org }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

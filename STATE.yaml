@@ -3,12 +3,20 @@ updated: 2026-05-31T15:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T15:15:08Z
-  change: "Add Cache-Control: no-store headers to /api/templates GET and POST responses so browsers and CDNs never cache authenticated template lists or newly created templates"
+  date: 2026-05-31T16:15:09Z
+  change: "Add Cache-Control: no-store header to /api/orgs/[id] GET response so browsers and CDNs never cache authenticated single-org lookups"
   files:
-    - src/app/api/templates/route.ts
+    - src/app/api/orgs/[id]/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 220b792"
+  verification: "npm run lint clean; npm run build green; committed as ee8249e"
+
+previous_cycles:
+  - date: 2026-05-31T15:15:08Z
+    change: "Add Cache-Control: no-store headers to /api/templates GET and POST responses so browsers and CDNs never cache authenticated template lists or newly created templates"
+    files:
+      - src/app/api/templates/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 220b792"
 
 previous_cycles:
   - date: 2026-05-31T14:15:05Z
