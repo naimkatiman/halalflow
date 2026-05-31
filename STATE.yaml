@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-05-31T15:15:08Z
+updated: 2026-05-31T17:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T16:15:09Z
-  change: "Add Cache-Control: no-store header to /api/orgs/[id] GET response so browsers and CDNs never cache authenticated single-org lookups"
+  date: 2026-05-31T17:15:09Z
+  change: "Add Cache-Control: no-store headers to /api/orgs/[id]/members GET and POST responses so browsers and CDNs never cache authenticated member lists or member invitations"
   files:
-    - src/app/api/orgs/[id]/route.ts
+    - src/app/api/orgs/[id]/members/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as ee8249e"
+  verification: "npm run lint clean; npm run build green; committed as c6594b4"
+
+previous_cycles:
+  - date: 2026-05-31T16:15:09Z
+    change: "Add Cache-Control: no-store header to /api/orgs/[id] GET response so browsers and CDNs never cache authenticated single-org lookups"
+    files:
+      - src/app/api/orgs/[id]/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as ee8249e"
 
 previous_cycles:
   - date: 2026-05-31T15:15:08Z
