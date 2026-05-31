@@ -17,7 +17,7 @@ export async function GET(
     });
 
     if (!invite || invite.acceptedAt || invite.expiresAt < new Date()) {
-      return NextResponse.json({ error: "Invalid or expired invitation" }, { status: 410 });
+      return NextResponse.json({ error: "Invalid or expired invitation" }, { status: 410, headers: { "Cache-Control": "no-store" } });
     }
 
     return NextResponse.json({
@@ -27,7 +27,7 @@ export async function GET(
         orgName: invite.org.name,
         expiresAt: invite.expiresAt,
       },
-    });
+    }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
@@ -86,7 +86,7 @@ export async function POST(
     session.orgRole = invite.role;
     await session.save();
 
-    return NextResponse.json({ ok: true }, { headers: { "X-CSRF-Token": csrf.newToken } });
+    return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

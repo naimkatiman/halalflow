@@ -3,13 +3,21 @@ updated: 2026-05-31T06:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T10:15:07Z
-  change: "Add Cache-Control: no-store headers to /api/auth/login and /api/auth/register responses so browsers and intermediaries never cache credential-handling endpoints or session cookies"
+  date: 2026-05-31T12:15:08Z
+  change: "Add Cache-Control: no-store headers to /api/invites/[token] GET and POST responses so browsers and CDNs never cache invitation tokens or membership state"
   files:
-    - src/app/api/auth/login/route.ts
-    - src/app/api/auth/register/route.ts
+    - src/app/api/invites/[token]/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T10:15:07Z
+    change: "Add Cache-Control: no-store headers to /api/auth/login and /api/auth/register responses so browsers and intermediaries never cache credential-handling endpoints or session cookies"
+    files:
+      - src/app/api/auth/login/route.ts
+      - src/app/api/auth/register/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 8d7a207"
 
 previous_cycles:
   - date: 2026-05-31T09:15:06Z
