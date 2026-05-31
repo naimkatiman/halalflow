@@ -8,15 +8,15 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store, max-age=0" } });
     }
 
     const csrf = await validateCsrfToken(request);
-    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store, max-age=0" } });
 
     session.destroy();
-    return NextResponse.json({ ok: true }, { headers: { "X-CSRF-Token": csrf.newToken } });
+    return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store, max-age=0", "X-CSRF-Token": csrf.newToken } });
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store, max-age=0" } });
   }
 }
