@@ -1,14 +1,70 @@
 project: halalflow
-updated: 2026-05-31T17:15:09Z
+updated: 2026-06-01T02:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-05-31T18:15:05Z
-  change: "Add Cache-Control: no-store headers to /api/orgs/[id]/switch POST response so browsers and CDNs never cache session-switching responses or new CSRF tokens"
+  date: 2026-06-01T03:15:10Z
+  change: "Add Cache-Control: no-store headers to /api/invites/[token] POST error responses (401, 403, 410, 409, 500) so browsers and CDNs never cache authenticated invite acceptance errors or CSRF tokens"
   files:
-    - src/app/api/orgs/[id]/switch/route.ts
+    - src/app/api/invites/[token]/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-01T02:15:10Z
+    change: "Add Cache-Control: no-store headers to /api/workflows/[id]/comments POST responses so browsers and CDNs never cache authenticated comment submissions or newly issued CSRF tokens"
+    files:
+      - src/app/api/workflows/[id]/comments/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-01T01:15:09Z
+    change: "Add Cache-Control: no-store headers to /api/templates/import POST responses so browsers and CDNs never cache authenticated template imports or newly issued CSRF tokens"
+    files:
+      - src/app/api/templates/import/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T22:15:09Z
+    change: "Add Cache-Control: no-store headers to /api/workflows/[id]/approve POST responses so browsers and CDNs never cache authenticated approval actions or newly issued CSRF tokens"
+    files:
+      - src/app/api/workflows/[id]/approve/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T21:15:09Z
+    change: "Add Cache-Control: no-store header to /api/templates/[id]/export GET response so browsers and CDNs never cache authenticated template export data"
+    files:
+      - src/app/api/templates/[id]/export/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T20:15:09Z
+    change: "Add Cache-Control: no-store headers to /api/workflows/[id] GET and DELETE responses so browsers and CDNs never cache authenticated workflow lookups or deletions"
+    files:
+      - src/app/api/workflows/[id]/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T19:15:07Z
+    change: "Add Cache-Control: no-store headers to /api/templates/[id] GET, PUT, and DELETE responses so browsers and CDNs never cache authenticated template lookups, updates, or deletions"
+    files:
+      - src/app/api/templates/[id]/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-05-31T18:15:05Z
+    change: "Add Cache-Control: no-store headers to /api/orgs/[id]/switch POST response so browsers and CDNs never cache session-switching responses or new CSRF tokens"
+    files:
+      - src/app/api/orgs/[id]/switch/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-05-31T17:15:09Z

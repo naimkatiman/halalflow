@@ -23,7 +23,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     });
     if (!template) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    return NextResponse.json({ template });
+    return NextResponse.json({ template }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
@@ -46,7 +46,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const data = updateSchema.parse(body);
     const template = await prisma.workflowTemplate.update({ where: { id }, data });
 
-    return NextResponse.json({ template }, { headers: { "X-CSRF-Token": csrf.newToken } });
+    return NextResponse.json({ template }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
@@ -67,7 +67,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     await prisma.workflowTemplate.delete({ where: { id } });
-    return NextResponse.json({ ok: true }, { headers: { "X-CSRF-Token": csrf.newToken } });
+    return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

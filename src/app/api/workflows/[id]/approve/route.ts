@@ -42,10 +42,10 @@ function collectRecipients(workflow: WorkflowForNotification, actorEmail: string
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
 
     const csrf = await validateCsrfToken(request);
-    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
     const workflow = await prisma.workflow.findFirst({
@@ -62,12 +62,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       },
     });
 
-    if (!workflow) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!workflow) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
     if (!["in_progress", "pending"].includes(workflow.status)) {
-      return NextResponse.json({ error: "Workflow is not active" }, { status: 400 });
+      return NextResponse.json({ error: "Workflow is not active" }, { status: 400, headers: { "Cache-Control": "no-store" } });
     }
     if (workflow.createdById === session.userId) {
-      return NextResponse.json({ error: "You cannot approve your own workflow" }, { status: 403 });
+      return NextResponse.json({ error: "You cannot approve your own workflow" }, { status: 403, headers: { "Cache-Control": "no-store" } });
     }
 
     const body = await request.json();
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       (approval) => approval.status === "pending" && approval.step.order === workflow.currentStep
     );
     if (!pendingApproval) {
-      return NextResponse.json({ error: "No pending step at current position" }, { status: 400 });
+      return NextResponse.json({ error: "No pending step at current position" }, { status: 400, headers: { "Cache-Control": "no-store" } });
     }
 
     const totalSteps = workflow.template.steps.length;
@@ -149,10 +149,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     return NextResponse.json(
       { workflow: updated, notifications },
-      { headers: { "X-CSRF-Token": csrf.newToken } }
+      { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {
-    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

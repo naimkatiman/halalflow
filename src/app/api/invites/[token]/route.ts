@@ -29,7 +29,7 @@ export async function GET(
       },
     }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
 
@@ -40,11 +40,11 @@ export async function POST(
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
     }
 
     const csrf = await validateCsrfToken(request);
-    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
 
     const { token } = await params;
     const invite = await prisma.invitation.findUnique({
@@ -53,14 +53,14 @@ export async function POST(
     });
 
     if (!invite || invite.acceptedAt || invite.expiresAt < new Date()) {
-      return NextResponse.json({ error: "Invalid or expired invitation" }, { status: 410 });
+      return NextResponse.json({ error: "Invalid or expired invitation" }, { status: 410, headers: { "Cache-Control": "no-store" } });
     }
 
     const user = await prisma.user.findUnique({ where: { id: session.userId } });
     if (!user || user.email.toLowerCase() !== invite.email.toLowerCase()) {
       return NextResponse.json(
         { error: "This invitation is for a different email address" },
-        { status: 403 }
+        { status: 403, headers: { "Cache-Control": "no-store" } }
       );
     }
 
@@ -68,7 +68,7 @@ export async function POST(
       where: { orgId_userId: { orgId: invite.orgId, userId: user.id } },
     });
     if (existingMember) {
-      return NextResponse.json({ error: "Already a member" }, { status: 409 });
+      return NextResponse.json({ error: "Already a member" }, { status: 409, headers: { "Cache-Control": "no-store" } });
     }
 
     await prisma.$transaction([

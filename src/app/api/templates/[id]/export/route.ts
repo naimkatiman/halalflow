@@ -28,7 +28,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       version: "1.0",
     };
 
-    return NextResponse.json(exportData);
+    return NextResponse.json(exportData, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
