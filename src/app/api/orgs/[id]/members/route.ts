@@ -38,7 +38,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       }),
     ]);
 
-    return NextResponse.json({ members, pendingInvites });
+    return NextResponse.json({ members, pendingInvites }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         data: { orgId: id, userId: existingUser.id, role },
         include: { user: { select: { id: true, name: true, email: true } } },
       });
-      return NextResponse.json({ member, type: "direct" }, { status: 201 });
+      return NextResponse.json({ member, type: "direct" }, { status: 201, headers: { "Cache-Control": "no-store" } });
     }
 
     // Case 2: User does not exist — create an invitation
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     return NextResponse.json(
       { invite, type: "invitation" },
-      { status: 201, headers: { "X-CSRF-Token": csrf.newToken } }
+      { status: 201, headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
