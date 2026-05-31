@@ -6,7 +6,7 @@ import { SessionData, sessionOptions } from "@/lib/session";
 export async function GET() {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    if (!session.isLoggedIn) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Not authenticated" }, { status: 401, headers: { "Cache-Control": "no-store" } });
     return NextResponse.json(
       {
         user: {
@@ -21,6 +21,6 @@ export async function GET() {
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

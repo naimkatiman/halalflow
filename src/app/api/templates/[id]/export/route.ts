@@ -7,14 +7,14 @@ import { SessionData, sessionOptions } from "@/lib/session";
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
     const template = await prisma.workflowTemplate.findFirst({
       where: { id, orgId: session.orgId },
       include: { steps: { orderBy: { order: "asc" } } },
     });
-    if (!template) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!template) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
 
     const exportData = {
       name: template.name,
@@ -30,6 +30,6 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 
     return NextResponse.json(exportData, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

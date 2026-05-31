@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: 'Too many attempts. Please try again later.' },
-        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter), 'Cache-Control': 'no-store' } }
       );
     }
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = email.toLowerCase().trim();
 
     const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
-    if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 409 });
+    if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 409, headers: { "Cache-Control": "no-store" } });
 
     const hashed = await bcrypt.hash(password, 12);
     const user = await prisma.user.create({ data: { name, email: normalizedEmail, password: hashed } });
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       { status: 201, headers: { "Cache-Control": "no-store" } }
     );
   } catch (error) {
-    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

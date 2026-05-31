@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: 'Too many attempts. Please try again later.' },
-        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter), 'Cache-Control': 'no-store' } }
       );
     }
 
@@ -34,10 +34,10 @@ export async function POST(request: NextRequest) {
         memberships: { include: { org: true }, orderBy: { createdAt: "asc" }, take: 1 },
       },
     });
-    if (!user) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    if (!user) return NextResponse.json({ error: "Invalid credentials" }, { status: 401, headers: { "Cache-Control": "no-store" } });
 
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    if (!valid) return NextResponse.json({ error: "Invalid credentials" }, { status: 401, headers: { "Cache-Control": "no-store" } });
 
     const membership = user.memberships[0];
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       org: membership ? { id: membership.orgId, name: membership.org.name, role: membership.role } : null,
     }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

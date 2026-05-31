@@ -24,8 +24,8 @@ const MAX_PAGE_SIZE = 100;
 export async function GET(request: NextRequest) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
+    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400, headers: { "Cache-Control": "no-store" } });
 
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
@@ -49,18 +49,18 @@ export async function GET(request: NextRequest) {
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400 });
+    if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
+    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400, headers: { "Cache-Control": "no-store" } });
 
     const csrf = await validateCsrfToken(request);
-    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
 
     const body = await request.json();
     const { name, description, steps } = createSchema.parse(body);
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
       { status: 201, headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {
-    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

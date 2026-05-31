@@ -4,7 +4,7 @@ product: Islamic Finance Workflow Engine
 
 latest_cycle:
   date: 2026-06-01T03:15:10Z
-  change: "Add Cache-Control: no-store headers to /api/invites/[token] POST error responses (401, 403, 410, 409, 500) so browsers and CDNs never cache authenticated invite acceptance errors or CSRF tokens"
+  change: "Add missing Cache-Control: no-store header to /api/invites/[token] POST 500 error response so browsers and CDNs never cache authenticated errors"
   files:
     - src/app/api/invites/[token]/route.ts
     - STATE.yaml
