@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
       org: membership ? { id: membership.orgId, name: membership.org.name, role: membership.role } : null,
-    });
+    }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { user: { id: user.id, email: user.email, name: user.name }, orgId },
-      { status: 201 }
+      { status: 201, headers: { "Cache-Control": "no-store" } }
     );
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
