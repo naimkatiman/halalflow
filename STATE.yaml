@@ -1,12 +1,12 @@
 project: halalflow
-updated: 2026-06-01T02:15:10Z
+updated: 2026-06-01T04:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T03:15:10Z
-  change: "Add missing Cache-Control: no-store header to /api/invites/[token] POST 500 error response so browsers and CDNs never cache authenticated errors"
+  date: 2026-06-01T04:15:10Z
+  change: "Add responsive mobile navigation menu to authenticated Navbar so mobile users can access Dashboard, Workflows, Templates, Settings, and Sign out on small screens"
   files:
-    - src/app/api/invites/[token]/route.ts
+    - src/components/Navbar.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 

@@ -154,21 +154,64 @@ export function Navbar() {
             ))}
           </nav>
         </div>
-        {user && (
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-zinc-500 hidden sm:block truncate max-w-[160px]">{user.name}</span>
+        <div className="flex items-center gap-3">
+          {user && (
+            <>
+              <span className="text-xs text-zinc-500 hidden sm:block truncate max-w-[160px]">{user.name}</span>
+              <button
+                type="button"
+                onClick={handleLogout}
+                aria-label="Sign out"
+                className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
+              >
+                <SignOut className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Sign out</span>
+              </button>
+            </>
+          )}
+          <button
+            type="button"
+            className="sm:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-menu-auth"
+          >
+            {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <List className="w-5 h-5" aria-hidden="true" />}
+          </button>
+        </div>
+      </div>
+      {mobileOpen && (
+        <div id="mobile-nav-menu-auth" className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-1">
+          {nav.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              aria-current={pathname.startsWith(href) ? 'page' : undefined}
+              onClick={() => setMobileOpen(false)}
+              className={clsx(
+                'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                pathname.startsWith(href)
+                  ? 'bg-emerald-50 text-emerald-700'
+                  : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50'
+              )}
+            >
+              <Icon className="w-4 h-4" weight={pathname.startsWith(href) ? 'fill' : 'regular'} aria-hidden="true" />
+              {label}
+            </Link>
+          ))}
+          {user && (
             <button
               type="button"
-              onClick={handleLogout}
-              aria-label="Sign out"
-              className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
+              onClick={() => { setMobileOpen(false); handleLogout(); }}
+              className="flex sm:hidden items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
             >
-              <SignOut className="w-3.5 h-3.5" aria-hidden="true" />
-              <span className="hidden sm:block">Sign out</span>
+              <SignOut className="w-4 h-4" aria-hidden="true" />
+              Sign out
             </button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </header>
   );
 }
