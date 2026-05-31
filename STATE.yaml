@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-01T06:15:10Z
+updated: 2026-06-01T07:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T06:15:10Z
-  change: "Remove dead src/proxy.ts middleware file — not referenced anywhere and not at the Next.js conventional middleware.ts path; auth guarding is handled inline in page components and API routes"
+  date: 2026-06-01T07:15:10Z
+  change: "Remove dead src/types/index.ts file — OrgRole, WorkflowStatus, and ApprovalStatus types are not imported anywhere; Badge.tsx defines its own local WorkflowStatus and no file references @/types"
   files:
-    - src/proxy.ts
+    - src/types/index.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-01T06:15:10Z
+    change: "Remove dead src/proxy.ts middleware file — not referenced anywhere and not at the Next.js conventional middleware.ts path; auth guarding is handled inline in page components and API routes"
+    files:
+      - src/proxy.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-06-01T05:15:10Z
