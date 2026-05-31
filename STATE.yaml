@@ -1,14 +1,30 @@
 project: halalflow
-updated: 2026-06-01T04:15:10Z
+updated: 2026-06-01T06:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T04:15:10Z
-  change: "Add responsive mobile navigation menu to authenticated Navbar so mobile users can access Dashboard, Workflows, Templates, Settings, and Sign out on small screens"
+  date: 2026-06-01T06:15:10Z
+  change: "Remove dead src/proxy.ts middleware file — not referenced anywhere and not at the Next.js conventional middleware.ts path; auth guarding is handled inline in page components and API routes"
   files:
-    - src/components/Navbar.tsx
+    - src/proxy.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-01T05:15:10Z
+    change: "Update .env.example to use SQLite by default (matching the project README and Prisma schema) with PostgreSQL as a commented alternative, so the quick-start instructions work out of the box without requiring a running Postgres instance"
+    files:
+      - .env.example
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-01T04:15:10Z
+    change: "Add responsive mobile navigation menu to authenticated Navbar so mobile users can access Dashboard, Workflows, Templates, Settings, and Sign out on small screens"
+    files:
+      - src/components/Navbar.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-06-01T02:15:10Z
