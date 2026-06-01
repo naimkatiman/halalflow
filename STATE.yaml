@@ -1,16 +1,22 @@
 project: halalflow
-updated: 2026-06-02T02:15:07Z
+updated: 2026-06-02T04:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T03:15:08Z
-  change: "Add Pending stat card to dashboard so users see pending workflow count alongside Total, In Progress, Approved, and Rejected; adjust grid to 5 columns on desktop"
+  date: 2026-06-02T04:15:08Z
+  change: "Change Pending dashboard stat icon from Clock to Hourglass so it is visually distinct from the Total stat"
   files:
     - src/app/dashboard/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-06-02T03:15:08Z
+    change: "Add Pending stat card to dashboard so users see pending workflow count alongside Total, In Progress, Approved, and Rejected; adjust grid to 5 columns on desktop"
+    files:
+      - src/app/dashboard/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-02T01:15:08Z
     change: "Add metadataBase to root layout using NEXT_PUBLIC_BASE_URL so OpenGraph and Twitter card URLs resolve as absolute URLs for social parsers"
     files:

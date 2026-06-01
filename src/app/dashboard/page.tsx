@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
-import { CheckCircle, XCircle, Clock, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
+import { CheckCircle, XCircle, Clock, Hourglass, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
   title: 'Dashboard — HalalFlow',
@@ -72,7 +72,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: 'Total', value: stats.total, icon: Clock, color: 'text-zinc-600' },
-          { label: 'Pending', value: stats.pending, icon: Clock, color: 'text-amber-600' },
+          { label: 'Pending', value: stats.pending, icon: Hourglass, color: 'text-amber-600' },
           { label: 'In Progress', value: stats.inProgress, icon: Clock, color: 'text-blue-600' },
           { label: 'Approved', value: stats.approved, icon: CheckCircle, color: 'text-emerald-600' },
           { label: 'Rejected', value: stats.rejected, icon: XCircle, color: 'text-red-600' },
