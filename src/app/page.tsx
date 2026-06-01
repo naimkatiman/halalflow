@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';

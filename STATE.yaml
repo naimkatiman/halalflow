@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-01T12:15:07Z
+updated: 2026-06-01T14:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T12:15:07Z
-  change: "Move CommentForm import to top of workflow detail page, before the metadata export, for consistent import ordering"
+  date: 2026-06-01T14:15:10Z
+  change: "Convert landing page Metadata import to type-only import for consistency with all other app pages"
   files:
-    - src/app/workflows/[id]/page.tsx
+    - src/app/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 584facd"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-01T12:15:07Z
+    change: "Move CommentForm import to top of workflow detail page, before the metadata export, for consistent import ordering"
+    files:
+      - src/app/workflows/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 584facd"
 
 previous_cycles:
   - date: 2026-06-01T11:15:09Z
