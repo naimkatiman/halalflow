@@ -62,7 +62,7 @@ export default async function WorkflowsPage({
   ]);
 
   const pages = Math.ceil(total / PAGE_SIZE);
-  const filters = ['', 'in_progress', 'approved', 'rejected'] as const;
+  const filters = ['', 'pending', 'in_progress', 'approved', 'rejected'] as const;
 
   return (
     <div className="space-y-6">

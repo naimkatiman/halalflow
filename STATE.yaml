@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-02T01:15:08Z
+updated: 2026-06-02T02:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T01:15:08Z
-  change: "Add metadataBase to root layout using NEXT_PUBLIC_BASE_URL so OpenGraph and Twitter card URLs resolve as absolute URLs for social parsers"
+  date: 2026-06-02T02:15:07Z
+  change: "Add 'pending' to workflows page status filter list so users can filter to see only pending workflows"
   files:
-    - src/app/layout.tsx
+    - src/app/workflows/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-02T01:15:08Z
+    change: "Add metadataBase to root layout using NEXT_PUBLIC_BASE_URL so OpenGraph and Twitter card URLs resolve as absolute URLs for social parsers"
+    files:
+      - src/app/layout.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T00:15:02Z
