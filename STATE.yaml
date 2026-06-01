@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-01T21:15:04Z
+updated: 2026-06-01T23:15:05Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T22:15:04Z
-  change: "Add OpenGraph and Twitter card metadata to root layout for better social sharing and link previews"
+  date: 2026-06-01T23:15:05Z
+  change: "Add viewport export with themeColor to root layout so mobile browsers tint the address bar with the emerald brand color, matching the PWA manifest"
   files:
     - src/app/layout.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-01T22:15:04Z
+    change: "Add OpenGraph and Twitter card metadata to root layout for better social sharing and link previews"
+    files:
+      - src/app/layout.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-01T21:15:04Z

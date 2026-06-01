@@ -1,8 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
+
+export const viewport: Viewport = {
+  themeColor: "#059669",
+};
 
 export const metadata: Metadata = {
   title: "HalalFlow — Islamic Finance Workflow",
