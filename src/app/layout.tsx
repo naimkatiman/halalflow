@@ -11,6 +11,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "HalalFlow — Islamic Finance Workflow",
   description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",
+  appleWebApp: {
+    capable: true,
+    title: "HalalFlow",
+    statusBarStyle: "default",
+  },
   openGraph: {
     title: "HalalFlow — Islamic Finance Workflow",
     description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",

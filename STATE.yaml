@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-01T23:15:05Z
+updated: 2026-06-02T00:15:02Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T23:15:05Z
-  change: "Add viewport export with themeColor to root layout so mobile browsers tint the address bar with the emerald brand color, matching the PWA manifest"
+  date: 2026-06-02T00:15:02Z
+  change: "Add appleWebApp metadata to root layout for Safari PWA support — enables apple-mobile-web-app-capable and sets status bar style"
   files:
     - src/app/layout.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-01T23:15:05Z
+    change: "Add viewport export with themeColor to root layout so mobile browsers tint the address bar with the emerald brand color, matching the PWA manifest"
+    files:
+      - src/app/layout.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-01T22:15:04Z
