@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-01T20:15:04Z
+updated: 2026-06-01T21:15:04Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T20:15:04Z
-  change: "Add pending invitations list to Settings page so owners/admins can see who they've invited but hasn't accepted yet"
+  date: 2026-06-01T21:15:04Z
+  change: "Add web app manifest (manifest.ts) for PWA support — provides app name, theme color, start URL, and icon reference"
   files:
-    - src/app/settings/page.tsx
+    - src/app/manifest.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-01T20:15:04Z
+    change: "Add pending invitations list to Settings page so owners/admins can see who they've invited but hasn't accepted yet"
+    files:
+      - src/app/settings/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-01T19:15:03Z
