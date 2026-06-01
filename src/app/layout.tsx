@@ -7,6 +7,17 @@ import { Navbar } from "@/components/Navbar";
 export const metadata: Metadata = {
   title: "HalalFlow — Islamic Finance Workflow",
   description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",
+  openGraph: {
+    title: "HalalFlow — Islamic Finance Workflow",
+    description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",
+    type: "website",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HalalFlow — Islamic Finance Workflow",
+    description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",
+  },
 };
 
 export default function RootLayout({

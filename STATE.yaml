@@ -3,12 +3,20 @@ updated: 2026-06-01T21:15:04Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T21:15:04Z
-  change: "Add web app manifest (manifest.ts) for PWA support — provides app name, theme color, start URL, and icon reference"
+  date: 2026-06-01T22:15:04Z
+  change: "Add OpenGraph and Twitter card metadata to root layout for better social sharing and link previews"
   files:
-    - src/app/manifest.ts
+    - src/app/layout.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-01T21:15:04Z
+    change: "Add web app manifest (manifest.ts) for PWA support — provides app name, theme color, start URL, and icon reference"
+    files:
+      - src/app/manifest.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-01T20:15:04Z
