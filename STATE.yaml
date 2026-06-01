@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-02T04:15:08Z
+updated: 2026-06-02T05:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T04:15:08Z
-  change: "Change Pending dashboard stat icon from Clock to Hourglass so it is visually distinct from the Total stat"
+  date: 2026-06-02T05:15:08Z
+  change: "Change In Progress dashboard stat icon from Clock to ArrowsClockwise so all five stat icons are visually distinct"
   files:
     - src/app/dashboard/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-02T04:15:08Z
+    change: "Change Pending dashboard stat icon from Clock to Hourglass so it is visually distinct from the Total stat"
+    files:
+      - src/app/dashboard/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T03:15:08Z
