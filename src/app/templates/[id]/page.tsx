@@ -42,6 +42,14 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
     cancelled: 'bg-zinc-100 text-zinc-600 border-zinc-200',
   };
 
+  const statusLabels: Record<string, string> = {
+    in_progress: 'In Progress',
+    approved: 'Approved',
+    rejected: 'Rejected',
+    pending: 'Pending',
+    cancelled: 'Cancelled',
+  };
+
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -105,7 +113,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
                     <div className="text-xs text-zinc-400">{w.createdBy.name}</div>
                   </div>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ml-2 shrink-0 ${statusCls[w.status] ?? statusCls['pending']}`}>
-                    {w.status.replaceAll('_', ' ')}
+                    {statusLabels[w.status] ?? w.status.replaceAll('_', ' ')}
                   </span>
                 </Link>
               ))}
