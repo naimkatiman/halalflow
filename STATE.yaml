@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-02T00:15:02Z
+updated: 2026-06-02T01:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T00:15:02Z
-  change: "Add appleWebApp metadata to root layout for Safari PWA support — enables apple-mobile-web-app-capable and sets status bar style"
+  date: 2026-06-02T01:15:08Z
+  change: "Add metadataBase to root layout using NEXT_PUBLIC_BASE_URL so OpenGraph and Twitter card URLs resolve as absolute URLs for social parsers"
   files:
     - src/app/layout.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-02T00:15:02Z
+    change: "Add appleWebApp metadata to root layout for Safari PWA support — enables apple-mobile-web-app-capable and sets status bar style"
+    files:
+      - src/app/layout.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-01T23:15:05Z
