@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-01T08:15:02Z
+updated: 2026-06-01T09:15:04Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T08:15:02Z
-  change: "Add /logout to robots.ts disallow list so crawlers do not attempt to index the logout action page"
+  date: 2026-06-01T09:15:04Z
+  change: "Fix workflows page subtitle to show total workflow count instead of current-page length, so pagination does not under-report the true total"
   files:
-    - src/app/robots.ts
+    - src/app/workflows/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-01T08:15:02Z
+    change: "Add /logout to robots.ts disallow list so crawlers do not attempt to index the logout action page"
+    files:
+      - src/app/robots.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-06-01T07:15:10Z

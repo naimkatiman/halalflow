@@ -69,7 +69,7 @@ export default async function WorkflowsPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">Workflows</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">{workflows.length} workflows</p>
+          <p className="text-sm text-zinc-500 mt-0.5">{total} workflows</p>
         </div>
         <Link
           href="/workflows/new"
