@@ -105,7 +105,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
                     <div className="text-xs text-zinc-400">{w.createdBy.name}</div>
                   </div>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ml-2 shrink-0 ${statusCls[w.status] ?? statusCls['pending']}`}>
-                    {w.status.replace('_', ' ')}
+                    {w.status.replaceAll('_', ' ')}
                   </span>
                 </Link>
               ))}
