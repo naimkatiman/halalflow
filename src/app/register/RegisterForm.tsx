@@ -54,7 +54,7 @@ export function RegisterForm() {
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" />
+          <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" aria-hidden="true" />
           <span className="font-bold text-zinc-950">HalalFlow</span>
         </div>
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm">

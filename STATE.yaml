@@ -1,14 +1,31 @@
 project: halalflow
-updated: 2026-06-01T15:15:10Z
+updated: 2026-06-01T18:15:03Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T15:15:10Z
-  change: "Add autoComplete=organization to onboarding form organization name input for better browser autofill UX"
+  date: 2026-06-01T18:15:03Z
+  change: "Add aria-label to footer GitHub link so screen readers know it opens an external site in a new tab"
   files:
-    - src/app/onboarding/OnboardingForm.tsx
+    - src/app/layout.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as d0e71ff"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-01T17:15:02Z
+    change: "Add aria-hidden to decorative GitBranch icons in login and register forms so screen readers skip them"
+    files:
+      - src/app/login/LoginForm.tsx
+      - src/app/register/RegisterForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-01T15:15:10Z
+    change: "Add autoComplete=organization to onboarding form organization name input for better browser autofill UX"
+    files:
+      - src/app/onboarding/OnboardingForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as d0e71ff"
 
 previous_cycles:
   - date: 2026-06-01T14:15:10Z
