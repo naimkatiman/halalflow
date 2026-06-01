@@ -6,6 +6,7 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle } from '@phosphor-icons/react/dist/ssr';
 import { ApprovalActions } from './ApprovalActions';
+import { CommentForm } from './CommentForm';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -13,7 +14,6 @@ export const metadata: Metadata = {
   description:
     'Track the status of a submitted workflow, view approval steps, add comments, and see the full audit log.',
 };
-import { CommentForm } from './CommentForm';
 
 const STATUS_CLS: Record<string, string> = {
   in_progress: 'bg-blue-50 text-blue-700 border-blue-100',
