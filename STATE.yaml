@@ -3,12 +3,12 @@ updated: 2026-06-01T10:15:06Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T10:15:06Z
+  date: 2026-06-01T11:15:09Z
   change: "Update templates page subtitle to show total template count instead of static text, matching the workflows page pattern"
   files:
     - src/app/templates/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed as ca213d4"
 
 previous_cycles:
   - date: 2026-06-01T09:15:04Z
