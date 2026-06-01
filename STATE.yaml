@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-02T06:15:08Z
+updated: 2026-06-02T07:15:05Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T06:15:08Z
-  change: "Add status label map to template detail page so workflow statuses render as proper title case (e.g. In Progress) instead of lowercase with underscores"
+  date: 2026-06-02T07:15:05Z
+  change: "Make dashboard stat cards clickable links to filtered workflow lists so users can drill down from overview counts"
   files:
-    - src/app/templates/[id]/page.tsx
+    - src/app/dashboard/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-02T06:15:08Z
+    change: "Add status label map to template detail page so workflow statuses render as proper title case (e.g. In Progress) instead of lowercase with underscores"
+    files:
+      - src/app/templates/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T05:15:08Z
