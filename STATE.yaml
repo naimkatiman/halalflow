@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-01T19:15:03Z
+updated: 2026-06-01T20:15:04Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-01T19:15:03Z
-  change: "Fix template detail page status label to use replaceAll instead of replace so multi-word statuses with multiple underscores render correctly"
+  date: 2026-06-01T20:15:04Z
+  change: "Add pending invitations list to Settings page so owners/admins can see who they've invited but hasn't accepted yet"
   files:
-    - src/app/templates/[id]/page.tsx
+    - src/app/settings/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-01T19:15:03Z
+    change: "Fix template detail page status label to use replaceAll instead of replace so multi-word statuses with multiple underscores render correctly"
+    files:
+      - src/app/templates/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-01T18:15:03Z

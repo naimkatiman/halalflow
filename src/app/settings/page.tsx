@@ -6,7 +6,7 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
 import { InviteMemberForm } from './InviteMemberForm';
 import { OrgSwitcher } from './OrgSwitcher';
-import { Buildings, Users } from '@phosphor-icons/react/dist/ssr';
+import { Buildings, Users, PaperPlaneTilt } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
   title: 'Settings — HalalFlow',
@@ -31,6 +31,13 @@ export default async function SettingsPage() {
   if (!org) redirect('/onboarding');
 
   const canInvite = ['owner', 'admin'].includes(session.orgRole);
+
+  const pendingInvites = canInvite
+    ? await prisma.invitation.findMany({
+        where: { orgId: session.orgId, acceptedAt: null, expiresAt: { gt: new Date() } },
+        orderBy: { createdAt: 'asc' },
+      })
+    : [];
 
   const memberships = await prisma.orgMember.findMany({
     where: { userId: session.userId },
@@ -97,6 +104,22 @@ export default async function SettingsPage() {
             </div>
           ))}
         </div>
+        {canInvite && pendingInvites.length > 0 && (
+          <div className="pt-3 border-t border-zinc-100 space-y-2">
+            <div className="flex items-center gap-2">
+              <PaperPlaneTilt className="w-3.5 h-3.5 text-zinc-400" aria-hidden />
+              <p className="text-xs font-semibold text-zinc-700">Pending invitations ({pendingInvites.length})</p>
+            </div>
+            {pendingInvites.map((invite) => (
+              <div key={invite.id} className="flex items-center justify-between py-1">
+                <span className="text-sm text-zinc-600">{invite.email}</span>
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
+                  {invite.role}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
         {canInvite && <InviteMemberForm orgId={session.orgId} />}
       </div>
     </div>
