@@ -71,17 +71,17 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: 'Total', value: stats.total, icon: Clock, color: 'text-zinc-600' },
-          { label: 'Pending', value: stats.pending, icon: Hourglass, color: 'text-amber-600' },
-          { label: 'In Progress', value: stats.inProgress, icon: ArrowsClockwise, color: 'text-blue-600' },
-          { label: 'Approved', value: stats.approved, icon: CheckCircle, color: 'text-emerald-600' },
-          { label: 'Rejected', value: stats.rejected, icon: XCircle, color: 'text-red-600' },
-        ].map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="bg-white border border-zinc-200/70 rounded-xl p-5">
+          { label: 'Total', value: stats.total, icon: Clock, color: 'text-zinc-600', href: '/workflows' },
+          { label: 'Pending', value: stats.pending, icon: Hourglass, color: 'text-amber-600', href: '/workflows?status=pending' },
+          { label: 'In Progress', value: stats.inProgress, icon: ArrowsClockwise, color: 'text-blue-600', href: '/workflows?status=in_progress' },
+          { label: 'Approved', value: stats.approved, icon: CheckCircle, color: 'text-emerald-600', href: '/workflows?status=approved' },
+          { label: 'Rejected', value: stats.rejected, icon: XCircle, color: 'text-red-600', href: '/workflows?status=rejected' },
+        ].map(({ label, value, icon: Icon, color, href }) => (
+          <Link key={label} href={href} className="bg-white border border-zinc-200/70 rounded-xl p-5 hover:border-zinc-300 transition-colors block">
             <Icon className={`w-4 h-4 ${color} mb-3`} weight="fill" aria-hidden />
             <div className="text-3xl font-bold text-zinc-950 tabular-nums">{value}</div>
             <div className="text-xs text-zinc-500 mt-1">{label}</div>
-          </div>
+          </Link>
         ))}
       </div>
 
