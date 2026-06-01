@@ -18,7 +18,7 @@ export default async function DashboardPage() {
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
 
-  const [workflows, templates, org, totalWorkflows, inProgressCount, approvedCount, rejectedCount] = await Promise.all([
+  const [workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount] = await Promise.all([
     prisma.workflow.findMany({
       where: { orgId: session.orgId },
       include: {
@@ -31,6 +31,7 @@ export default async function DashboardPage() {
     prisma.workflowTemplate.count({ where: { orgId: session.orgId } }),
     prisma.organization.findUnique({ where: { id: session.orgId } }),
     prisma.workflow.count({ where: { orgId: session.orgId } }),
+    prisma.workflow.count({ where: { orgId: session.orgId, status: 'pending' } }),
     prisma.workflow.count({ where: { orgId: session.orgId, status: 'in_progress' } }),
     prisma.workflow.count({ where: { orgId: session.orgId, status: 'approved' } }),
     prisma.workflow.count({ where: { orgId: session.orgId, status: 'rejected' } }),
@@ -38,6 +39,7 @@ export default async function DashboardPage() {
 
   const stats = {
     total: totalWorkflows,
+    pending: pendingCount,
     inProgress: inProgressCount,
     approved: approvedCount,
     rejected: rejectedCount,
@@ -67,9 +69,10 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: 'Total', value: stats.total, icon: Clock, color: 'text-zinc-600' },
+          { label: 'Pending', value: stats.pending, icon: Clock, color: 'text-amber-600' },
           { label: 'In Progress', value: stats.inProgress, icon: Clock, color: 'text-blue-600' },
           { label: 'Approved', value: stats.approved, icon: CheckCircle, color: 'text-emerald-600' },
           { label: 'Rejected', value: stats.rejected, icon: XCircle, color: 'text-red-600' },

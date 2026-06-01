@@ -3,12 +3,12 @@ updated: 2026-06-02T02:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T02:15:07Z
-  change: "Add 'pending' to workflows page status filter list so users can filter to see only pending workflows"
+  date: 2026-06-02T03:15:08Z
+  change: "Add Pending stat card to dashboard so users see pending workflow count alongside Total, In Progress, Approved, and Rejected; adjust grid to 5 columns on desktop"
   files:
-    - src/app/workflows/page.tsx
+    - src/app/dashboard/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T01:15:08Z
