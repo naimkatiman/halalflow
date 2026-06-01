@@ -51,7 +51,7 @@ export default async function TemplatesPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">Templates</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">Reusable workflow structures</p>
+          <p className="text-sm text-zinc-500 mt-0.5">{total} templates</p>
         </div>
         <div className="flex items-center gap-2">
           <ImportButton />
