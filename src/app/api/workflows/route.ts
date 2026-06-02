@@ -54,7 +54,8 @@ export async function GET(request: NextRequest) {
       { workflows, pagination: { page, limit, total, pages: Math.ceil(total / limit) } },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch {
+  } catch (error) {
+    console.error("GET /api/workflows error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

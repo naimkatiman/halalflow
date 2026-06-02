@@ -48,7 +48,8 @@ export async function GET(request: NextRequest) {
       { templates, pagination: { page, limit, total, pages: Math.ceil(total / limit) } },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch {
+  } catch (error) {
+    console.error("GET /api/templates error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
