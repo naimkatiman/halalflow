@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-03T01:15:04Z
+updated: 2026-06-03T02:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-03T01:15:04Z
-  change: "Add console.error logging to GET and POST /api/invites/[token] catch blocks so database, session, invitation, or runtime failures during invite lookups and acceptances are visible in server logs instead of being silently swallowed"
+  date: 2026-06-03T02:15:07Z
+  change: "Add console.error logging to POST /api/orgs/[id]/switch catch block so session, database, or runtime failures during org switching are visible in server logs instead of being silently swallowed"
   files:
-    - src/app/api/invites/[token]/route.ts
+    - src/app/api/orgs/[id]/switch/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-03T01:15:04Z
+    change: "Add console.error logging to GET and POST /api/invites/[token] catch blocks so database, session, invitation, or runtime failures during invite lookups and acceptances are visible in server logs instead of being silently swallowed"
+    files:
+      - src/app/api/invites/[token]/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 12567d3"
 
 previous_cycles:
   - date: 2026-06-02T23:15:05Z

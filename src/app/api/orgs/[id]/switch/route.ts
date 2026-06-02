@@ -27,7 +27,8 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
       { orgId: id, orgRole: member.role },
       { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
-  } catch {
+  } catch (error) {
+    console.error("Org switch error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
