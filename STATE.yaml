@@ -8,7 +8,7 @@ latest_cycle:
   files:
     - src/app/api/orgs/[id]/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed as ab10223"
 
 previous_cycles:
   - date: 2026-06-02T22:15:04Z
