@@ -1,16 +1,22 @@
 project: halalflow
-updated: 2026-06-02T09:15:08Z
+updated: 2026-06-02T11:15:06Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T10:15:08Z
-  change: "Add favicon.ico to public/ so browsers and the PWA manifest have a valid icon instead of 404ing"
+  date: 2026-06-02T11:15:06Z
+  change: "Add global-error.tsx for root layout error boundary so crashes in the root layout render a branded recovery page instead of the generic Next.js fallback"
   files:
-    - public/favicon.ico
+    - src/app/global-error.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-02T10:15:08Z
+    change: "Add favicon.ico to public/ so browsers and the PWA manifest have a valid icon instead of 404ing"
+    files:
+      - public/favicon.ico
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-02T09:15:08Z
     change: "Add autoComplete=email to invite member form email input for better browser autofill UX"
     files:
