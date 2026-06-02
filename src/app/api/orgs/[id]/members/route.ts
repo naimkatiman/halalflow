@@ -39,7 +39,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     ]);
 
     return NextResponse.json({ members, pendingInvites }, { headers: { "Cache-Control": "no-store" } });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/orgs/[id]/members error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
