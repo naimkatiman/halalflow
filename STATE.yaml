@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-02T08:15:06Z
+updated: 2026-06-02T09:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T08:15:06Z
-  change: "Fix CommentForm error layout so validation errors stack below the input row instead of appearing inline in the flex container"
+  date: 2026-06-02T09:15:08Z
+  change: "Add autoComplete=email to invite member form email input for better browser autofill UX"
   files:
-    - src/app/workflows/[id]/CommentForm.tsx
+    - src/app/settings/InviteMemberForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-02T08:15:06Z
+    change: "Fix CommentForm error layout so validation errors stack below the input row instead of appearing inline in the flex container"
+    files:
+      - src/app/workflows/[id]/CommentForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T07:15:05Z

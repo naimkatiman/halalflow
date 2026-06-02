@@ -50,6 +50,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
         <input
           id="invite-email"
           type="email"
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
