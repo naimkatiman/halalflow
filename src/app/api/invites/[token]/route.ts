@@ -28,7 +28,8 @@ export async function GET(
         expiresAt: invite.expiresAt,
       },
     }, { headers: { "Cache-Control": "no-store" } });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/invites/[token] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
@@ -87,7 +88,8 @@ export async function POST(
     await session.save();
 
     return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
-  } catch {
+  } catch (error) {
+    console.error("POST /api/invites/[token] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
