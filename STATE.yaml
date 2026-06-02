@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-03T06:15:05Z
+updated: 2026-06-03T07:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-03T06:15:05Z
-  change: "Add console.error logging to GET and DELETE /api/templates/[id] catch blocks so database, session, CSRF, or runtime failures during template lookups and deletions are visible in server logs instead of being silently swallowed"
+  date: 2026-06-03T07:15:09Z
+  change: "Add console.error logging to PUT /api/templates/[id]/steps catch block so database, session, CSRF, or runtime failures during step updates are visible in server logs instead of being silently swallowed"
   files:
-    - src/app/api/templates/[id]/route.ts
+    - src/app/api/templates/[id]/steps/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 603d939"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-03T06:15:06Z
+    change: "Add console.error logging to GET and DELETE /api/templates/[id] catch blocks so database, session, CSRF, or runtime failures during template lookups and deletions are visible in server logs instead of being silently swallowed"
+    files:
+      - src/app/api/templates/[id]/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 603d939"
 
 previous_cycles:
   - date: 2026-06-03T05:15:06Z
