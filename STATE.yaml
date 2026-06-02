@@ -3,12 +3,20 @@ updated: 2026-06-02T09:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T09:15:08Z
-  change: "Add autoComplete=email to invite member form email input for better browser autofill UX"
+  date: 2026-06-02T10:15:08Z
+  change: "Add favicon.ico to public/ so browsers and the PWA manifest have a valid icon instead of 404ing"
   files:
-    - src/app/settings/InviteMemberForm.tsx
+    - public/favicon.ico
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-02T09:15:08Z
+    change: "Add autoComplete=email to invite member form email input for better browser autofill UX"
+    files:
+      - src/app/settings/InviteMemberForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T08:15:06Z
