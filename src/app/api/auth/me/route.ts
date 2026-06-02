@@ -20,7 +20,8 @@ export async function GET() {
       },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch {
+  } catch (error) {
+    console.error("GET /api/auth/me error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

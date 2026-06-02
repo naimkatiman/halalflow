@@ -21,7 +21,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     });
 
     return NextResponse.json({ org }, { headers: { "Cache-Control": "no-store" } });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/orgs/[id] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

@@ -16,7 +16,8 @@ export async function POST(request: NextRequest) {
 
     session.destroy();
     return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store, max-age=0", "X-CSRF-Token": csrf.newToken } });
-  } catch {
+  } catch (err) {
+    console.error("Logout error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store, max-age=0" } });
   }
 }

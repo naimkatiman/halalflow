@@ -28,7 +28,8 @@ export async function GET() {
       { orgs: memberships.map((m) => ({ ...m.org, role: m.role })) },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch {
+  } catch (err) {
+    console.error("GET /api/orgs error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
@@ -66,6 +67,7 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    console.error("POST /api/orgs error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
