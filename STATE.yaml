@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-02T07:15:05Z
+updated: 2026-06-02T08:15:06Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T07:15:05Z
-  change: "Make dashboard stat cards clickable links to filtered workflow lists so users can drill down from overview counts"
+  date: 2026-06-02T08:15:06Z
+  change: "Fix CommentForm error layout so validation errors stack below the input row instead of appearing inline in the flex container"
   files:
-    - src/app/dashboard/page.tsx
+    - src/app/workflows/[id]/CommentForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-02T07:15:05Z
+    change: "Make dashboard stat cards clickable links to filtered workflow lists so users can drill down from overview counts"
+    files:
+      - src/app/dashboard/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T06:15:08Z
