@@ -1,14 +1,25 @@
 project: halalflow
-updated: 2026-06-02T11:15:06Z
+updated: 2026-06-02T13:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-02T11:15:06Z
-  change: "Add global-error.tsx for root layout error boundary so crashes in the root layout render a branded recovery page instead of the generic Next.js fallback"
+  date: 2026-06-02T13:15:07Z
+  change: "Remove dead 'cancelled' status entries from UI label maps in dashboard, template detail, and workflow list/detail pages — workflows can never be cancelled, so the styling and labels were unreachable dead code"
   files:
-    - src/app/global-error.tsx
+    - src/app/dashboard/page.tsx
+    - src/app/templates/[id]/page.tsx
+    - src/app/workflows/page.tsx
+    - src/app/workflows/[id]/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-02T11:15:06Z
+    change: "Add global-error.tsx for root layout error boundary so crashes in the root layout render a branded recovery page instead of the generic Next.js fallback"
+    files:
+      - src/app/global-error.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-02T10:15:08Z
