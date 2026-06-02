@@ -24,7 +24,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     if (!template) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
 
     return NextResponse.json({ template }, { headers: { "Cache-Control": "no-store" } });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/templates/[id] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
@@ -68,7 +69,8 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
 
     await prisma.workflowTemplate.delete({ where: { id } });
     return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
-  } catch {
+  } catch (error) {
+    console.error("DELETE /api/templates/[id] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
