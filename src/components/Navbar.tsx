@@ -24,7 +24,7 @@ export function Navbar() {
     fetch('/api/auth/me')
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => { if (data?.user) setUser(data.user); })
-      .catch(() => {});
+      .catch((err) => { console.error('Navbar auth check failed:', err); });
   }, []);
 
   const handleLogout = async () => {
