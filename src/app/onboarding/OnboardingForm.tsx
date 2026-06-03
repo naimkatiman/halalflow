@@ -28,7 +28,8 @@ export default function OnboardingForm() {
       }
       router.push('/dashboard');
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error('OnboardingForm submit error:', err);
       setError('Something went wrong');
     } finally {
       setLoading(false);

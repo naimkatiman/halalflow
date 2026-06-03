@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-03T07:15:09Z
+updated: 2026-06-03T16:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-03T07:15:09Z
-  change: "Add console.error logging to NewWorkflowForm template fetch catch block so network, session, or runtime failures during template list loading are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-03T16:15:10Z
+  change: "Add console.error logging to OnboardingForm submit catch block so network, session, or runtime failures during organization creation are visible in browser devtools instead of being silently swallowed"
   files:
-    - src/app/workflows/new/NewWorkflowForm.tsx
+    - src/app/onboarding/OnboardingForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-03T07:15:09Z
+    change: "Add console.error logging to NewWorkflowForm template fetch catch block so network, session, or runtime failures during template list loading are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-03T05:18:20Z
