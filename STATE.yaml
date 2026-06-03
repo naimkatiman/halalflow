@@ -1,14 +1,23 @@
 project: halalflow
-updated: 2026-06-03T10:15:09Z
+updated: 2026-06-03T11:15:05Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-03T10:15:09Z
-  change: "Add console.error logging to POST /api/templates/import catch block so database, session, CSRF, or runtime failures during template import are visible in server logs instead of being silently swallowed"
+  date: 2026-06-03T11:15:05Z
+  change: "Add console.error logging to POST /api/orgs/[id]/members and PUT /api/templates/[id] catch blocks so database, session, CSRF, email, or runtime failures during member invitations and template updates are visible in server logs instead of being silently swallowed"
   files:
-    - src/app/api/templates/import/route.ts
+    - src/app/api/orgs/[id]/members/route.ts
+    - src/app/api/templates/[id]/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-03T10:15:09Z
+    change: "Add console.error logging to POST /api/templates/import catch block so database, session, CSRF, or runtime failures during template import are visible in server logs instead of being silently swallowed"
+    files:
+      - src/app/api/templates/import/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-06-03T09:15:08Z
