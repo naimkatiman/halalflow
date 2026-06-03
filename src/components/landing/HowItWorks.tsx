@@ -45,7 +45,7 @@ export function HowItWorks() {
                 <div className="hidden h-px flex-1 bg-emerald-100 sm:block" />
               )}
             </div>
-            <Icon className="mt-4 h-5 w-5 text-emerald-600" weight="duotone" aria-hidden />
+            <Icon className="mt-4 h-5 w-5 text-emerald-600" weight="duotone" aria-hidden="true" />
             <h3 className="mt-2 text-base font-bold text-zinc-950">{title}</h3>
             <p className="mt-1 max-w-[34ch] text-sm leading-relaxed text-zinc-500">
               {body}

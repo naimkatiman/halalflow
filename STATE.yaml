@@ -1,14 +1,24 @@
 project: halalflow
-updated: 2026-06-03T16:15:10Z
+updated: 2026-06-03T17:15:06Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-03T16:15:10Z
-  change: "Add console.error logging to OnboardingForm submit catch block so network, session, or runtime failures during organization creation are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-03T17:15:06Z
+  change: "Standardize bare aria-hidden attributes to explicit aria-hidden=true in landing page components (Hero, CtaBand, HowItWorks) for consistency with the rest of the codebase"
   files:
-    - src/app/onboarding/OnboardingForm.tsx
+    - src/components/landing/Hero.tsx
+    - src/components/landing/CtaBand.tsx
+    - src/components/landing/HowItWorks.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-03T16:15:10Z
+    change: "Add console.error logging to OnboardingForm submit catch block so network, session, or runtime failures during organization creation are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/app/onboarding/OnboardingForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-03T07:15:09Z

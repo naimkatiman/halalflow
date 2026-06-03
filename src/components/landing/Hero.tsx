@@ -36,7 +36,7 @@ export function Hero() {
               href="/register"
               className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 active:translate-y-px"
             >
-              Get started <ArrowRight className="h-4 w-4" weight="bold" aria-hidden />
+              Get started <ArrowRight className="h-4 w-4" weight="bold" aria-hidden="true" />
             </Link>
             <Link
               href="/login"
@@ -59,9 +59,9 @@ export function Hero() {
               className="flex items-center gap-2.5 border-t border-zinc-100 py-2.5"
             >
               {step.done ? (
-                <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" weight="fill" aria-hidden />
+                <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" weight="fill" aria-hidden="true" />
               ) : (
-                <Circle className="h-4 w-4 shrink-0 text-amber-500" weight="bold" aria-hidden />
+                <Circle className="h-4 w-4 shrink-0 text-amber-500" weight="bold" aria-hidden="true" />
               )}
               <span className="flex-1 text-xs text-zinc-900">{step.name}</span>
               <span
