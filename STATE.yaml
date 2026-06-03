@@ -1,14 +1,30 @@
 project: halalflow
-updated: 2026-06-03T07:15:09Z
+updated: 2026-06-03T08:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-03T07:15:09Z
-  change: "Add console.error logging to PUT /api/templates/[id]/steps catch block so database, session, CSRF, or runtime failures during step updates are visible in server logs instead of being silently swallowed"
+  date: 2026-06-03T09:15:08Z
+  change: "Add console.error logging to POST /api/workflows catch block so database, session, CSRF, or runtime failures during workflow creation are visible in server logs instead of being silently swallowed"
   files:
-    - src/app/api/templates/[id]/steps/route.ts
+    - src/app/api/workflows/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-03T08:15:08Z
+    change: "Add console.error logging to POST /api/workflows/[id]/comments catch block so database, session, CSRF, or runtime failures during comment creation are visible in server logs instead of being silently swallowed"
+    files:
+      - src/app/api/workflows/[id]/comments/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-03T07:15:09Z
+    change: "Add console.error logging to PUT /api/templates/[id]/steps catch block so database, session, CSRF, or runtime failures during step updates are visible in server logs instead of being silently swallowed"
+    files:
+      - src/app/api/templates/[id]/steps/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-06-03T06:15:06Z
