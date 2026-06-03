@@ -1,16 +1,22 @@
 project: halalflow
-updated: 2026-06-03T05:18:20Z
+updated: 2026-06-03T07:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-03T05:18:20Z
-  change: "Add console.error logging to Navbar auth/me fetch catch block so network, session, or runtime failures during the background user check are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-03T07:15:09Z
+  change: "Add console.error logging to NewWorkflowForm template fetch catch block so network, session, or runtime failures during template list loading are visible in browser devtools instead of being silently swallowed"
   files:
-    - src/components/Navbar.tsx
+    - src/app/workflows/new/NewWorkflowForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-03T05:18:20Z
+    change: "Add console.error logging to Navbar auth/me fetch catch block so network, session, or runtime failures during the background user check are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/components/Navbar.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-03T04:17:50Z
     change: "Standardize console.error label in POST /api/workflows/[id]/comments catch block from bare console.error(error) to console.error(\"POST /api/workflows/[id]/comments error:\", error) so log aggregation and filtering can route comment-creation failures distinctly"
     files:

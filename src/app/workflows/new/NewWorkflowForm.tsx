@@ -35,7 +35,7 @@ export function NewWorkflowForm() {
           setTemplateId((prev) => prev || d.templates[0].id);
         }
       })
-      .catch(() => {});
+      .catch((err) => { console.error('NewWorkflowForm template fetch failed:', err); });
   }, [preselectedId]);
 
   const selectedTemplate = templates.find((t) => t.id === templateId);
