@@ -11,7 +11,7 @@ export function Hero() {
   return (
     <section className="animate-fade-up relative overflow-hidden rounded-3xl border border-emerald-100 bg-emerald-50 px-6 py-12 sm:px-12 sm:py-16">
       <div
-        aria-hidden
+        aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-70"
         style={{
           backgroundImage:
