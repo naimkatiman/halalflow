@@ -9,7 +9,7 @@ latest_cycle:
     - src/components/landing/Hero.tsx
     - src/components/landing/UseCases.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 7c90dd2"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-03T17:15:06Z
