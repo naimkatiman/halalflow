@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-06T23:15:07Z
+updated: 2026-06-07T00:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-06T23:15:07Z
-  change: "Add console.error logging to OrgSwitcher catch block so network, session, or runtime failures during org switching are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-07T00:15:07Z
+  change: "Add console.error logging to ImportButton catch block so network, JSON parse, session, or runtime failures during template import are visible in browser devtools instead of being silently swallowed"
   files:
-    - src/app/settings/OrgSwitcher.tsx
+    - src/app/templates/ImportButton.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-06T23:15:07Z
+    change: "Add console.error logging to OrgSwitcher catch block so network, session, or runtime failures during org switching are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/app/settings/OrgSwitcher.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-06T22:15:06Z

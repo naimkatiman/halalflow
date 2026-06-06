@@ -29,7 +29,8 @@ export function ImportButton() {
       } else {
         setImporting(false);
       }
-    } catch {
+    } catch (err) {
+      console.error('Template import failed:', err);
       setImporting(false);
     } finally {
       if (inputRef.current) inputRef.current.value = '';
