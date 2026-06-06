@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-06T19:15:10Z
+updated: 2026-06-06T21:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-06T20:15:10Z
-  change: "Add console.error logging to NewWorkflowForm handleSubmit catch block so network, session, or runtime failures during workflow creation are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-06T21:15:10Z
+  change: "Remove dead 'cancelled' status from Badge.tsx WorkflowStatus type and config map — workflows can never be cancelled, so the entry was unreachable dead code"
   files:
-    - src/app/workflows/new/NewWorkflowForm.tsx
+    - src/components/ui/Badge.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-06T20:15:10Z
+    change: "Add console.error logging to NewWorkflowForm handleSubmit catch block so network, session, or runtime failures during workflow creation are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-06T19:15:10Z
