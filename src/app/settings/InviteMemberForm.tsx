@@ -36,7 +36,8 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
         setSuccess(`${data.member.user.name} added as ${role}`);
       }
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error('InviteMemberForm submit error:', err);
       setError('Something went wrong');
     } finally {
       setLoading(false);

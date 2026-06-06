@@ -65,7 +65,8 @@ export function NewTemplateForm() {
       }
       router.push('/templates');
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error('NewTemplateForm submit error:', err);
       setError('Something went wrong');
     } finally {
       setLoading(false);

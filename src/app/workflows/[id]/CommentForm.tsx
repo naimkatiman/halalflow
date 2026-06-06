@@ -29,7 +29,8 @@ export function CommentForm({ workflowId }: { workflowId: string }) {
       }
       setBody('');
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error('CommentForm submit error:', err);
       setError('Something went wrong');
     } finally {
       setLoading(false);

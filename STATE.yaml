@@ -1,14 +1,24 @@
 project: halalflow
-updated: 2026-06-07T00:15:07Z
+updated: 2026-06-07T01:15:06Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T00:15:07Z
-  change: "Add console.error logging to ImportButton catch block so network, JSON parse, session, or runtime failures during template import are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-07T01:15:06Z
+  change: "Add console.error logging to NewTemplateForm, CommentForm, and InviteMemberForm catch blocks so network, session, or runtime failures during template creation, comment posting, and member invitation are visible in browser devtools instead of being silently swallowed"
   files:
-    - src/app/templates/ImportButton.tsx
+    - src/app/templates/new/NewTemplateForm.tsx
+    - src/app/workflows/[id]/CommentForm.tsx
+    - src/app/settings/InviteMemberForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T00:15:07Z
+    change: "Add console.error logging to ImportButton catch block so network, JSON parse, session, or runtime failures during template import are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/app/templates/ImportButton.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-06T23:15:07Z
