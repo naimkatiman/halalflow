@@ -10,6 +10,7 @@ export function LogoutHandler() {
 
   useEffect(() => {
     fetchWithCsrf('/api/auth/logout', { method: 'POST' })
+      .catch((err) => { console.error('Logout request failed:', err); })
       .finally(() => {
         const redirect = searchParams.get('redirect') || '/login';
         router.replace(redirect);
