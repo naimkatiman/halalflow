@@ -1,14 +1,23 @@
 project: halalflow
-updated: 2026-06-06T21:15:10Z
+updated: 2026-06-06T22:15:06Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-06T21:15:10Z
-  change: "Remove dead 'cancelled' status from Badge.tsx WorkflowStatus type and config map — workflows can never be cancelled, so the entry was unreachable dead code"
+  date: 2026-06-06T22:15:06Z
+  change: "Remove unused dependencies lucide-react, @upstash/redis, and dotenv from package.json — none are imported anywhere in the codebase, so they were bloating node_modules and install time for no benefit"
   files:
-    - src/components/ui/Badge.tsx
+    - package.json
+    - package-lock.json
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-06T21:15:10Z
+    change: "Remove dead 'cancelled' status from Badge.tsx WorkflowStatus type and config map — workflows can never be cancelled, so the entry was unreachable dead code"
+    files:
+      - src/components/ui/Badge.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-06T20:15:10Z
