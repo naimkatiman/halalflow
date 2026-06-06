@@ -6,6 +6,7 @@ export async function GET() {
   try {
     await prisma.$queryRaw`SELECT 1`;
   } catch (err) {
+    console.error("Health check DB query failed:", err);
     db = err instanceof Error ? err.message : "unreachable";
     return NextResponse.json(
       { status: "degraded", db, uptime: process.uptime(), timestamp: Date.now() },
