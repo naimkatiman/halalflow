@@ -1,18 +1,24 @@
 project: halalflow
-updated: 2026-06-07T06:15:08Z
+updated: 2026-06-07T07:15:05Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T06:15:08Z
-  change: "Export escapeHtml from email.ts and apply it to user-controlled values (orgName, invitedByName, inviteUrl) in the invite email HTML template so HTML/JS injection from organization names or user display names cannot break email rendering"
+  date: 2026-06-07T07:15:05Z
+  change: "Commit pending email escaping changes from prior cycle (escapeHtml in invite-email.ts) so the XSS-prevention work is on main and not left as uncommitted working-tree changes"
   files:
     - src/lib/notifications/email.ts
     - src/lib/notifications/invite-email.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed as 60314f8"
 
 previous_cycles:
-  - date: 2026-06-07T05:15:08Z
+  - date: 2026-06-07T06:15:08Z
+    change: "Export escapeHtml from email.ts and apply it to user-controlled values (orgName, invitedByName, inviteUrl) in the invite email HTML template so HTML/JS injection from organization names or user display names cannot break email rendering"
+    files:
+      - src/lib/notifications/email.ts
+      - src/lib/notifications/invite-email.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
     change: "Add escapeHtml helper to email.ts and escape all user-controlled values (workflowTitle, stepName, actorName, orgName, note, workflowUrl) in the workflow decision email HTML template so HTML/JS injection from user input cannot break email rendering or trigger unwanted behavior"
     files:
       - src/lib/notifications/email.ts
