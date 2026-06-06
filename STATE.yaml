@@ -3,12 +3,21 @@ updated: 2026-06-06T17:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-06T17:15:09Z
-  change: "Add console.error logging to ApprovalActions catch block so network, session, or runtime failures during workflow approvals are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-06T18:15:09Z
+  change: "Add console.error logging to LoginForm and RegisterForm catch blocks so network, session, or runtime failures during authentication are visible in browser devtools instead of being silently swallowed"
   files:
-    - src/app/workflows/[id]/ApprovalActions.tsx
+    - src/app/login/LoginForm.tsx
+    - src/app/register/RegisterForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-06T17:15:09Z
+    change: "Add console.error logging to ApprovalActions catch block so network, session, or runtime failures during workflow approvals are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/app/workflows/[id]/ApprovalActions.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-06T16:15:09Z

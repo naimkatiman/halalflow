@@ -43,7 +43,8 @@ export function RegisterForm() {
         router.push('/onboarding');
       }
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error('RegisterForm submit error:', err);
       setError('Something went wrong');
     } finally {
       setLoading(false);
