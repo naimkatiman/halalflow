@@ -56,7 +56,8 @@ export function NewWorkflowForm() {
         return;
       }
       router.push(`/workflows/${data.workflow.id}`);
-    } catch {
+    } catch (err) {
+      console.error('NewWorkflowForm submit error:', err);
       setError('Something went wrong');
     } finally {
       setLoading(false);
