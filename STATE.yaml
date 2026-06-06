@@ -1,16 +1,23 @@
 project: halalflow
-updated: 2026-06-06T15:15:09Z
+updated: 2026-06-06T16:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-06T15:15:09Z
-  change: "Add console.error logging to health endpoint catch block so database connectivity failures during health checks are visible in server logs instead of being silently swallowed"
+  date: 2026-06-06T16:15:09Z
+  change: "Add descriptive labels to error boundary console.error calls in error.tsx and global-error.tsx so runtime errors caught by boundaries are identifiable in logs instead of appearing as bare error dumps"
   files:
-    - src/app/api/health/route.ts
+    - src/app/error.tsx
+    - src/app/global-error.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-06T15:15:09Z
+    change: "Add console.error logging to health endpoint catch block so database connectivity failures during health checks are visible in server logs instead of being silently swallowed"
+    files:
+      - src/app/api/health/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-06T14:15:09Z
     change: "Add console.error logging to ExportButton catch block so network, session, or runtime failures during template export are visible in browser devtools instead of being silently swallowed"
     files:

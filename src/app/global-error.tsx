@@ -11,7 +11,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    console.error("Global error boundary:", error);
   }, [error]);
 
   return (

@@ -12,7 +12,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log to console in development; production logging can be wired here
-    console.error(error);
+    console.error("Page error boundary:", error);
   }, [error]);
 
   return (
