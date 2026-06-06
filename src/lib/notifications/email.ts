@@ -49,7 +49,10 @@ export async function sendEmail(message: EmailMessage): Promise<EmailSendResult>
     }),
   });
 
-  const payload = await res.json().catch(() => null);
+  const payload = await res.json().catch((err) => {
+    console.error('Resend JSON parse error:', err);
+    return null;
+  });
 
   if (!res.ok) {
     return {
