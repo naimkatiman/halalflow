@@ -59,7 +59,7 @@ export default async function TemplatesPage({
             href="/templates/new"
             className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-colors"
           >
-            <Plus className="w-4 h-4" weight="bold" aria-hidden />
+            <Plus className="w-4 h-4" weight="bold" aria-hidden="true" />
             New template
           </Link>
         </div>
@@ -93,14 +93,14 @@ export default async function TemplatesPage({
 
       {templates.length === 0 ? (
         <div className="bg-white border border-zinc-200/70 border-dashed rounded-xl p-12 text-center">
-          <Clipboard className="w-8 h-8 text-zinc-300 mx-auto mb-3" weight="duotone" aria-hidden />
+          <Clipboard className="w-8 h-8 text-zinc-300 mx-auto mb-3" weight="duotone" aria-hidden="true" />
           <p className="text-sm font-medium text-zinc-500">No templates yet</p>
           <p className="text-xs text-zinc-400 mt-1 mb-4">Templates define the steps in your approval workflows.</p>
           <Link
             href="/templates/new"
             className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-colors"
           >
-            <Plus className="w-3.5 h-3.5" weight="bold" aria-hidden />
+            <Plus className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
             Create first template
           </Link>
         </div>
@@ -114,7 +114,7 @@ export default async function TemplatesPage({
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                  <Clipboard className="w-4 h-4 text-emerald-600" weight="duotone" aria-hidden />
+                  <Clipboard className="w-4 h-4 text-emerald-600" weight="duotone" aria-hidden="true" />
                 </div>
                 <span className="text-xs text-zinc-400">{t._count.workflows} uses</span>
               </div>

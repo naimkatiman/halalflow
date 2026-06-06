@@ -29,7 +29,7 @@ export default function Error({
         onClick={reset}
         className="mt-6 inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-colors cursor-pointer"
       >
-        <ArrowClockwise className="w-4 h-4" weight="bold" aria-hidden />
+        <ArrowClockwise className="w-4 h-4" weight="bold" aria-hidden="true" />
         Try again
       </button>
     </div>

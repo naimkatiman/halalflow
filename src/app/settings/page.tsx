@@ -65,7 +65,7 @@ export default async function SettingsPage() {
 
       <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-3">
         <div className="flex items-center gap-2 mb-1">
-          <Buildings className="w-4 h-4 text-zinc-400" aria-hidden />
+          <Buildings className="w-4 h-4 text-zinc-400" aria-hidden="true" />
           <h2 className="font-semibold text-zinc-950 text-sm">Organization</h2>
         </div>
         <div className="space-y-1">
@@ -88,7 +88,7 @@ export default async function SettingsPage() {
 
       <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <Users className="w-4 h-4 text-zinc-400" aria-hidden />
+          <Users className="w-4 h-4 text-zinc-400" aria-hidden="true" />
           <h2 className="font-semibold text-zinc-950 text-sm">Members ({org.members.length})</h2>
         </div>
         <div className="divide-y divide-zinc-100">
@@ -107,7 +107,7 @@ export default async function SettingsPage() {
         {canInvite && pendingInvites.length > 0 && (
           <div className="pt-3 border-t border-zinc-100 space-y-2">
             <div className="flex items-center gap-2">
-              <PaperPlaneTilt className="w-3.5 h-3.5 text-zinc-400" aria-hidden />
+              <PaperPlaneTilt className="w-3.5 h-3.5 text-zinc-400" aria-hidden="true" />
               <p className="text-xs font-semibold text-zinc-700">Pending invitations ({pendingInvites.length})</p>
             </div>
             {pendingInvites.map((invite) => (

@@ -1,15 +1,30 @@
 project: halalflow
-updated: 2026-06-05T23:17:31Z
+updated: 2026-06-06T11:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-05T23:17:31Z
-  change: "Standardize remaining bare aria-hidden attributes to explicit aria-hidden=true in landing page components (Hero decorative background div, UseCases icons) for consistency with the rest of the codebase"
+  date: 2026-06-06T11:15:09Z
+  change: "Standardize bare aria-hidden attributes to explicit aria-hidden=true in app page components (error, global-error, not-found, loading, dashboard, templates, workflows, settings) for consistency with the rest of the codebase"
   files:
-    - src/components/landing/Hero.tsx
-    - src/components/landing/UseCases.tsx
+    - src/app/error.tsx
+    - src/app/global-error.tsx
+    - src/app/not-found.tsx
+    - src/app/loading.tsx
+    - src/app/dashboard/page.tsx
+    - src/app/templates/page.tsx
+    - src/app/workflows/page.tsx
+    - src/app/settings/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-05T23:17:31Z
+    change: "Standardize remaining bare aria-hidden attributes to explicit aria-hidden=true in landing page components (Hero decorative background div, UseCases icons) for consistency with the rest of the codebase"
+    files:
+      - src/components/landing/Hero.tsx
+      - src/components/landing/UseCases.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-03T17:15:06Z
