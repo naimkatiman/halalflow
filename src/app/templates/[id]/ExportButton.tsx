@@ -15,8 +15,8 @@ export function ExportButton({ templateId, templateName }: { templateId: string;
       a.download = `${templateName.replace(/\s+/g, '_').toLowerCase()}_template.json`;
       a.click();
       URL.revokeObjectURL(url);
-    } catch {
-      // silently fail
+    } catch (err) {
+      console.error('Template export failed:', err);
     }
   };
 
