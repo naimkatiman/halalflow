@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-07T04:15:10Z
+updated: 2026-06-07T05:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T04:15:10Z
-  change: "Add console.error logging to sendEmail JSON parse catch block so Resend API non-JSON responses during outages or rate limits are visible in server logs instead of being silently swallowed"
+  date: 2026-06-07T05:15:08Z
+  change: "Add escapeHtml helper to email.ts and escape all user-controlled values (workflowTitle, stepName, actorName, orgName, note, workflowUrl) in the workflow decision email HTML template so HTML/JS injection from user input cannot break email rendering or trigger unwanted behavior"
   files:
     - src/lib/notifications/email.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T04:15:10Z
+    change: "Add console.error logging to sendEmail JSON parse catch block so Resend API non-JSON responses during outages or rate limits are visible in server logs instead of being silently swallowed"
+    files:
+      - src/lib/notifications/email.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T03:15:09Z
