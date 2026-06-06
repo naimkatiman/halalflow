@@ -1,16 +1,24 @@
 project: halalflow
-updated: 2026-06-07T01:15:06Z
+updated: 2026-06-07T03:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T01:15:06Z
-  change: "Add console.error logging to NewTemplateForm, CommentForm, and InviteMemberForm catch blocks so network, session, or runtime failures during template creation, comment posting, and member invitation are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-07T03:15:09Z
+  change: "Add try/catch with console.error to GET /api/csrf so iron-session or crypto failures during CSRF token generation are visible in server logs instead of being silently swallowed and returning an unhandled 500"
   files:
-    - src/app/templates/new/NewTemplateForm.tsx
-    - src/app/workflows/[id]/CommentForm.tsx
-    - src/app/settings/InviteMemberForm.tsx
+    - src/app/api/csrf/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T01:15:06Z
+    change: "Add console.error logging to NewTemplateForm, CommentForm, and InviteMemberForm catch blocks so network, session, or runtime failures during template creation, comment posting, and member invitation are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/app/templates/new/NewTemplateForm.tsx
+      - src/app/workflows/[id]/CommentForm.tsx
+      - src/app/settings/InviteMemberForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T00:15:07Z
