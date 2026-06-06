@@ -24,7 +24,8 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
       } else {
         setSwitching(null);
       }
-    } catch {
+    } catch (error) {
+      console.error('Org switch error:', error);
       setSwitching(null);
     }
   };

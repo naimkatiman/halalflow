@@ -1,15 +1,23 @@
 project: halalflow
-updated: 2026-06-06T22:15:06Z
+updated: 2026-06-06T23:15:07Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-06T22:15:06Z
-  change: "Remove unused dependencies lucide-react, @upstash/redis, and dotenv from package.json — none are imported anywhere in the codebase, so they were bloating node_modules and install time for no benefit"
+  date: 2026-06-06T23:15:07Z
+  change: "Add console.error logging to OrgSwitcher catch block so network, session, or runtime failures during org switching are visible in browser devtools instead of being silently swallowed"
   files:
-    - package.json
-    - package-lock.json
+    - src/app/settings/OrgSwitcher.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-06T22:15:06Z
+    change: "Remove unused dependencies lucide-react, @upstash/redis, and dotenv from package.json — none are imported anywhere in the codebase, so they were bloating node_modules and install time for no benefit"
+    files:
+      - package.json
+      - package-lock.json
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-06T21:15:10Z
