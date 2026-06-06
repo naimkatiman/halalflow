@@ -27,7 +27,8 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
       }
       setNote('');
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error('ApprovalActions submit error:', err);
       setError('Something went wrong');
     } finally {
       setLoading(false);
