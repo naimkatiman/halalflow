@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-06T13:15:07Z
+updated: 2026-06-06T14:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-06T13:15:07Z
-  change: "Add aria-label attributes to step name and description inputs in NewTemplateForm so screen readers announce each field with its step number, since the dynamic list has no visible <label> elements"
+  date: 2026-06-06T14:15:09Z
+  change: "Add console.error logging to ExportButton catch block so network, session, or runtime failures during template export are visible in browser devtools instead of being silently swallowed"
   files:
-    - src/app/templates/new/NewTemplateForm.tsx
+    - src/app/templates/[id]/ExportButton.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-06T13:15:07Z
+    change: "Add aria-label attributes to step name and description inputs in NewTemplateForm so screen readers announce each field with its step number, since the dynamic list has no visible <label> elements"
+    files:
+      - src/app/templates/new/NewTemplateForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-06T11:15:09Z
