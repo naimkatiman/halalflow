@@ -13,8 +13,9 @@ export async function initCsrfToken() {
     .then((data) => {
       if (data.csrfToken) csrfToken = data.csrfToken;
     })
-    .catch(() => {
-      // Fail silently on unauthenticated pages
+    .catch((error) => {
+      // Fail silently on unauthenticated pages, but log for debugging
+      console.error("initCsrfToken error:", error);
     });
 
   return initPromise;

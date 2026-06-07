@@ -3,12 +3,20 @@ updated: 2026-06-07T18:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T18:15:10Z
-  change: "Check off PDF receipt generation in README roadmap and remove it from STATE.yaml next_actions — the feature is fully shipped (API route, PDF layout, download button)"
+  date: 2026-06-07T19:15:10Z
+  change: "Add console.error logging to initCsrfToken catch block in csrf-client.ts so network, session, or runtime failures during CSRF token initialization are visible in browser devtools instead of being silently swallowed"
   files:
-    - README.md
+    - src/lib/csrf-client.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T18:15:10Z
+    change: "Check off PDF receipt generation in README roadmap and remove it from STATE.yaml next_actions — the feature is fully shipped (API route, PDF layout, download button)"
+    files:
+      - README.md
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
   - date: 2026-06-07T17:15:07Z
