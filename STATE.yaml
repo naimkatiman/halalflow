@@ -1,15 +1,24 @@
 project: halalflow
-updated: 2026-06-07T07:15:05Z
+updated: 2026-06-07T08:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T07:15:05Z
-  change: "Commit pending email escaping changes from prior cycle (escapeHtml in invite-email.ts) so the XSS-prevention work is on main and not left as uncommitted working-tree changes"
+  date: 2026-06-07T08:15:08Z
+  change: "Add requiredRole column to TemplateStep schema so workflow templates can optionally restrict each approval step to a specific org role — foundational step toward per-step role assignment enforcement roadmap item"
   files:
-    - src/lib/notifications/email.ts
-    - src/lib/notifications/invite-email.ts
+    - prisma/schema.prisma
+    - prisma/migrations/20260607002001_add_step_required_role/migration.sql
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 60314f8"
+  verification: "npm run lint clean; npm run build green; committed as 504db4c"
+
+previous_cycles:
+  - date: 2026-06-07T07:15:05Z
+    change: "Commit pending email escaping changes from prior cycle (escapeHtml in invite-email.ts) so the XSS-prevention work is on main and not left as uncommitted working-tree changes"
+    files:
+      - src/lib/notifications/email.ts
+      - src/lib/notifications/invite-email.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 60314f8"
 
 previous_cycles:
   - date: 2026-06-07T06:15:08Z
