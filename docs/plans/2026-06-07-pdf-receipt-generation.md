@@ -66,5 +66,5 @@ Let users download a formal PDF receipt for any fully-approved workflow. Useful 
 |---|---|---|---|
 | 2026-06-07T16:15:10Z | 1 — API skeleton | ✅ done | Installed pdf-lib; created GET /api/workflows/[id]/receipt with session auth, full Prisma query, and complete PDF layout (header, workflow metadata, approval chain, footer). Returns application/pdf with Cache-Control: no-store. |
 | | 2 — Full PDF layout | ✅ done | Folded into Lane 1 — the skeleton already includes full layout. |
-| | 3 — UI button | | |
+| 2026-06-07T17:15:07Z | 3 — UI button | ✅ done | Added Download receipt button to workflow detail page, only visible when status === 'approved', uses FileArrowDown icon and a[download] linking to /api/workflows/[id]/receipt. | |
 | | 4 — Polish | | |

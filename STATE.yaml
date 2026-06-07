@@ -3,15 +3,24 @@ updated: 2026-06-07T16:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T16:15:10Z
-  change: "Implement Lane 1 of PDF receipt generation — install pdf-lib, create GET /api/workflows/[id]/receipt API route with session auth, full Prisma query (workflow + template + org + approvals with approvers), and complete PDF layout including header, workflow metadata, approval chain, and footer. Returns application/pdf with Cache-Control: no-store. Also fixes STATE.yaml duplicate previous_cycles keys from prior cycle."
+  date: 2026-06-07T17:15:07Z
+  change: "Add Download receipt button to workflow detail page — only visible when workflow.status === 'approved', uses emerald-styled <a download> linking to /api/workflows/[id]/receipt with FileArrowDown icon. Completes Lane 3 of PDF receipt generation sub-plan."
   files:
-    - src/app/api/workflows/[id]/receipt/route.ts
-    - package.json
-    - package-lock.json
+    - src/app/workflows/[id]/page.tsx
     - docs/plans/2026-06-07-pdf-receipt-generation.md
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T16:15:10Z
+    change: "Implement Lane 1 of PDF receipt generation — install pdf-lib, create GET /api/workflows/[id]/receipt API route with session auth, full Prisma query (workflow + template + org + approvals with approvers), and complete PDF layout including header, workflow metadata, approval chain, and footer. Returns application/pdf with Cache-Control: no-store. Also fixes STATE.yaml duplicate previous_cycles keys from prior cycle."
+    files:
+      - src/app/api/workflows/[id]/receipt/route.ts
+      - package.json
+      - package-lock.json
+      - docs/plans/2026-06-07-pdf-receipt-generation.md
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T13:15:09Z

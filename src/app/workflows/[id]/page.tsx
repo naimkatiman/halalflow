@@ -4,7 +4,7 @@ import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prisma } from '@/lib/db';
-import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle } from '@phosphor-icons/react/dist/ssr';
+import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle, FileArrowDown } from '@phosphor-icons/react/dist/ssr';
 import { ApprovalActions } from './ApprovalActions';
 import { CommentForm } from './CommentForm';
 import type { Metadata } from 'next';
@@ -210,6 +210,17 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
               ))}
             </div>
           </div>
+
+          {workflow.status === 'approved' && (
+            <a
+              href={`/api/workflows/${workflow.id}/receipt`}
+              download
+              className="flex items-center gap-2 w-full bg-emerald-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-emerald-700 transition-colors"
+            >
+              <FileArrowDown className="w-4 h-4" aria-hidden="true" />
+              Download receipt
+            </a>
+          )}
 
           <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
             <h2 className="font-semibold text-zinc-950 text-sm mb-3">Progress</h2>
