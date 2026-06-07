@@ -148,8 +148,16 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             </ol>
           </div>
 
-          {currentApproval && isActive && workflow.createdById !== session.userId && canApprove && (
-            <ApprovalActions workflowId={workflow.id} stepName={currentApproval.step.name} />
+          {currentApproval && isActive && workflow.createdById !== session.userId && (
+            canApprove ? (
+              <ApprovalActions workflowId={workflow.id} stepName={currentApproval.step.name} />
+            ) : (
+              <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                <p className="text-sm text-amber-800">
+                  This step requires the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role to approve.
+                </p>
+              </div>
+            )
           )}
 
           <div className="bg-white border border-zinc-200/70 rounded-xl p-5">

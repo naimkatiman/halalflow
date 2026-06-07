@@ -1,14 +1,23 @@
 project: halalflow
-updated: 2026-06-07T11:15:06Z
+updated: 2026-06-07T12:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T11:15:06Z
-  change: "Add requiredRole to PUT /api/templates/[id]/steps schema and createMany payload so template step edits preserve per-step role restrictions — completes the editing path for per-step role assignment enforcement"
+  date: 2026-06-07T12:15:09Z
+  change: "Add role-restriction notice to workflow detail page so users see an explanatory banner when the current approval step requires a role they do not have — closes the UX gap in the newly shipped per-step role assignment feature"
   files:
-    - src/app/api/templates/[id]/steps/route.ts
+    - src/app/workflows/[id]/page.tsx
+    - README.md
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T11:15:06Z
+    change: "Add requiredRole to PUT /api/templates/[id]/steps schema and createMany payload so template step edits preserve per-step role restrictions — completes the editing path for per-step role assignment enforcement"
+    files:
+      - src/app/api/templates/[id]/steps/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T10:15:10Z
@@ -944,7 +953,8 @@ demo:
   password: "changeme123"
 
 next_actions:
-  - "Roadmap complete — no pending items"
+  - "PDF receipt generation (README roadmap item)"
+  - "Hosted SaaS cloud.halalflow.app (README roadmap item)"
 
 previous_cycles:
   - date: 2026-05-30T10:15:08Z
