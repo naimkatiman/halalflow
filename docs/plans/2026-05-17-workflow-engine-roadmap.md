@@ -30,6 +30,12 @@ HalalFlow is now an Islamic finance workflow engine with these live surfaces:
 - [x] Add multi-org switching support in the session and UI.
 - [x] Write a deployment guide for production Postgres instead of SQLite.
 
+## Next features
+
+- [ ] PDF receipt generation for approved workflows.  
+  **Status:** sub-plan drafted at `docs/plans/2026-06-07-pdf-receipt-generation.md`. Hourly cycles should pick Lane 1 first.
+- [ ] Hosted SaaS (cloud.halalflow.app).
+
 ## Notes for future cycles
 
 - Keep the implementation lane small and leave the closed stock-screener roadmap alone.

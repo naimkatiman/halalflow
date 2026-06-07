@@ -1,17 +1,25 @@
 project: halalflow
-updated: 2026-06-07T12:15:09Z
+updated: 2026-06-07T13:15:09Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T12:15:09Z
-  change: "Add role-restriction notice to workflow detail page so users see an explanatory banner when the current approval step requires a role they do not have — closes the UX gap in the newly shipped per-step role assignment feature"
+  date: 2026-06-07T13:15:09Z
+  change: "Draft sub-plan for PDF receipt generation (docs/plans/2026-06-07-pdf-receipt-generation.md) and link it from the workflow-engine roadmap so the next cycles have a clear, lane-by-lane implementation path for the next README roadmap item"
   files:
-    - src/app/workflows/[id]/page.tsx
-    - README.md
+    - docs/plans/2026-06-07-pdf-receipt-generation.md
+    - docs/plans/2026-05-17-workflow-engine-roadmap.md
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-06-07T12:15:09Z
+    change: "Add role-restriction notice to workflow detail page so users see an explanatory banner when the current approval step requires a role they do not have — closes the UX gap in the newly shipped per-step role assignment feature"
+    files:
+      - src/app/workflows/[id]/page.tsx
+      - README.md
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-07T11:15:06Z
     change: "Add requiredRole to PUT /api/templates/[id]/steps schema and createMany payload so template step edits preserve per-step role restrictions — completes the editing path for per-step role assignment enforcement"
     files:
@@ -19,7 +27,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T10:15:10Z
     change: "Wire requiredRole through template creation API and UI — let users set per-step role restrictions when creating templates, and display them on template detail page"
     files:
@@ -29,7 +36,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T09:15:08Z
     change: "Enforce requiredRole in approval API and hide approval UI when the current user's org role does not match the step's requiredRole — first functional use of the per-step role restriction field added in the previous cycle"
     files:
@@ -38,7 +44,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T08:15:08Z
     change: "Add requiredRole column to TemplateStep schema so workflow templates can optionally restrict each approval step to a specific org role — foundational step toward per-step role assignment enforcement roadmap item"
     files:
@@ -47,7 +52,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 504db4c"
 
-previous_cycles:
   - date: 2026-06-07T07:15:05Z
     change: "Commit pending email escaping changes from prior cycle (escapeHtml in invite-email.ts) so the XSS-prevention work is on main and not left as uncommitted working-tree changes"
     files:
@@ -56,7 +60,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 60314f8"
 
-previous_cycles:
   - date: 2026-06-07T06:15:08Z
     change: "Export escapeHtml from email.ts and apply it to user-controlled values (orgName, invitedByName, inviteUrl) in the invite email HTML template so HTML/JS injection from organization names or user display names cannot break email rendering"
     files:
@@ -70,7 +73,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T04:15:10Z
     change: "Add console.error logging to sendEmail JSON parse catch block so Resend API non-JSON responses during outages or rate limits are visible in server logs instead of being silently swallowed"
     files:
@@ -78,7 +80,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T03:15:09Z
     change: "Add try/catch with console.error to GET /api/csrf so iron-session or crypto failures during CSRF token generation are visible in server logs instead of being silently swallowed and returning an unhandled 500"
     files:
@@ -86,7 +87,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T01:15:06Z
     change: "Add console.error logging to NewTemplateForm, CommentForm, and InviteMemberForm catch blocks so network, session, or runtime failures during template creation, comment posting, and member invitation are visible in browser devtools instead of being silently swallowed"
     files:
@@ -96,7 +96,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T00:15:07Z
     change: "Add console.error logging to ImportButton catch block so network, JSON parse, session, or runtime failures during template import are visible in browser devtools instead of being silently swallowed"
     files:
@@ -104,7 +103,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T23:15:07Z
     change: "Add console.error logging to OrgSwitcher catch block so network, session, or runtime failures during org switching are visible in browser devtools instead of being silently swallowed"
     files:
@@ -112,7 +110,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T22:15:06Z
     change: "Remove unused dependencies lucide-react, @upstash/redis, and dotenv from package.json — none are imported anywhere in the codebase, so they were bloating node_modules and install time for no benefit"
     files:
@@ -121,7 +118,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T21:15:10Z
     change: "Remove dead 'cancelled' status from Badge.tsx WorkflowStatus type and config map — workflows can never be cancelled, so the entry was unreachable dead code"
     files:
@@ -129,7 +125,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T20:15:10Z
     change: "Add console.error logging to NewWorkflowForm handleSubmit catch block so network, session, or runtime failures during workflow creation are visible in browser devtools instead of being silently swallowed"
     files:
@@ -137,7 +132,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T19:15:10Z
     change: "Add .catch with console.error to LogoutHandler fetch promise so network, session, or runtime failures during logout are visible in browser devtools instead of being silently swallowed"
     files:
@@ -145,7 +139,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T18:15:09Z
     change: "Add console.error logging to LoginForm and RegisterForm catch blocks so network, session, or runtime failures during authentication are visible in browser devtools instead of being silently swallowed"
     files:
@@ -154,7 +147,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T17:15:09Z
     change: "Add console.error logging to ApprovalActions catch block so network, session, or runtime failures during workflow approvals are visible in browser devtools instead of being silently swallowed"
     files:
@@ -162,7 +154,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T16:15:09Z
     change: "Add descriptive labels to error boundary console.error calls in error.tsx and global-error.tsx so runtime errors caught by boundaries are identifiable in logs instead of appearing as bare error dumps"
     files:
@@ -171,7 +162,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T15:15:09Z
     change: "Add console.error logging to health endpoint catch block so database connectivity failures during health checks are visible in server logs instead of being silently swallowed"
     files:
@@ -185,7 +175,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T13:15:07Z
     change: "Add aria-label attributes to step name and description inputs in NewTemplateForm so screen readers announce each field with its step number, since the dynamic list has no visible <label> elements"
     files:
@@ -193,7 +182,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-06T11:15:09Z
     change: "Standardize bare aria-hidden attributes to explicit aria-hidden=true in app page components (error, global-error, not-found, loading, dashboard, templates, workflows, settings) for consistency with the rest of the codebase"
     files:
@@ -208,7 +196,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-05T23:17:31Z
     change: "Standardize remaining bare aria-hidden attributes to explicit aria-hidden=true in landing page components (Hero decorative background div, UseCases icons) for consistency with the rest of the codebase"
     files:
@@ -217,7 +204,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-03T17:15:06Z
     change: "Standardize bare aria-hidden attributes to explicit aria-hidden=true in landing page components (Hero, CtaBand, HowItWorks) for consistency with the rest of the codebase"
     files:
@@ -227,7 +213,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-03T16:15:10Z
     change: "Add console.error logging to OnboardingForm submit catch block so network, session, or runtime failures during organization creation are visible in browser devtools instead of being silently swallowed"
     files:
@@ -235,7 +220,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-03T07:15:09Z
     change: "Add console.error logging to NewWorkflowForm template fetch catch block so network, session, or runtime failures during template list loading are visible in browser devtools instead of being silently swallowed"
     files:
@@ -243,7 +227,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-03T05:18:20Z
     change: "Add console.error logging to Navbar auth/me fetch catch block so network, session, or runtime failures during the background user check are visible in browser devtools instead of being silently swallowed"
     files:
@@ -264,7 +247,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as f2f759a"
 
-previous_cycles:
   - date: 2026-06-03T10:15:09Z
     change: "Add console.error logging to POST /api/templates/import catch block so database, session, CSRF, or runtime failures during template import are visible in server logs instead of being silently swallowed"
     files:
@@ -272,7 +254,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-03T09:15:08Z
     change: "Add console.error logging to POST /api/workflows catch block so database, session, CSRF, or runtime failures during workflow creation are visible in server logs instead of being silently swallowed"
     files:
@@ -280,7 +261,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-03T08:15:08Z
     change: "Add console.error logging to POST /api/workflows/[id]/comments catch block so database, session, CSRF, or runtime failures during comment creation are visible in server logs instead of being silently swallowed"
     files:
@@ -288,7 +268,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-03T07:15:09Z
     change: "Add console.error logging to PUT /api/templates/[id]/steps catch block so database, session, CSRF, or runtime failures during step updates are visible in server logs instead of being silently swallowed"
     files:
@@ -296,7 +275,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-03T06:15:06Z
     change: "Add console.error logging to GET and DELETE /api/templates/[id] catch blocks so database, session, CSRF, or runtime failures during template lookups and deletions are visible in server logs instead of being silently swallowed"
     files:
@@ -304,7 +282,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 603d939"
 
-previous_cycles:
   - date: 2026-06-03T05:15:06Z
     change: "Add console.error logging to POST /api/templates catch block so database, session, CSRF, or runtime failures during template creation are visible in server logs instead of being silently swallowed"
     files:
@@ -312,7 +289,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 07976cb"
 
-previous_cycles:
   - date: 2026-06-03T04:15:09Z
     change: "Add console.error logging to GET /api/templates/[id]/export catch block so database, session, or runtime failures during template exports are visible in server logs instead of being silently swallowed"
     files:
@@ -320,7 +296,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-03T03:15:08Z
     change: "Add console.error logging to GET /api/orgs/[id]/members catch block so database, session, or runtime failures during member list lookups are visible in server logs instead of being silently swallowed"
     files:
@@ -328,7 +303,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-03T02:15:07Z
     change: "Add console.error logging to POST /api/orgs/[id]/switch catch block so session, database, or runtime failures during org switching are visible in server logs instead of being silently swallowed"
     files:
@@ -343,7 +317,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 12567d3"
 
-previous_cycles:
   - date: 2026-06-02T23:15:05Z
     change: "Add console.error logging to GET /api/orgs/[id] catch block so database, session, or runtime failures during single-org lookups are visible in server logs instead of being silently swallowed"
     files:
@@ -351,7 +324,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as ab10223"
 
-previous_cycles:
   - date: 2026-06-02T22:15:04Z
     change: "Add console.error logging to GET and POST /api/orgs catch blocks so database, session, CSRF, or runtime failures are visible in server logs instead of being silently swallowed"
     files:
@@ -359,7 +331,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-02T21:15:04Z
     change: "Add console.error logging to POST /api/auth/logout catch block so session, cookie, or CSRF failures during logout are visible in server logs instead of being silently swallowed"
     files:
@@ -385,7 +356,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-02T17:15:02Z
     change: "Add console.error logging to POST /api/auth/register catch block so database, bcrypt, or session failures are visible in server logs instead of being silently swallowed"
     files:
@@ -393,7 +363,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-02T16:15:03Z
     change: "Add console.error logging to POST /api/auth/login catch block so database, bcrypt, or session failures are visible in server logs instead of being silently swallowed"
     files:
@@ -401,7 +370,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-02T15:15:09Z
     change: "Add console.error logging to GET /api/workflows catch block so database or runtime failures are visible in server logs instead of being silently swallowed"
     files:
@@ -409,7 +377,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-02T14:15:08Z
     change: "Add console.error logging to GET /api/templates catch block so database or runtime failures are visible in server logs instead of being silently swallowed"
     files:
@@ -417,7 +384,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-02T13:15:07Z
     change: "Remove dead 'cancelled' status entries from UI label maps in dashboard, template detail, and workflow list/detail pages — workflows can never be cancelled, so the styling and labels were unreachable dead code"
     files:
@@ -428,7 +394,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-02T11:15:06Z
     change: "Add global-error.tsx for root layout error boundary so crashes in the root layout render a branded recovery page instead of the generic Next.js fallback"
     files:
@@ -436,7 +401,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T10:15:08Z
     change: "Add favicon.ico to public/ so browsers and the PWA manifest have a valid icon instead of 404ing"
     files:
@@ -450,7 +414,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T08:15:06Z
     change: "Fix CommentForm error layout so validation errors stack below the input row instead of appearing inline in the flex container"
     files:
@@ -458,7 +421,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T07:15:05Z
     change: "Make dashboard stat cards clickable links to filtered workflow lists so users can drill down from overview counts"
     files:
@@ -466,7 +428,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T06:15:08Z
     change: "Add status label map to template detail page so workflow statuses render as proper title case (e.g. In Progress) instead of lowercase with underscores"
     files:
@@ -474,7 +435,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T05:15:08Z
     change: "Change In Progress dashboard stat icon from Clock to ArrowsClockwise so all five stat icons are visually distinct"
     files:
@@ -482,7 +442,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T04:15:08Z
     change: "Change Pending dashboard stat icon from Clock to Hourglass so it is visually distinct from the Total stat"
     files:
@@ -490,7 +449,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T03:15:08Z
     change: "Add Pending stat card to dashboard so users see pending workflow count alongside Total, In Progress, Approved, and Rejected; adjust grid to 5 columns on desktop"
     files:
@@ -504,7 +462,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-02T00:15:02Z
     change: "Add appleWebApp metadata to root layout for Safari PWA support — enables apple-mobile-web-app-capable and sets status bar style"
     files:
@@ -512,7 +469,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T23:15:05Z
     change: "Add viewport export with themeColor to root layout so mobile browsers tint the address bar with the emerald brand color, matching the PWA manifest"
     files:
@@ -520,7 +476,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T22:15:04Z
     change: "Add OpenGraph and Twitter card metadata to root layout for better social sharing and link previews"
     files:
@@ -528,7 +483,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T21:15:04Z
     change: "Add web app manifest (manifest.ts) for PWA support — provides app name, theme color, start URL, and icon reference"
     files:
@@ -536,7 +490,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T20:15:04Z
     change: "Add pending invitations list to Settings page so owners/admins can see who they've invited but hasn't accepted yet"
     files:
@@ -544,7 +497,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T19:15:03Z
     change: "Fix template detail page status label to use replaceAll instead of replace so multi-word statuses with multiple underscores render correctly"
     files:
@@ -552,7 +504,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T18:15:03Z
     change: "Add aria-label to footer GitHub link so screen readers know it opens an external site in a new tab"
     files:
@@ -560,7 +511,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T17:15:02Z
     change: "Add aria-hidden to decorative GitBranch icons in login and register forms so screen readers skip them"
     files:
@@ -569,7 +519,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-01T15:15:10Z
     change: "Add autoComplete=organization to onboarding form organization name input for better browser autofill UX"
     files:
@@ -577,7 +526,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as d0e71ff"
 
-previous_cycles:
   - date: 2026-06-01T14:15:10Z
     change: "Convert landing page Metadata import to type-only import for consistency with all other app pages"
     files:
@@ -585,7 +533,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-01T12:15:07Z
     change: "Move CommentForm import to top of workflow detail page, before the metadata export, for consistent import ordering"
     files:
@@ -593,7 +540,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 584facd"
 
-previous_cycles:
   - date: 2026-06-01T11:15:09Z
     change: "Update templates page subtitle to show total template count instead of static text, matching the workflows page pattern"
     files:
@@ -601,7 +547,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as ca213d4"
 
-previous_cycles:
   - date: 2026-06-01T09:15:04Z
     change: "Fix workflows page subtitle to show total workflow count instead of current-page length, so pagination does not under-report the true total"
     files:
@@ -615,7 +560,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-01T07:15:10Z
     change: "Remove dead src/types/index.ts file — OrgRole, WorkflowStatus, and ApprovalStatus types are not imported anywhere; Badge.tsx defines its own local WorkflowStatus and no file references @/types"
     files:
@@ -629,7 +573,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-01T05:15:10Z
     change: "Update .env.example to use SQLite by default (matching the project README and Prisma schema) with PostgreSQL as a commented alternative, so the quick-start instructions work out of the box without requiring a running Postgres instance"
     files:
@@ -637,7 +580,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-01T04:15:10Z
     change: "Add responsive mobile navigation menu to authenticated Navbar so mobile users can access Dashboard, Workflows, Templates, Settings, and Sign out on small screens"
     files:
@@ -645,7 +587,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-01T02:15:10Z
     change: "Add Cache-Control: no-store headers to /api/workflows/[id]/comments POST responses so browsers and CDNs never cache authenticated comment submissions or newly issued CSRF tokens"
     files:
@@ -653,7 +594,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-01T01:15:09Z
     change: "Add Cache-Control: no-store headers to /api/templates/import POST responses so browsers and CDNs never cache authenticated template imports or newly issued CSRF tokens"
     files:
@@ -661,7 +601,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T22:15:09Z
     change: "Add Cache-Control: no-store headers to /api/workflows/[id]/approve POST responses so browsers and CDNs never cache authenticated approval actions or newly issued CSRF tokens"
     files:
@@ -669,7 +608,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T21:15:09Z
     change: "Add Cache-Control: no-store header to /api/templates/[id]/export GET response so browsers and CDNs never cache authenticated template export data"
     files:
@@ -677,7 +615,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T20:15:09Z
     change: "Add Cache-Control: no-store headers to /api/workflows/[id] GET and DELETE responses so browsers and CDNs never cache authenticated workflow lookups or deletions"
     files:
@@ -685,7 +622,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T19:15:07Z
     change: "Add Cache-Control: no-store headers to /api/templates/[id] GET, PUT, and DELETE responses so browsers and CDNs never cache authenticated template lookups, updates, or deletions"
     files:
@@ -693,7 +629,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T18:15:05Z
     change: "Add Cache-Control: no-store headers to /api/orgs/[id]/switch POST response so browsers and CDNs never cache session-switching responses or new CSRF tokens"
     files:
@@ -701,7 +636,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T17:15:09Z
     change: "Add Cache-Control: no-store headers to /api/orgs/[id]/members GET and POST responses so browsers and CDNs never cache authenticated member lists or member invitations"
     files:
@@ -709,7 +643,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as c6594b4"
 
-previous_cycles:
   - date: 2026-05-31T16:15:09Z
     change: "Add Cache-Control: no-store header to /api/orgs/[id] GET response so browsers and CDNs never cache authenticated single-org lookups"
     files:
@@ -717,7 +650,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as ee8249e"
 
-previous_cycles:
   - date: 2026-05-31T15:15:08Z
     change: "Add Cache-Control: no-store headers to /api/templates GET and POST responses so browsers and CDNs never cache authenticated template lists or newly created templates"
     files:
@@ -725,7 +657,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 220b792"
 
-previous_cycles:
   - date: 2026-05-31T14:15:05Z
     change: "Add Cache-Control: no-store headers to /api/workflows GET and POST responses so browsers and CDNs never cache authenticated workflow lists or newly created workflows"
     files:
@@ -733,7 +664,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 179f93a"
 
-previous_cycles:
   - date: 2026-05-31T13:15:09Z
     change: "Add Cache-Control: no-store headers to /api/orgs GET and POST responses so browsers and CDNs never cache authenticated org memberships or session-updating org creation"
     files:
@@ -741,7 +671,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 179f93a"
 
-previous_cycles:
   - date: 2026-05-31T10:15:07Z
     change: "Add Cache-Control: no-store headers to /api/auth/login and /api/auth/register responses so browsers and intermediaries never cache credential-handling endpoints or session cookies"
     files:
@@ -750,7 +679,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 8d7a207"
 
-previous_cycles:
   - date: 2026-05-31T09:15:06Z
     change: "Add Cache-Control: no-store headers to /api/auth/logout responses so browsers and CDNs never cache logout state or CSRF tokens"
     files:
@@ -758,7 +686,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T07:15:09Z
     change: "Add Cache-Control: no-store headers to /api/auth/me responses so browsers and CDNs never cache authenticated user data"
     files:
@@ -766,7 +693,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 0294731"
 
-previous_cycles:
   - date: 2026-05-31T06:15:10Z
     change: "Add Cache-Control: no-store headers to /api/csrf responses so browsers and CDNs never cache CSRF tokens"
     files:
@@ -774,7 +700,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 4b67d38"
 
-previous_cycles:
   - date: 2026-05-31T04:15:09Z
     change: "Add Cache-Control: no-store headers to /api/health responses so CDNs and reverse proxies never cache health status"
     files:
@@ -782,7 +707,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T02:15:09Z
     change: "Add aria-hidden to decorative ArrowRight icon in landing page Hero CTA so screen readers skip it"
     files:
@@ -790,7 +714,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T01:15:10Z
     change: "Add role=alert to error boundary message so screen readers announce runtime errors immediately"
     files:
@@ -798,7 +721,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-31T00:15:07Z
     change: "Commit accumulated cycle batch: not-found metadata + button type consistency across 8 files"
     files:
@@ -812,7 +734,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 670f1fe"
 
-previous_cycles:
   - date: 2026-05-30T22:15:04Z
     change: "Add metadata title to 404 not-found page for consistent browser tab UX"
     files:
@@ -820,7 +741,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-30T21:15:04Z
     change: "Standardize page title separators in template and workflow detail pages from middle dot (·) to em dash (—) for consistency with all other app pages"
     files:
@@ -829,7 +749,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-30T19:15:04Z
     change: "Add meta description to New Template page for SEO consistency"
     files:
@@ -855,7 +774,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-30T14:15:10Z
     change: "Add meta description to Invite page for SEO consistency"
     files:
@@ -863,7 +781,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-30T13:16:10Z
     change: "Add meta description to Logout page for SEO consistency"
     files:
@@ -956,7 +873,6 @@ next_actions:
   - "PDF receipt generation (README roadmap item)"
   - "Hosted SaaS cloud.halalflow.app (README roadmap item)"
 
-previous_cycles:
   - date: 2026-05-30T10:15:08Z
     change: "Replace raw <a> tag with Next.js <Link> for Switch account button on invite page so client-side navigation avoids full page reload"
     files:
@@ -969,7 +885,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 01df95a"
 
-previous_cycles:
   - date: 2026-05-30T07:15:09Z
     change: "Add meta description tags to public landing page and core app pages (dashboard, workflows, templates, login, register) for SEO and social sharing"
     files:
@@ -1011,7 +926,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-27T09:15:06Z
     change: "Add role=alert to form error messages in onboarding, new-template, and new-workflow forms so screen readers announce validation errors immediately"
     files:
@@ -1038,7 +952,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-27T06:15:08Z
     change: "Add aria-hidden to decorative icons in error and not-found boundary pages so screen readers skip them"
     files:
@@ -1047,7 +960,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-27T05:15:07Z
     change: "Add aria-hidden to decorative Phosphor icons in app pages (dashboard, settings, templates, workflows) so screen readers skip them"
     files:
@@ -1058,7 +970,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-27T04:15:07Z
     change: "Add role=status live region and aria-hidden to global loading.tsx so screen readers announce loading state and skip decorative spinner"
     files:
@@ -1066,7 +977,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-27T02:15:05Z
     change: "Add aria-hidden to decorative Phosphor icons in landing page components (Hero, HowItWorks, UseCases, CtaBand) so screen readers skip them"
     files:
@@ -1090,7 +1000,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-26T22:15:05Z
     change: "Add aria-label to approval note textarea and role=alert to error messages in ApprovalActions and CommentForm for screen-reader accessibility"
     files:
@@ -1132,7 +1041,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-26T15:15:10Z
     change: "Add htmlFor/id associations to new-workflow form labels and inputs for screen-reader accessibility"
     files:
@@ -1140,7 +1048,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-26T13:15:10Z
     change: "Add htmlFor/id associations to onboarding form label and input for screen-reader accessibility"
     files:
@@ -1148,7 +1055,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-26T04:17:14Z
     change: "Add htmlFor/id associations to register form labels and inputs for screen-reader accessibility"
     files:
@@ -1156,7 +1062,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-26T02:15:09Z
     change: "Add htmlFor/id associations to login form labels and inputs for screen-reader accessibility"
     files:
@@ -1164,7 +1069,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-05-25T23:15:06Z
     change: "Add sitemap.ts for public routes and reference it in robots.ts for SEO"
     files:
@@ -1179,7 +1083,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T20:15:04Z
     change: "Add prefers-reduced-motion media query to disable fade-up animations and smooth scrolling for users with motion sensitivity"
     files:
@@ -1187,7 +1090,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T19:15:04Z
     change: "Add aria-current=page to active Navbar nav link for screen-reader accessibility"
     files:
@@ -1201,7 +1103,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T17:15:07Z
     change: "Add root loading.tsx for global Suspense fallback during route transitions"
     files:
@@ -1215,7 +1116,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T15:15:07Z
     change: "Add autoComplete attributes to login and register form inputs for better browser autofill and password manager UX"
     files:
@@ -1224,7 +1124,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T11:15:07Z
     change: "Extract new-workflow form into NewWorkflowForm.tsx and add metadata title to /workflows/new page for consistent browser tab UX"
     files:
@@ -1233,7 +1132,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T10:15:05Z
     change: "Extract new-template form into NewTemplateForm.tsx and add metadata title to /templates/new page for consistent browser tab UX"
     files:
@@ -1242,7 +1140,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T09:15:07Z
     change: "Extract onboarding form into OnboardingForm.tsx and add metadata title to /onboarding page for consistent browser tab UX"
     files:
@@ -1251,7 +1148,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T07:15:07Z
     change: "Extract logout handler into LogoutHandler.tsx and add metadata title to /logout page for consistent browser tab UX"
     files:
@@ -1267,7 +1163,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-05-25T05:15:07Z
     change: "Remove broken 'Edit steps' link from template detail page — /templates/[id]/edit page does not exist"
     files:
