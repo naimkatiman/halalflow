@@ -1,15 +1,24 @@
 project: halalflow
-updated: 2026-06-07T08:15:08Z
+updated: 2026-06-07T09:15:08Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T08:15:08Z
-  change: "Add requiredRole column to TemplateStep schema so workflow templates can optionally restrict each approval step to a specific org role — foundational step toward per-step role assignment enforcement roadmap item"
+  date: 2026-06-07T09:15:08Z
+  change: "Enforce requiredRole in approval API and hide approval UI when the current user's org role does not match the step's requiredRole — first functional use of the per-step role restriction field added in the previous cycle"
   files:
-    - prisma/schema.prisma
-    - prisma/migrations/20260607002001_add_step_required_role/migration.sql
+    - src/app/api/workflows/[id]/approve/route.ts
+    - src/app/workflows/[id]/page.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as 504db4c"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T08:15:08Z
+    change: "Add requiredRole column to TemplateStep schema so workflow templates can optionally restrict each approval step to a specific org role — foundational step toward per-step role assignment enforcement roadmap item"
+    files:
+      - prisma/schema.prisma
+      - prisma/migrations/20260607002001_add_step_required_role/migration.sql
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 504db4c"
 
 previous_cycles:
   - date: 2026-06-07T07:15:05Z

@@ -63,6 +63,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
     (a) => a.status === 'pending' && a.step.order === workflow.currentStep
   );
   const isActive = ['in_progress', 'pending'].includes(workflow.status);
+  const canApprove = !currentApproval?.step.requiredRole || currentApproval.step.requiredRole === session.orgRole;
   const sc = STATUS_CLS[workflow.status] ?? STATUS_CLS['pending'];
 
   const formatDate = (d: Date) =>
@@ -147,7 +148,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             </ol>
           </div>
 
-          {currentApproval && isActive && workflow.createdById !== session.userId && (
+          {currentApproval && isActive && workflow.createdById !== session.userId && canApprove && (
             <ApprovalActions workflowId={workflow.id} stepName={currentApproval.step.name} />
           )}
 

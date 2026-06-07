@@ -79,6 +79,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!pendingApproval) {
       return NextResponse.json({ error: "No pending step at current position" }, { status: 400, headers: { "Cache-Control": "no-store" } });
     }
+    if (pendingApproval.step.requiredRole && pendingApproval.step.requiredRole !== session.orgRole) {
+      return NextResponse.json({ error: "You do not have the required role for this step" }, { status: 403, headers: { "Cache-Control": "no-store" } });
+    }
 
     const totalSteps = workflow.template.steps.length;
     const nextStep = workflow.currentStep + 1;
