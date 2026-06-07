@@ -58,13 +58,14 @@ model WorkflowTemplate {
 }
 
 model TemplateStep {
-  id          String           @id @default(cuid())
-  templateId  String
-  template    WorkflowTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  order       Int
-  name        String
-  description String?
-  approvals   Approval[]
+  id           String           @id @default(cuid())
+  templateId   String
+  template     WorkflowTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  order        Int
+  name         String
+  description  String?
+  requiredRole String?
+  approvals    Approval[]
 
   @@index([templateId])
 }
