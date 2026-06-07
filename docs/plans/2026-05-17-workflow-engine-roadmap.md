@@ -32,7 +32,7 @@ HalalFlow is now an Islamic finance workflow engine with these live surfaces:
 
 ## Next features
 
-- [ ] PDF receipt generation for approved workflows.  
+- [x] PDF receipt generation for approved workflows.  
   **Status:** sub-plan drafted at `docs/plans/2026-06-07-pdf-receipt-generation.md`. Hourly cycles should pick Lane 1 first.
 - [ ] Hosted SaaS (cloud.halalflow.app).
 
@@ -54,3 +54,4 @@ HalalFlow is now an Islamic finance workflow engine with these live surfaces:
 | 2026-05-23T18:15Z | Add workflow template import/export as JSON for portability. | done | Export already existed; added POST /api/templates/import that accepts the exported JSON shape, validates with zod, and creates a template with steps. Added ImportButton to /templates list page. Verified npm run lint and npm run build green. |
 | 2026-05-23T18:15Z | Add multi-org switching support in the session and UI. | done | Already implemented in prior cycles: /api/orgs/[id]/switch updates session orgId/orgRole, and OrgSwitcher UI on /settings lets users switch orgs. Verified present in build output. |
 | 2026-05-23T19:15Z | Write a deployment guide for production Postgres instead of SQLite. | done | Added docs/deployment.md with step-by-step Postgres migration, env var changes, migrate/deploy/seed flow, Railway and generic host guidance. Verified npm run lint and npm run build green. |
+| 2026-06-07T16:15Z — 2026-06-07T19:15Z | PDF receipt generation for approved workflows. | done | Installed pdf-lib, created GET /api/workflows/[id]/receipt with full PDF layout (header, metadata, approval chain, footer), added Download receipt button to workflow detail page (visible only when status === 'approved'). Verified npm run lint and npm run build green. |

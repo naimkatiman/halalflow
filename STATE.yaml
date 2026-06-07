@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-07T18:15:10Z
+updated: 2026-06-07T20:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T19:15:10Z
-  change: "Add console.error logging to initCsrfToken catch block in csrf-client.ts so network, session, or runtime failures during CSRF token initialization are visible in browser devtools instead of being silently swallowed"
+  date: 2026-06-07T20:15:10Z
+  change: "Mark PDF receipt generation as complete in docs/plans/2026-05-17-workflow-engine-roadmap.md and add execution log entry — the feature was already shipped (API route, PDF layout, download button) but the roadmap was still showing it unchecked"
   files:
-    - src/lib/csrf-client.ts
+    - docs/plans/2026-05-17-workflow-engine-roadmap.md
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-07T19:15:10Z
+    change: "Add console.error logging to initCsrfToken catch block in csrf-client.ts so network, session, or runtime failures during CSRF token initialization are visible in browser devtools instead of being silently swallowed"
+    files:
+      - src/lib/csrf-client.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T18:15:10Z
