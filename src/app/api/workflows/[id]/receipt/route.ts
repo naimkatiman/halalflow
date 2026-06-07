@@ -32,6 +32,10 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
     }
 
+    if (workflow.status !== "approved") {
+      return NextResponse.json({ error: "Workflow not approved" }, { status: 403, headers: { "Cache-Control": "no-store" } });
+    }
+
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([612, 792]); // US Letter
     const { height } = page.getSize();

@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-07T20:15:10Z
+updated: 2026-06-07T22:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T20:15:10Z
-  change: "Mark PDF receipt generation as complete in docs/plans/2026-05-17-workflow-engine-roadmap.md and add execution log entry — the feature was already shipped (API route, PDF layout, download button) but the roadmap was still showing it unchecked"
+  date: 2026-06-07T22:15:10Z
+  change: "Add workflow status approval gate to GET /api/workflows/[id]/receipt so the API refuses to generate receipts for non-approved workflows (returns 403) — the UI already hides the download button unless status === 'approved', but the API should enforce this boundary"
   files:
-    - docs/plans/2026-05-17-workflow-engine-roadmap.md
+    - src/app/api/workflows/[id]/receipt/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T20:15:10Z
+    change: "Mark PDF receipt generation as complete in docs/plans/2026-05-17-workflow-engine-roadmap.md and add execution log entry — the feature was already shipped (API route, PDF layout, download button) but the roadmap was still showing it unchecked"
+    files:
+      - docs/plans/2026-05-17-workflow-engine-roadmap.md
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T19:15:10Z
