@@ -110,7 +110,7 @@ SESSION_SECRET="your-32-char-secret"
 - [x] Multi-org switching
 - [x] Workflow template export/import
 - [x] Per-step role assignment enforcement
-- [ ] PDF receipt generation
+- [x] PDF receipt generation
 - [ ] Hosted SaaS (cloud.halalflow.app)
 
 ## License
