@@ -1,16 +1,24 @@
 project: halalflow
-updated: 2026-06-07T10:15:10Z
+updated: 2026-06-07T11:15:06Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T10:15:10Z
-  change: "Wire requiredRole through template creation API and UI — let users set per-step role restrictions when creating templates, and display them on template detail page"
+  date: 2026-06-07T11:15:06Z
+  change: "Add requiredRole to PUT /api/templates/[id]/steps schema and createMany payload so template step edits preserve per-step role restrictions — completes the editing path for per-step role assignment enforcement"
   files:
-    - src/app/api/templates/route.ts
-    - src/app/templates/new/NewTemplateForm.tsx
-    - src/app/templates/[id]/page.tsx
+    - src/app/api/templates/[id]/steps/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T10:15:10Z
+    change: "Wire requiredRole through template creation API and UI — let users set per-step role restrictions when creating templates, and display them on template detail page"
+    files:
+      - src/app/api/templates/route.ts
+      - src/app/templates/new/NewTemplateForm.tsx
+      - src/app/templates/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T09:15:08Z

@@ -11,6 +11,7 @@ const stepsSchema = z.array(
     name: z.string().min(1),
     description: z.string().optional(),
     order: z.number().int().min(0),
+    requiredRole: z.enum(["owner", "admin", "member"]).optional(),
   })
 ).min(1);
 
@@ -33,7 +34,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     await prisma.$transaction([
       prisma.templateStep.deleteMany({ where: { templateId: id } }),
       prisma.templateStep.createMany({
-        data: steps.map((s) => ({ templateId: id, name: s.name, description: s.description, order: s.order })),
+        data: steps.map((s) => ({ templateId: id, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })),
       }),
     ]);
 
