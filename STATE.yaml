@@ -1,15 +1,25 @@
 project: halalflow
-updated: 2026-06-07T09:15:08Z
+updated: 2026-06-07T10:15:10Z
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T09:15:08Z
-  change: "Enforce requiredRole in approval API and hide approval UI when the current user's org role does not match the step's requiredRole — first functional use of the per-step role restriction field added in the previous cycle"
+  date: 2026-06-07T10:15:10Z
+  change: "Wire requiredRole through template creation API and UI — let users set per-step role restrictions when creating templates, and display them on template detail page"
   files:
-    - src/app/api/workflows/[id]/approve/route.ts
-    - src/app/workflows/[id]/page.tsx
+    - src/app/api/templates/route.ts
+    - src/app/templates/new/NewTemplateForm.tsx
+    - src/app/templates/[id]/page.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T09:15:08Z
+    change: "Enforce requiredRole in approval API and hide approval UI when the current user's org role does not match the step's requiredRole — first functional use of the per-step role restriction field added in the previous cycle"
+    files:
+      - src/app/api/workflows/[id]/approve/route.ts
+      - src/app/workflows/[id]/page.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T08:15:08Z
