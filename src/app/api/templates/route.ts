@@ -10,6 +10,7 @@ const stepSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   order: z.number().int().min(0),
+  requiredRole: z.string().optional(),
 });
 
 const createSchema = z.object({
@@ -71,7 +72,7 @@ export async function POST(request: NextRequest) {
         orgId: session.orgId,
         name,
         description,
-        steps: { create: steps.map((s) => ({ name: s.name, description: s.description, order: s.order })) },
+        steps: { create: steps.map((s) => ({ name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
       },
       include: { steps: { orderBy: { order: "asc" } } },
     });

@@ -9,17 +9,18 @@ import { fetchWithCsrf } from '@/lib/csrf-client';
 interface Step {
   name: string;
   description: string;
+  requiredRole?: string;
 }
 
 export function NewTemplateForm() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [steps, setSteps] = useState<Step[]>([{ name: '', description: '' }]);
+  const [steps, setSteps] = useState<Step[]>([{ name: '', description: '', requiredRole: '' }]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const addStep = () => setSteps([...steps, { name: '', description: '' }]);
+  const addStep = () => setSteps([...steps, { name: '', description: '', requiredRole: '' }]);
 
   const removeStep = (i: number) => {
     if (steps.length === 1) return;
@@ -55,7 +56,7 @@ export function NewTemplateForm() {
         body: JSON.stringify({
           name,
           description: description || undefined,
-          steps: steps.map((s, i) => ({ name: s.name.trim(), description: s.description || undefined, order: i })),
+          steps: steps.map((s, i) => ({ name: s.name.trim(), description: s.description || undefined, order: i, requiredRole: s.requiredRole || undefined })),
         }),
       });
       const data = await res.json();
@@ -163,6 +164,17 @@ export function NewTemplateForm() {
                     className="w-full ml-5 px-3 py-1.5 border border-zinc-100 rounded-lg text-xs text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
                     placeholder="Step description (optional)"
                   />
+                  <select
+                    value={step.requiredRole || ''}
+                    onChange={(e) => updateStep(i, 'requiredRole', e.target.value)}
+                    aria-label={`Step ${i + 1} required role`}
+                    className="w-full ml-5 px-3 py-1.5 border border-zinc-100 rounded-lg text-xs text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors bg-white"
+                  >
+                    <option value="">Any member can approve</option>
+                    <option value="owner">Owner only</option>
+                    <option value="admin">Admin or above</option>
+                    <option value="member">Member or above</option>
+                  </select>
                 </div>
               </div>
             ))}
