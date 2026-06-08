@@ -5,6 +5,15 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { prisma } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .substring(0, 40);
+}
+
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
@@ -226,7 +235,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="receipt-${workflow.id}.pdf"`,
+        "Content-Disposition": `attachment; filename="receipt-${slugify(workflow.title)}-${workflow.id}.pdf"`,
         "Cache-Control": "no-store",
       },
     });

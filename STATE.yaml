@@ -1,16 +1,22 @@
 project: halalflow
-updated: 2026-06-08T17:15:05+08:00
+updated: 2026-06-08T18:15:03+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-08T17:15:05+08:00
-  change: "Add workflow creator name to PDF receipt API — include createdBy in the Prisma query and render a 'Created by:' line in the receipt PDF for better audit trail compliance"
+  date: 2026-06-08T18:15:03+08:00
+  change: "Slugify workflow title into PDF receipt filename so downloads are human-readable (receipt-{slug}-{id}.pdf) instead of an opaque ID-only name"
   files:
     - src/app/api/workflows/[id]/receipt/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-06-08T17:15:05+08:00
+    change: "Add workflow creator name to PDF receipt API — include createdBy in the Prisma query and render a 'Created by:' line in the receipt PDF for better audit trail compliance"
+    files:
+      - src/app/api/workflows/[id]/receipt/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-08T14:15:10+08:00
     change: "Fix InviteMemberForm success message to use data.member.role instead of the local role state variable, which was stale due to React batching after setRole('member') reset — prevents showing the wrong role (e.g. admin) in the success toast when a user was actually added as member"
     files:
