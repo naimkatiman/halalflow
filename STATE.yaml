@@ -1,14 +1,22 @@
 project: halalflow
-updated: 2026-06-07T22:15:10Z
+updated: 2026-06-08T10:15:06+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-07T22:15:10Z
-  change: "Add workflow status approval gate to GET /api/workflows/[id]/receipt so the API refuses to generate receipts for non-approved workflows (returns 403) — the UI already hides the download button unless status === 'approved', but the API should enforce this boundary"
+  date: 2026-06-08T10:15:06+08:00
+  change: "Reset initPromise to null in csrf-client.ts catch block so transient CSRF token fetch failures are retried on the next fetchWithCsrf call instead of permanently sticking to a failed state until page reload"
   files:
-    - src/app/api/workflows/[id]/receipt/route.ts
+    - src/lib/csrf-client.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-07T22:15:10Z
+    change: "Add workflow status approval gate to GET /api/workflows/[id]/receipt so the API refuses to generate receipts for non-approved workflows (returns 403) — the UI already hides the download button unless status === 'approved', but the API should enforce this boundary"
+    files:
+      - src/app/api/workflows/[id]/receipt/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T20:15:10Z

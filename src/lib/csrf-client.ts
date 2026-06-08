@@ -16,6 +16,8 @@ export async function initCsrfToken() {
     .catch((error) => {
       // Fail silently on unauthenticated pages, but log for debugging
       console.error("initCsrfToken error:", error);
+      // Reset so the next call retries (transient failures shouldn't stick)
+      initPromise = null;
     });
 
   return initPromise;
