@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
     const body = await request.json();
     const { email, password } = loginSchema.parse(body);
-    const rateLimitKey = `login:${ip}:${email.toLowerCase()}`;
+    const normalizedEmail = email.toLowerCase().trim();
+    const rateLimitKey = `login:${ip}:${normalizedEmail}`;
     const rateLimit = checkRateLimit(rateLimitKey);
     if (!rateLimit.allowed) {
       return NextResponse.json(
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { email: normalizedEmail },
       include: {
         memberships: { include: { org: true }, orderBy: { createdAt: "asc" }, take: 1 },
       },

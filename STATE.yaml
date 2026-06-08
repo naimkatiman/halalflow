@@ -1,17 +1,23 @@
 project: halalflow
-updated: 2026-06-08T20:15:03+08:00
+updated: 2026-06-08T21:15:04+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-08T20:15:03+08:00
-  change: "Preserve requiredRole in template export and import so per-step role restrictions survive JSON round-trips instead of being silently dropped"
+  date: 2026-06-08T21:15:04+08:00
+  change: "Normalize email to lowercase in login API before DB lookup so users who registered with mixed-case emails can log in with any casing — the register route already normalized, but login was doing a raw lookup causing credential mismatches"
   files:
-    - src/app/api/templates/[id]/export/route.ts
-    - src/app/api/templates/import/route.ts
+    - src/app/api/auth/login/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-06-08T20:15:03+08:00
+    change: "Preserve requiredRole in template export and import so per-step role restrictions survive JSON round-trips instead of being silently dropped"
+    files:
+      - src/app/api/templates/[id]/export/route.ts
+      - src/app/api/templates/import/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-06-08T18:15:03+08:00
     change: "Slugify workflow title into PDF receipt filename so downloads are human-readable (receipt-{slug}-{id}.pdf) instead of an opaque ID-only name"
     files:
