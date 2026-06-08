@@ -34,7 +34,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
       if (data.type === 'invitation') {
         setSuccess(`Invitation sent to ${data.invite.email}`);
       } else {
-        setSuccess(`${data.member.user.name} added as ${role}`);
+        setSuccess(`${data.member.user.name} added as ${data.member.role}`);
       }
       router.refresh();
     } catch (err) {
