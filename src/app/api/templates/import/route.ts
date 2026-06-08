@@ -10,7 +10,7 @@ const importStepSchema = z.object({
   order: z.number().int().min(0),
   name: z.string().min(1),
   description: z.string().optional(),
-  requiredRole: z.string().optional(),
+  requiredRole: z.enum(["owner", "admin", "member"]).optional(),
 });
 
 const importSchema = z.object({

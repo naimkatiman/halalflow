@@ -10,7 +10,7 @@ const stepSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   order: z.number().int().min(0),
-  requiredRole: z.string().optional(),
+  requiredRole: z.enum(["owner", "admin", "member"]).optional(),
 });
 
 const createSchema = z.object({

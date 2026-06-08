@@ -1,14 +1,66 @@
 project: halalflow
-updated: 2026-06-08T21:15:04+08:00
+updated: 2026-06-08T23:15:04+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-08T21:15:04+08:00
-  change: "Normalize email to lowercase in login API before DB lookup so users who registered with mixed-case emails can log in with any casing — the register route already normalized, but login was doing a raw lookup causing credential mismatches"
+  date: 2026-06-08T23:15:04+08:00
+  change: "Tighten requiredRole schema validation in template creation and import APIs from z.string().optional() to z.enum(['owner', 'admin', 'member']).optional() — aligns with the step update API and prevents invalid role strings from making approval steps permanently unapprovable"
   files:
-    - src/app/api/auth/login/route.ts
+    - src/app/api/templates/route.ts
+    - src/app/api/templates/import/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-08T21:15:04+08:00
+    change: "Normalize email to lowercase in login API before DB lookup so users who registered with mixed-case emails can log in with any casing — the register route already normalized, but login was doing a raw lookup causing credential mismatches"
+    files:
+      - src/app/api/auth/login/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+  - date: 2026-06-08T20:15:03+08:00
+    change: "Preserve requiredRole in template export and import so per-step role restrictions survive JSON round-trips"
+    files:
+      - src/app/api/templates/[id]/export/route.ts
+      - src/app/api/templates/import/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+  - date: 2026-06-08T18:15:03+08:00
+    change: "Slugify workflow title into PDF receipt filename so downloads are human-readable (receipt-{slug}-{id}.pdf) instead of an opaque ID-only name"
+    files:
+      - src/app/api/workflows/[id]/receipt/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
+  - date: 2026-06-08T17:15:05+08:00
+    change: "Add workflow creator name to PDF receipt API — include createdBy in the Prisma query and render a 'Created by:' line in the receipt PDF for better audit trail compliance"
+    files:
+      - src/app/api/workflows/[id]/receipt/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
+  - date: 2026-06-08T14:15:10+08:00
+    change: "Fix InviteMemberForm success message to use data.member.role instead of the local role state variable, which was stale due to React batching after setRole('member') reset — prevents showing the wrong role (e.g. admin) in the success toast when a user was actually added as member"
+    files:
+      - src/app/settings/InviteMemberForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as f8f6b28"
+  - date: 2026-06-08T13:15:10+08:00
+    change: "Reset role state to 'member' in InviteMemberForm after a successful invite so consecutive invitations default to the safer member role instead of preserving the previous selection (e.g. admin)"
+    files:
+      - src/app/settings/InviteMemberForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as 4bd8a9e"
+  - date: 2026-06-08T11:15:09+08:00
+    change: "Add MIT LICENSE file to project root so the README's stated MIT license is actually present in the repository, making the open-source terms legally clear for contributors and users"
+    files:
+      - LICENSE
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
+  - date: 2026-06-08T10:15:06+08:00
+    change: "Reset initPromise to null in csrf-client.ts catch block so transient CSRF token fetch failures are retried on the next fetchWithCsrf call instead of permanently sticking to a failed state until page reload"
+    files:
+      - src/lib/csrf-client.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-08T20:15:03+08:00
