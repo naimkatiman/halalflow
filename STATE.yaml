@@ -3,12 +3,20 @@ updated: 2026-06-08T10:15:06+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-08T10:15:06+08:00
-  change: "Reset initPromise to null in csrf-client.ts catch block so transient CSRF token fetch failures are retried on the next fetchWithCsrf call instead of permanently sticking to a failed state until page reload"
+  date: 2026-06-08T11:15:09+08:00
+  change: "Add MIT LICENSE file to project root so the README's stated MIT license is actually present in the repository, making the open-source terms legally clear for contributors and users"
   files:
-    - src/lib/csrf-client.ts
+    - LICENSE
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
+
+previous_cycles:
+  - date: 2026-06-08T10:15:06+08:00
+    change: "Reset initPromise to null in csrf-client.ts catch block so transient CSRF token fetch failures are retried on the next fetchWithCsrf call instead of permanently sticking to a failed state until page reload"
+    files:
+      - src/lib/csrf-client.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-07T22:15:10Z
