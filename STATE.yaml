@@ -1,16 +1,22 @@
 project: halalflow
-updated: 2026-06-08T16:15:09+08:00
+updated: 2026-06-08T17:15:05+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-08T14:15:10+08:00
-  change: "Fix InviteMemberForm success message to use data.member.role instead of the local role state variable, which was stale due to React batching after setRole('member') reset — prevents showing the wrong role (e.g. admin) in the success toast when a user was actually added as member"
+  date: 2026-06-08T17:15:05+08:00
+  change: "Add workflow creator name to PDF receipt API — include createdBy in the Prisma query and render a 'Created by:' line in the receipt PDF for better audit trail compliance"
   files:
-    - src/app/settings/InviteMemberForm.tsx
+    - src/app/api/workflows/[id]/receipt/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed as f8f6b28"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-08T14:15:10+08:00
+    change: "Fix InviteMemberForm success message to use data.member.role instead of the local role state variable, which was stale due to React batching after setRole('member') reset — prevents showing the wrong role (e.g. admin) in the success toast when a user was actually added as member"
+    files:
+      - src/app/settings/InviteMemberForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed as f8f6b28"
   - date: 2026-06-08T13:15:10+08:00
     change: "Reset role state to 'member' in InviteMemberForm after a successful invite so consecutive invitations default to the safer member role instead of preserving the previous selection (e.g. admin)"
     files:

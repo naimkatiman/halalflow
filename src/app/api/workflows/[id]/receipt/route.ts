@@ -18,6 +18,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       include: {
         template: true,
         org: true,
+        createdBy: { select: { name: true } },
         approvals: {
           include: {
             step: true,
@@ -125,6 +126,17 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       color: rgb(0.3, 0.3, 0.3),
     });
     y -= 16;
+
+    if (workflow.createdBy?.name) {
+      page.drawText(`Created by: ${workflow.createdBy.name}`, {
+        x: margin,
+        y,
+        size: 10,
+        font,
+        color: rgb(0.3, 0.3, 0.3),
+      });
+      y -= 16;
+    }
 
     const finalApproval = workflow.approvals.find((a) => a.status === "approved" && a.step.order === workflow.approvals.length - 1);
     if (finalApproval?.updatedAt) {
