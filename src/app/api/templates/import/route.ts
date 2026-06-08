@@ -10,6 +10,7 @@ const importStepSchema = z.object({
   order: z.number().int().min(0),
   name: z.string().min(1),
   description: z.string().optional(),
+  requiredRole: z.string().optional(),
 });
 
 const importSchema = z.object({
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
         orgId: session.orgId,
         name,
         description,
-        steps: { create: sortedSteps.map((s) => ({ name: s.name, description: s.description, order: s.order })) },
+        steps: { create: sortedSteps.map((s) => ({ name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
       },
       include: { steps: { orderBy: { order: "asc" } } },
     });

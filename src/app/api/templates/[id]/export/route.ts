@@ -23,6 +23,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
         order: s.order,
         name: s.name,
         description: s.description,
+        requiredRole: s.requiredRole,
       })),
       exportedAt: new Date().toISOString(),
       version: "1.0",
