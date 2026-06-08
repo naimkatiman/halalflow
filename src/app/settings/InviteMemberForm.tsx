@@ -30,6 +30,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
         return;
       }
       setEmail('');
+      setRole('member');
       if (data.type === 'invitation') {
         setSuccess(`Invitation sent to ${data.invite.email}`);
       } else {

@@ -1,16 +1,22 @@
 project: halalflow
-updated: 2026-06-08T10:15:06+08:00
+updated: 2026-06-08T12:15:08+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-08T11:15:09+08:00
-  change: "Add MIT LICENSE file to project root so the README's stated MIT license is actually present in the repository, making the open-source terms legally clear for contributors and users"
+  date: 2026-06-08T13:15:10+08:00
+  change: "Reset role state to 'member' in InviteMemberForm after a successful invite so consecutive invitations default to the safer member role instead of preserving the previous selection (e.g. admin)"
   files:
-    - LICENSE
+    - src/app/settings/InviteMemberForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed as 7e61d39"
 
 previous_cycles:
+  - date: 2026-06-08T11:15:09+08:00
+    change: "Add MIT LICENSE file to project root so the README's stated MIT license is actually present in the repository, making the open-source terms legally clear for contributors and users"
+    files:
+      - LICENSE
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green"
   - date: 2026-06-08T10:15:06+08:00
     change: "Reset initPromise to null in csrf-client.ts catch block so transient CSRF token fetch failures are retried on the next fetchWithCsrf call instead of permanently sticking to a failed state until page reload"
     files:
