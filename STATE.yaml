@@ -8,7 +8,7 @@ latest_cycle:
   files:
     - src/app/api/workflows/[id]/receipt/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-08T17:15:05+08:00
