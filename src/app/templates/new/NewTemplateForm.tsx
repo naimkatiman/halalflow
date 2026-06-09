@@ -143,6 +143,7 @@ export function NewTemplateForm() {
                       value={step.name}
                       onChange={(e) => updateStep(i, 'name', e.target.value)}
                       required
+                      maxLength={100}
                       aria-label={`Step ${i + 1} name`}
                       className="flex-1 px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
                       placeholder={`Step name (e.g. "Finance Officer Review")`}
