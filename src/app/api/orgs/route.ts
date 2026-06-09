@@ -11,7 +11,7 @@ function slugify(name: string) {
 }
 
 const createSchema = z.object({
-  name: z.string().min(1).max(100),
+  name: z.string().min(1).max(100).trim(),
 });
 
 export async function GET() {

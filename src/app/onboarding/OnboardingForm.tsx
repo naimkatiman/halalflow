@@ -19,7 +19,7 @@ export default function OnboardingForm() {
       const res = await fetchWithCsrf('/api/orgs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name: name.trim() }),
       });
       const data = await res.json();
       if (!res.ok) {

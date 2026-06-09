@@ -3,15 +3,24 @@ updated: 2026-06-10T01:15:05+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T01:15:05+08:00
-  change: "Add zod .trim() to template name in creation, update, and import APIs and trim name/description in NewTemplateForm before sending — prevents whitespace-only template names that would look broken in lists and detail pages"
+  date: 2026-06-10T02:15:06+08:00
+  change: "Add zod .trim() to org creation API schema and trim organization name in OnboardingForm before sending — prevents whitespace-only or whitespace-padded org names that would look broken in the navbar, settings, and dashboard"
   files:
-    - src/app/api/templates/route.ts
-    - src/app/api/templates/[id]/route.ts
-    - src/app/api/templates/import/route.ts
-    - src/app/templates/new/NewTemplateForm.tsx
+    - src/app/api/orgs/route.ts
+    - src/app/onboarding/OnboardingForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-10T01:15:05+08:00
+    change: "Add zod .trim() to template name in creation, update, and import APIs and trim name/description in NewTemplateForm before sending — prevents whitespace-only template names that would look broken in lists and detail pages"
+    files:
+      - src/app/api/templates/route.ts
+      - src/app/api/templates/[id]/route.ts
+      - src/app/api/templates/import/route.ts
+      - src/app/templates/new/NewTemplateForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-10T00:15:06+08:00
