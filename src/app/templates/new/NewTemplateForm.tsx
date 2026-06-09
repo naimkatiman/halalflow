@@ -54,8 +54,8 @@ export function NewTemplateForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name,
-          description: description || undefined,
+          name: name.trim(),
+          description: description.trim() || undefined,
           steps: steps.map((s, i) => ({ name: s.name.trim(), description: s.description || undefined, order: i, requiredRole: s.requiredRole || undefined })),
         }),
       });

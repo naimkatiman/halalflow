@@ -7,7 +7,7 @@ import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
 
 const updateSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
+  name: z.string().min(1).max(100).trim().optional(),
   description: z.string().max(2000).optional(),
 });
 
