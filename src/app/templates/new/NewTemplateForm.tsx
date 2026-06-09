@@ -165,6 +165,7 @@ export function NewTemplateForm() {
                     onChange={(e) => updateStep(i, 'description', e.target.value)}
                     aria-label={`Step ${i + 1} description`}
                     className="w-full ml-5 px-3 py-1.5 border border-zinc-100 rounded-lg text-xs text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                    maxLength={2000}
                     placeholder="Step description (optional)"
                   />
                   <select

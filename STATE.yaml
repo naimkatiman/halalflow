@@ -1,19 +1,28 @@
 project: halalflow
-updated: 2026-06-09T22:15:05+08:00
+updated: 2026-06-09T23:15:04+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-09T22:15:05+08:00
-  change: "Add zod .max(2000) to template description in creation, update, and import APIs plus maxLength={2000} on the new-template form description textarea — matches the existing workflow description constraint and prevents abuse"
+  date: 2026-06-09T23:15:04+08:00
+  change: "Add zod .max(2000) to template step description in creation, update, and import APIs plus maxLength={2000} on the new-template form step description input — matches the existing template/workflow description constraint and prevents abuse"
   files:
     - src/app/api/templates/route.ts
-    - src/app/api/templates/[id]/route.ts
     - src/app/api/templates/import/route.ts
+    - src/app/api/templates/[id]/steps/route.ts
     - src/app/templates/new/NewTemplateForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-09T22:15:05+08:00
+    change: "Add zod .max(2000) to template description in creation, update, and import APIs plus maxLength={2000} on the new-template form description textarea — matches the existing workflow description constraint and prevents abuse"
+    files:
+      - src/app/api/templates/route.ts
+      - src/app/api/templates/[id]/route.ts
+      - src/app/api/templates/import/route.ts
+      - src/app/templates/new/NewTemplateForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-09T21:15:02+08:00
     change: "Add zod .max(100) to template step name in creation and import APIs so all three template step endpoints (create, update, import) enforce the same 100-character limit — prevents step names that pass creation but fail editing"
     files:
