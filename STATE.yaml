@@ -3,13 +3,22 @@ updated: 2026-06-10T01:15:05+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T02:15:06+08:00
-  change: "Add zod .trim() to org creation API schema and trim organization name in OnboardingForm before sending — prevents whitespace-only or whitespace-padded org names that would look broken in the navbar, settings, and dashboard"
+  date: 2026-06-10T03:15:06+08:00
+  change: "Add zod .trim() to register name and trim name in RegisterForm before sending — prevents whitespace-only or whitespace-padded user names that would look broken in the navbar, audit logs, emails, and PDF receipts"
   files:
-    - src/app/api/orgs/route.ts
-    - src/app/onboarding/OnboardingForm.tsx
+    - src/app/api/auth/register/route.ts
+    - src/app/register/RegisterForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-10T02:15:06+08:00
+    change: "Add zod .trim() to org creation API schema and trim organization name in OnboardingForm before sending — prevents whitespace-only or whitespace-padded org names that would look broken in the navbar, settings, and dashboard"
+    files:
+      - src/app/api/orgs/route.ts
+      - src/app/onboarding/OnboardingForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-10T01:15:05+08:00
