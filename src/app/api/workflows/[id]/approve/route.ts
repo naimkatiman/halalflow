@@ -102,6 +102,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       }),
       prisma.auditLog.create({
         data: {
+          orgId: workflow.orgId,
           workflowId: id,
           userId: session.userId,
           action,

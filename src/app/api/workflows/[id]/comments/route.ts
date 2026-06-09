@@ -26,7 +26,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { body: commentBody } = commentSchema.parse(body);
 
     const comment = await prisma.comment.create({
-      data: { workflowId: id, userId: session.userId, body: commentBody },
+      data: { orgId: workflow.orgId, workflowId: id, userId: session.userId, body: commentBody },
       include: { user: { select: { id: true, name: true, email: true } } },
     });
 

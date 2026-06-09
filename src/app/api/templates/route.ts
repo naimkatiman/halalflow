@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
         orgId: session.orgId,
         name,
         description,
-        steps: { create: steps.map((s) => ({ name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
+        steps: { create: steps.map((s) => ({ orgId: session.orgId, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
       },
       include: { steps: { orderBy: { order: "asc" } } },
     });

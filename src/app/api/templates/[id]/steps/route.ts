@@ -34,7 +34,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     await prisma.$transaction([
       prisma.templateStep.deleteMany({ where: { templateId: id } }),
       prisma.templateStep.createMany({
-        data: steps.map((s) => ({ templateId: id, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })),
+        data: steps.map((s) => ({ orgId: session.orgId, templateId: id, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })),
       }),
     ]);
 

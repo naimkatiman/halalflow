@@ -89,10 +89,11 @@ export async function POST(request: NextRequest) {
         currentStep: 0,
         createdById: session.userId,
         approvals: {
-          create: template.steps.map((step) => ({ stepId: step.id, status: "pending" })),
+          create: template.steps.map((step) => ({ orgId: session.orgId, stepId: step.id, status: "pending" })),
         },
         auditLogs: {
           create: {
+            orgId: session.orgId,
             userId: session.userId,
             action: "created",
             detail: `Workflow created from template "${template.name}"`,

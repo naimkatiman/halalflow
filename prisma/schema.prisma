@@ -23,14 +23,18 @@ model User {
 }
 
 model Organization {
-  id          String             @id @default(cuid())
-  name        String
-  slug        String             @unique
-  createdAt   DateTime           @default(now())
-  members     OrgMember[]
-  templates   WorkflowTemplate[]
-  workflows   Workflow[]
-  invitations Invitation[]
+  id            String             @id @default(cuid())
+  name          String
+  slug          String             @unique
+  createdAt     DateTime           @default(now())
+  members       OrgMember[]
+  templates     WorkflowTemplate[]
+  workflows     Workflow[]
+  invitations   Invitation[]
+  templateSteps TemplateStep[]
+  approvals     Approval[]
+  comments      Comment[]
+  auditLogs     AuditLog[]
 }
 
 model OrgMember {
@@ -56,10 +60,14 @@ model WorkflowTemplate {
   workflows   Workflow[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+
+  @@index([orgId])
 }
 
 model TemplateStep {
   id           String           @id @default(cuid())
+  orgId        String
+  org          Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
   templateId   String
   template     WorkflowTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
   order        Int
@@ -69,6 +77,7 @@ model TemplateStep {
   approvals    Approval[]
 
   @@index([templateId])
+  @@index([orgId])
 }
 
 model Workflow {
@@ -97,6 +106,8 @@ model Workflow {
 
 model Approval {
   id         String       @id @default(cuid())
+  orgId      String
+  org        Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   workflowId String
   workflow   Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   stepId     String
@@ -110,33 +121,40 @@ model Approval {
 
   @@index([workflowId])
   @@index([stepId])
+  @@index([orgId])
 }
 
 model Comment {
-  id         String   @id @default(cuid())
+  id         String       @id @default(cuid())
+  orgId      String
+  org        Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   workflowId String
-  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflow   Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   userId     String
-  user       User     @relation(fields: [userId], references: [id])
+  user       User         @relation(fields: [userId], references: [id])
   body       String
-  createdAt  DateTime @default(now())
+  createdAt  DateTime     @default(now())
 
   @@index([workflowId])
   @@index([createdAt])
+  @@index([orgId])
 }
 
 model AuditLog {
-  id         String   @id @default(cuid())
+  id         String       @id @default(cuid())
+  orgId      String
+  org        Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   workflowId String
-  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflow   Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   userId     String?
-  user       User?    @relation(fields: [userId], references: [id])
+  user       User?        @relation(fields: [userId], references: [id])
   action     String
   detail     String?
-  createdAt  DateTime @default(now())
+  createdAt  DateTime     @default(now())
 
   @@index([workflowId])
   @@index([createdAt])
+  @@index([orgId])
 }
 
 model Invitation {
