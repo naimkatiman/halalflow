@@ -1,15 +1,22 @@
 project: halalflow
-updated: 2026-06-09T16:15:09+08:00
+updated: 2026-06-09T17:15:09+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-09T16:15:09+08:00
-  change: "Consolidate 63 completed cycle entries from next_actions into previous_cycles where they belong, leaving next_actions with only the actual pending item (Hosted SaaS) — fixes structural drift that had accumulated over 60+ cycles"
+  date: 2026-06-09T17:15:09+08:00
+  change: "Add maxLength attributes to workflow title input (200, matching API .max(200)) and template name input (100, matching API .max(100)) so users get real-time feedback before hitting server validation errors"
   files:
+    - src/app/workflows/new/NewWorkflowForm.tsx
+    - src/app/templates/new/NewTemplateForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; YAML validation passes; build green; committed"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-06-09T16:15:09+08:00
+    change: "Consolidate 63 completed cycle entries from next_actions into previous_cycles where they belong, leaving next_actions with only the actual pending item (Hosted SaaS) — fixes structural drift that had accumulated over 60+ cycles"
+    files:
+      - STATE.yaml
+    verification: "npm run lint clean; YAML validation passes; build green; committed"
   - date: 2026-06-09T15:15:08+08:00
     change: "Add max-length validation to approval note (zod .max(1000) in API + maxLength on textarea) and comment input (maxLength={2000} matching existing API schema) to prevent abuse and keep UI and server constraints in sync"
     files:

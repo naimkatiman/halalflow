@@ -92,6 +92,7 @@ export function NewWorkflowForm() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                maxLength={200}
                 className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
                 placeholder="e.g. AC Unit Replacement — Masjid Al-Noor"
               />

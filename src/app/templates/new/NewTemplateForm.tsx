@@ -94,6 +94,7 @@ export function NewTemplateForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              maxLength={100}
               className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
               placeholder="Mosque Expense Approval"
             />
