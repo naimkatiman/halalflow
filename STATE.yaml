@@ -3,13 +3,21 @@ updated: 2026-06-10T01:15:05+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T03:15:06+08:00
-  change: "Add zod .trim() to register name and trim name in RegisterForm before sending — prevents whitespace-only or whitespace-padded user names that would look broken in the navbar, audit logs, emails, and PDF receipts"
+  date: 2026-06-10T04:15:07+08:00
+  change: "Add zod .trim() to template step update API schema — aligns with creation and import APIs that already trim step names/descriptions, preventing whitespace-only or whitespace-padded step data from entering the DB via edits"
   files:
-    - src/app/api/auth/register/route.ts
-    - src/app/register/RegisterForm.tsx
+    - src/app/api/templates/[id]/steps/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-10T03:15:06+08:00
+    change: "Add zod .trim() to register name and trim name in RegisterForm before sending — prevents whitespace-only or whitespace-padded user names that would look broken in the navbar, audit logs, emails, and PDF receipts"
+    files:
+      - src/app/api/auth/register/route.ts
+      - src/app/register/RegisterForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-10T02:15:06+08:00
