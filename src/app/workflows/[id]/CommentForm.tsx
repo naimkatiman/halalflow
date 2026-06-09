@@ -20,7 +20,7 @@ export function CommentForm({ workflowId }: { workflowId: string }) {
       const res = await fetchWithCsrf(`/api/workflows/${workflowId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body }),
+        body: JSON.stringify({ body: body.trim() }),
       });
       const data = await res.json();
       if (!res.ok) {

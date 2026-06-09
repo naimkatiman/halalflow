@@ -7,7 +7,7 @@ import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
 
 const commentSchema = z.object({
-  body: z.string().min(1).max(2000),
+  body: z.string().trim().min(1).max(2000),
 });
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
