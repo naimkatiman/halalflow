@@ -48,7 +48,7 @@ export function NewWorkflowForm() {
       const res = await fetchWithCsrf('/api/workflows', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ templateId, title, description: description || undefined }),
+        body: JSON.stringify({ templateId, title: title.trim(), description: description.trim() || undefined }),
       });
       const data = await res.json();
       if (!res.ok) {
