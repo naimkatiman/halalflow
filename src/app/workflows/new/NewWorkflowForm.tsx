@@ -104,6 +104,7 @@ export function NewWorkflowForm() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
+                maxLength={2000}
                 className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors resize-none"
                 placeholder="Provide context for reviewers…"
               />

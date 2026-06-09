@@ -9,7 +9,7 @@ import { z } from "zod";
 const createSchema = z.object({
   templateId: z.string().min(1),
   title: z.string().min(1).max(200),
-  description: z.string().optional(),
+  description: z.string().max(2000).optional(),
 });
 
 const DEFAULT_PAGE_SIZE = 20;
