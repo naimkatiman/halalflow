@@ -15,7 +15,7 @@ const importStepSchema = z.object({
 
 const importSchema = z.object({
   name: z.string().min(1).max(100),
-  description: z.string().optional(),
+  description: z.string().max(2000).optional(),
   steps: z.array(importStepSchema).min(1),
 });
 

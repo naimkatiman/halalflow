@@ -8,7 +8,7 @@ import { z } from "zod";
 
 const updateSchema = z.object({
   name: z.string().min(1).max(100).optional(),
-  description: z.string().optional(),
+  description: z.string().max(2000).optional(),
 });
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

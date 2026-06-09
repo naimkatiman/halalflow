@@ -15,7 +15,7 @@ const stepSchema = z.object({
 
 const createSchema = z.object({
   name: z.string().min(1).max(100),
-  description: z.string().optional(),
+  description: z.string().max(2000).optional(),
   steps: z.array(stepSchema).min(1),
 });
 
