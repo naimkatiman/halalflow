@@ -1,23 +1,30 @@
 project: halalflow
-updated: 2026-06-08T23:15:04+08:00
+updated: 2026-06-09T11:27:27+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-08T23:15:04+08:00
-  change: "Tighten requiredRole schema validation in template creation and import APIs from z.string().optional() to z.enum(['owner', 'admin', 'member']).optional() — aligns with the step update API and prevents invalid role strings from making approval steps permanently unapprovable"
+  date: 2026-06-09T11:27:27+08:00
+  change: "Consolidate duplicate previous_cycles keys in STATE.yaml that had accumulated over 60+ cycles into a single valid YAML list — removes 6 redundant keys and 8 duplicate entries, reducing file size by ~3.3KB"
   files:
-    - src/app/api/templates/route.ts
-    - src/app/api/templates/import/route.ts
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; YAML validation passes"
 
 previous_cycles:
+  - date: 2026-06-08T23:15:04+08:00
+    change: "Tighten requiredRole schema validation in template creation and import APIs from z.string().optional() to z.enum(['owner', 'admin', 'member']).optional() — aligns with the step update API and prevents invalid role strings from making approval steps permanently unapprovable"
+    files:
+      - src/app/api/templates/route.ts
+      - src/app/api/templates/import/route.ts
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-08T21:15:04+08:00
     change: "Normalize email to lowercase in login API before DB lookup so users who registered with mixed-case emails can log in with any casing — the register route already normalized, but login was doing a raw lookup causing credential mismatches"
     files:
       - src/app/api/auth/login/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-08T20:15:03+08:00
     change: "Preserve requiredRole in template export and import so per-step role restrictions survive JSON round-trips"
     files:
@@ -25,36 +32,42 @@ previous_cycles:
       - src/app/api/templates/import/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-08T18:15:03+08:00
     change: "Slugify workflow title into PDF receipt filename so downloads are human-readable (receipt-{slug}-{id}.pdf) instead of an opaque ID-only name"
     files:
       - src/app/api/workflows/[id]/receipt/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-08T17:15:05+08:00
     change: "Add workflow creator name to PDF receipt API — include createdBy in the Prisma query and render a 'Created by:' line in the receipt PDF for better audit trail compliance"
     files:
       - src/app/api/workflows/[id]/receipt/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-08T14:15:10+08:00
     change: "Fix InviteMemberForm success message to use data.member.role instead of the local role state variable, which was stale due to React batching after setRole('member') reset — prevents showing the wrong role (e.g. admin) in the success toast when a user was actually added as member"
     files:
       - src/app/settings/InviteMemberForm.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as f8f6b28"
+
   - date: 2026-06-08T13:15:10+08:00
     change: "Reset role state to 'member' in InviteMemberForm after a successful invite so consecutive invitations default to the safer member role instead of preserving the previous selection (e.g. admin)"
     files:
       - src/app/settings/InviteMemberForm.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed as 4bd8a9e"
+
   - date: 2026-06-08T11:15:09+08:00
     change: "Add MIT LICENSE file to project root so the README's stated MIT license is actually present in the repository, making the open-source terms legally clear for contributors and users"
     files:
       - LICENSE
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-08T10:15:06+08:00
     change: "Reset initPromise to null in csrf-client.ts catch block so transient CSRF token fetch failures are retried on the next fetchWithCsrf call instead of permanently sticking to a failed state until page reload"
     files:
@@ -62,52 +75,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
-  - date: 2026-06-08T20:15:03+08:00
-    change: "Preserve requiredRole in template export and import so per-step role restrictions survive JSON round-trips instead of being silently dropped"
-    files:
-      - src/app/api/templates/[id]/export/route.ts
-      - src/app/api/templates/import/route.ts
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green"
-  - date: 2026-06-08T18:15:03+08:00
-    change: "Slugify workflow title into PDF receipt filename so downloads are human-readable (receipt-{slug}-{id}.pdf) instead of an opaque ID-only name"
-    files:
-      - src/app/api/workflows/[id]/receipt/route.ts
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green; committed"
-  - date: 2026-06-08T17:15:05+08:00
-    change: "Add workflow creator name to PDF receipt API — include createdBy in the Prisma query and render a 'Created by:' line in the receipt PDF for better audit trail compliance"
-    files:
-      - src/app/api/workflows/[id]/receipt/route.ts
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green; committed"
-  - date: 2026-06-08T14:15:10+08:00
-    change: "Fix InviteMemberForm success message to use data.member.role instead of the local role state variable, which was stale due to React batching after setRole('member') reset — prevents showing the wrong role (e.g. admin) in the success toast when a user was actually added as member"
-    files:
-      - src/app/settings/InviteMemberForm.tsx
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green; committed as f8f6b28"
-  - date: 2026-06-08T13:15:10+08:00
-    change: "Reset role state to 'member' in InviteMemberForm after a successful invite so consecutive invitations default to the safer member role instead of preserving the previous selection (e.g. admin)"
-    files:
-      - src/app/settings/InviteMemberForm.tsx
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green; committed as 4bd8a9e"
-  - date: 2026-06-08T11:15:09+08:00
-    change: "Add MIT LICENSE file to project root so the README's stated MIT license is actually present in the repository, making the open-source terms legally clear for contributors and users"
-    files:
-      - LICENSE
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green"
-  - date: 2026-06-08T10:15:06+08:00
-    change: "Reset initPromise to null in csrf-client.ts catch block so transient CSRF token fetch failures are retried on the next fetchWithCsrf call instead of permanently sticking to a failed state until page reload"
-    files:
-      - src/lib/csrf-client.ts
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green; committed"
-
-previous_cycles:
   - date: 2026-06-07T22:15:10Z
     change: "Add workflow status approval gate to GET /api/workflows/[id]/receipt so the API refuses to generate receipts for non-approved workflows (returns 403) — the UI already hides the download button unless status === 'approved', but the API should enforce this boundary"
     files:
@@ -115,7 +82,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T20:15:10Z
     change: "Mark PDF receipt generation as complete in docs/plans/2026-05-17-workflow-engine-roadmap.md and add execution log entry — the feature was already shipped (API route, PDF layout, download button) but the roadmap was still showing it unchecked"
     files:
@@ -123,7 +89,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T19:15:10Z
     change: "Add console.error logging to initCsrfToken catch block in csrf-client.ts so network, session, or runtime failures during CSRF token initialization are visible in browser devtools instead of being silently swallowed"
     files:
@@ -131,7 +96,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
 
-previous_cycles:
   - date: 2026-06-07T18:15:10Z
     change: "Check off PDF receipt generation in README roadmap and remove it from STATE.yaml next_actions — the feature is fully shipped (API route, PDF layout, download button)"
     files:
@@ -139,7 +103,6 @@ previous_cycles:
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
-previous_cycles:
   - date: 2026-06-07T17:15:07Z
     change: "Add Download receipt button to workflow detail page — only visible when workflow.status === 'approved', uses emerald-styled <a download> linking to /api/workflows/[id]/receipt with FileArrowDown icon. Completes Lane 3 of PDF receipt generation sub-plan."
     files:
@@ -322,6 +285,7 @@ previous_cycles:
       - src/app/api/health/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-06T14:15:09Z
     change: "Add console.error logging to ExportButton catch block so network, session, or runtime failures during template export are visible in browser devtools instead of being silently swallowed"
     files:
@@ -387,12 +351,14 @@ previous_cycles:
       - src/components/Navbar.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-03T04:17:50Z
     change: "Standardize console.error label in POST /api/workflows/[id]/comments catch block from bare console.error(error) to console.error(\"POST /api/workflows/[id]/comments error:\", error) so log aggregation and filtering can route comment-creation failures distinctly"
     files:
       - src/app/api/workflows/[id]/comments/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-03T11:15:05Z
     change: "Add console.error logging to POST /api/orgs/[id]/members and PUT /api/templates/[id] catch blocks so database, session, CSRF, email, or runtime failures during member invitations and template updates are visible in server logs instead of being silently swallowed"
     files:
@@ -419,13 +385,6 @@ previous_cycles:
     change: "Add console.error logging to POST /api/workflows/[id]/comments catch block so database, session, CSRF, or runtime failures during comment creation are visible in server logs instead of being silently swallowed"
     files:
       - src/app/api/workflows/[id]/comments/route.ts
-      - STATE.yaml
-    verification: "npm run lint clean; npm run build green"
-
-  - date: 2026-06-03T07:15:09Z
-    change: "Add console.error logging to PUT /api/templates/[id]/steps catch block so database, session, CSRF, or runtime failures during step updates are visible in server logs instead of being silently swallowed"
-    files:
-      - src/app/api/templates/[id]/steps/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
 
@@ -491,18 +450,21 @@ previous_cycles:
       - src/app/api/auth/logout/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-02T20:15:04Z
     change: "Add console.error logging to POST /api/workflows/[id]/approve catch block so database, session, email, or runtime failures during workflow approvals are visible in server logs instead of being silently swallowed"
     files:
       - src/app/api/workflows/[id]/approve/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-02T19:15:04Z
     change: "Add console.error logging to GET and DELETE /api/workflows/[id] catch blocks so database, session, or runtime failures are visible in server logs instead of being silently swallowed"
     files:
       - src/app/api/workflows/[id]/route.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-02T18:15:03Z
     change: "Add console.error logging to GET /api/auth/me catch block so session or cookie failures are visible in server logs instead of being silently swallowed"
     files:
@@ -561,6 +523,7 @@ previous_cycles:
       - public/favicon.ico
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-02T09:15:08Z
     change: "Add autoComplete=email to invite member form email input for better browser autofill UX"
     files:
@@ -609,6 +572,7 @@ previous_cycles:
       - src/app/dashboard/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green; committed"
+
   - date: 2026-06-02T01:15:08Z
     change: "Add metadataBase to root layout using NEXT_PUBLIC_BASE_URL so OpenGraph and Twitter card URLs resolve as absolute URLs for social parsers"
     files:
@@ -707,6 +671,7 @@ previous_cycles:
       - src/app/workflows/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-01T08:15:02Z
     change: "Add /logout to robots.ts disallow list so crawlers do not attempt to index the logout action page"
     files:
@@ -720,6 +685,7 @@ previous_cycles:
       - src/types/index.ts
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-06-01T06:15:10Z
     change: "Remove dead src/proxy.ts middleware file — not referenced anywhere and not at the Next.js conventional middleware.ts path; auth guarding is handled inline in page components and API routes"
     files:
@@ -909,18 +875,21 @@ previous_cycles:
       - src/app/templates/new/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-05-30T18:15:04Z
     change: "Add meta description to Workflow Details page for SEO consistency"
     files:
       - src/app/workflows/[id]/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-05-30T17:15:03Z
     change: "Add meta description to Template Details page for SEO consistency"
     files:
       - src/app/templates/[id]/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-05-30T16:15:03Z
     change: "Add meta description to New Workflow page for SEO consistency"
     files:
@@ -941,18 +910,21 @@ previous_cycles:
       - src/app/logout/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-05-30T12:15:09Z
     change: "Add meta description to Onboarding page for SEO consistency"
     files:
       - src/app/onboarding/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
   - date: 2026-05-30T11:15:06Z
     change: "Add meta description to Settings page for SEO consistency"
     files:
       - src/app/settings/page.tsx
       - STATE.yaml
     verification: "npm run lint clean; npm run build green"
+
 
 merge_consolidation:
   date: 2026-05-15
