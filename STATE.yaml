@@ -1,17 +1,23 @@
 project: halalflow
-updated: 2026-06-09T17:15:09+08:00
+updated: 2026-06-09T18:15:09+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-09T17:15:09+08:00
-  change: "Add maxLength attributes to workflow title input (200, matching API .max(200)) and template name input (100, matching API .max(100)) so users get real-time feedback before hitting server validation errors"
+  date: 2026-06-09T18:15:09+08:00
+  change: "Add maxLength={100} to onboarding organization name input to match existing API zod .max(100) validation and prevent server-side errors"
   files:
-    - src/app/workflows/new/NewWorkflowForm.tsx
-    - src/app/templates/new/NewTemplateForm.tsx
+    - src/app/onboarding/OnboardingForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green; committed"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-06-09T17:15:09+08:00
+    change: "Add maxLength attributes to workflow title input (200, matching API .max(200)) and template name input (100, matching API .max(100)) so users get real-time feedback before hitting server validation errors"
+    files:
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - src/app/templates/new/NewTemplateForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-09T16:15:09+08:00
     change: "Consolidate 63 completed cycle entries from next_actions into previous_cycles where they belong, leaving next_actions with only the actual pending item (Hosted SaaS) — fixes structural drift that had accumulated over 60+ cycles"
     files:
