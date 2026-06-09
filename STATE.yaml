@@ -9,7 +9,7 @@ latest_cycle:
     - src/app/workflows/new/NewWorkflowForm.tsx
     - src/app/templates/new/NewTemplateForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-09T16:15:09+08:00
