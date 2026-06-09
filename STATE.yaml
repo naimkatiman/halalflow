@@ -1,17 +1,26 @@
 project: halalflow
-updated: 2026-06-10T00:15:06+08:00
+updated: 2026-06-10T01:15:05+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T00:15:06+08:00
-  change: "Add zod .trim() to workflow title in creation API and trim title/description in NewWorkflowForm before sending — prevents whitespace-only workflow titles that would look broken in lists and detail pages"
+  date: 2026-06-10T01:15:05+08:00
+  change: "Add zod .trim() to template name in creation, update, and import APIs and trim name/description in NewTemplateForm before sending — prevents whitespace-only template names that would look broken in lists and detail pages"
   files:
-    - src/app/api/workflows/route.ts
-    - src/app/workflows/new/NewWorkflowForm.tsx
+    - src/app/api/templates/route.ts
+    - src/app/api/templates/[id]/route.ts
+    - src/app/api/templates/import/route.ts
+    - src/app/templates/new/NewTemplateForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-10T00:15:06+08:00
+    change: "Add zod .trim() to workflow title in creation API and trim title/description in NewWorkflowForm before sending — prevents whitespace-only workflow titles that would look broken in lists and detail pages"
+    files:
+      - src/app/api/workflows/route.ts
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-09T23:15:04+08:00
     change: "Add zod .max(2000) to template step description in creation, update, and import APIs plus maxLength={2000} on the new-template form step description input — matches the existing template/workflow description constraint and prevents abuse"
     files:
