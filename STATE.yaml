@@ -10,7 +10,7 @@ latest_cycle:
     - src/app/workflows/[id]/ApprovalActions.tsx
     - src/app/workflows/[id]/CommentForm.tsx
     - STATE.yaml
-  verification: "npm run lint clean; npm run build green"
+  verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-09T13:15:10+08:00
