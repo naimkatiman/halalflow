@@ -1,16 +1,25 @@
 project: halalflow
-updated: 2026-06-09T19:15:03+08:00
+updated: 2026-06-09T20:15:05+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-09T19:15:03+08:00
-  change: "Add maxLength validation to workflow description — zod .max(2000) in API + maxLength on textarea to prevent abuse and keep UI and server constraints in sync"
+  date: 2026-06-09T20:15:05+08:00
+  change: "Add maxLength validation to template step name — zod .max(100) in step update API + maxLength on step name input to match template creation/import constraints and keep UI and server in sync"
   files:
-    - src/app/api/workflows/route.ts
-    - src/app/workflows/new/NewWorkflowForm.tsx
-    - .gitignore
+    - src/app/api/templates/[id]/steps/route.ts
+    - src/app/templates/new/NewTemplateForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-09T19:15:03+08:00
+    change: "Add maxLength validation to workflow description — zod .max(2000) in API + maxLength on textarea to prevent abuse and keep UI and server constraints in sync"
+    files:
+      - src/app/api/workflows/route.ts
+      - src/app/workflows/new/NewWorkflowForm.tsx
+      - .gitignore
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-09T18:23:58+08:00
