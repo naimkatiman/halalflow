@@ -8,7 +8,7 @@ import { z } from "zod";
 
 const importStepSchema = z.object({
   order: z.number().int().min(0),
-  name: z.string().min(1),
+  name: z.string().min(1).max(100),
   description: z.string().optional(),
   requiredRole: z.enum(["owner", "admin", "member"]).optional(),
 });

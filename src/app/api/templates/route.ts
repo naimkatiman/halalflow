@@ -7,7 +7,7 @@ import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
 
 const stepSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1).max(100),
   description: z.string().optional(),
   order: z.number().int().min(0),
   requiredRole: z.enum(["owner", "admin", "member"]).optional(),
