@@ -1,17 +1,25 @@
 project: halalflow
-updated: 2026-06-09T18:23:58+08:00
+updated: 2026-06-09T19:15:03+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-09T18:23:58+08:00
-  change: "Fix .gitignore .env* pattern so .env.example is tracked — README onboarding depends on cp .env.example .env, but the file was silently ignored by .env* and missing from clones"
+  date: 2026-06-09T19:15:03+08:00
+  change: "Add maxLength validation to workflow description — zod .max(2000) in API + maxLength on textarea to prevent abuse and keep UI and server constraints in sync"
   files:
+    - src/app/api/workflows/route.ts
+    - src/app/workflows/new/NewWorkflowForm.tsx
     - .gitignore
-    - .env.example
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-09T18:23:58+08:00
+    change: "Fix .gitignore .env* pattern so .env.example is tracked — README onboarding depends on cp .env.example .env, but the file was silently ignored by .env* and missing from clones"
+    files:
+      - .gitignore
+      - .env.example
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-09T19:15:02+08:00
     change: "Add maxLength={100} to register form name input to match existing API zod .max(100) validation and prevent server-side errors"
     files:
