@@ -1,15 +1,21 @@
 project: halalflow
-updated: 2026-06-09T11:27:27+08:00
+updated: 2026-06-09T13:15:10+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-09T11:27:27+08:00
-  change: "Consolidate duplicate previous_cycles keys in STATE.yaml that had accumulated over 60+ cycles into a single valid YAML list — removes 6 redundant keys and 8 duplicate entries, reducing file size by ~3.3KB"
+  date: 2026-06-09T13:15:10+08:00
+  change: "Add poweredByHeader: false to next.config.ts to remove the X-Powered-By: Next.js response header — consistent with the existing security header hardening and reduces framework fingerprinting"
   files:
+    - next.config.ts
     - STATE.yaml
-  verification: "npm run lint clean; YAML validation passes"
+  verification: "npm run lint clean; npm run build green"
 
 previous_cycles:
+  - date: 2026-06-09T11:27:27+08:00
+    change: "Consolidate duplicate previous_cycles keys in STATE.yaml that had accumulated over 60+ cycles into a single valid YAML list — removes 6 redundant keys and 8 duplicate entries, reducing file size by ~3.3KB"
+    files:
+      - STATE.yaml
+    verification: "npm run lint clean; YAML validation passes"
   - date: 2026-06-08T23:15:04+08:00
     change: "Tighten requiredRole schema validation in template creation and import APIs from z.string().optional() to z.enum(['owner', 'admin', 'member']).optional() — aligns with the step update API and prevents invalid role strings from making approval steps permanently unapprovable"
     files:
