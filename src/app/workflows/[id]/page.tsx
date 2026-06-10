@@ -4,6 +4,7 @@ import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
+import { roleSatisfies } from '@/lib/roles';
 import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle, FileArrowDown } from '@phosphor-icons/react/dist/ssr';
 import { ApprovalActions } from './ApprovalActions';
 import { CommentForm } from './CommentForm';
@@ -65,7 +66,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
     (a) => a.status === 'pending' && a.step.order === workflow.currentStep
   );
   const isActive = ['in_progress', 'pending'].includes(workflow.status);
-  const canApprove = !currentApproval?.step.requiredRole || currentApproval.step.requiredRole === session.orgRole;
+  const canApprove = !currentApproval?.step.requiredRole || roleSatisfies(session.orgRole, currentApproval.step.requiredRole);
   const sc = STATUS_CLS[workflow.status] ?? STATUS_CLS['pending'];
 
   const formatDate = (d: Date) =>
@@ -156,7 +157,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             ) : (
               <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
                 <p className="text-sm text-amber-800">
-                  This step requires the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role to approve.
+                  This step requires the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role (or above) to approve.
                 </p>
               </div>
             )

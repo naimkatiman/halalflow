@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
+import { roleSatisfies } from "@/lib/roles";
 import { isOrgSubscribed } from "@/lib/require-subscription";
 import { buildWorkflowDecisionEmail, sendEmail } from "@/lib/notifications/email";
 import { z } from "zod";
@@ -86,7 +87,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       if (!pendingApproval) {
         return { status: 400, error: "No pending step at current position" } as const;
       }
-      if (pendingApproval.step.requiredRole && pendingApproval.step.requiredRole !== session.orgRole) {
+      if (pendingApproval.step.requiredRole && !roleSatisfies(session.orgRole, pendingApproval.step.requiredRole)) {
         return { status: 403, error: "You do not have the required role for this step" } as const;
       }
 
