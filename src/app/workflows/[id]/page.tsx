@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { withOrg } from '@/lib/db';
 import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle, FileArrowDown } from '@phosphor-icons/react/dist/ssr';
 import { ApprovalActions } from './ApprovalActions';
 import { CommentForm } from './CommentForm';
@@ -35,28 +35,30 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
   if (!session.orgId) redirect('/onboarding');
 
   const { id } = await params;
-  const workflow = await prisma.workflow.findFirst({
-    where: { id, orgId: session.orgId },
-    include: {
-      template: { include: { steps: { orderBy: { order: 'asc' } } } },
-      createdBy: { select: { id: true, name: true, email: true } },
-      approvals: {
-        include: {
-          step: true,
-          approver: { select: { id: true, name: true, email: true } },
+  const workflow = await withOrg(session.orgId, async (tx) =>
+    tx.workflow.findFirst({
+      where: { id, orgId: session.orgId },
+      include: {
+        template: { include: { steps: { orderBy: { order: 'asc' } } } },
+        createdBy: { select: { id: true, name: true, email: true } },
+        approvals: {
+          include: {
+            step: true,
+            approver: { select: { id: true, name: true, email: true } },
+          },
+          orderBy: { createdAt: 'asc' },
         },
-        orderBy: { createdAt: 'asc' },
+        comments: {
+          include: { user: { select: { id: true, name: true, email: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
+        auditLogs: {
+          include: { user: { select: { id: true, name: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
       },
-      comments: {
-        include: { user: { select: { id: true, name: true, email: true } } },
-        orderBy: { createdAt: 'asc' },
-      },
-      auditLogs: {
-        include: { user: { select: { id: true, name: true } } },
-        orderBy: { createdAt: 'asc' },
-      },
-    },
-  });
+    })
+  );
   if (!workflow) notFound();
 
   const currentApproval = workflow.approvals.find(

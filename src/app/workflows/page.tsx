@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { withOrg } from '@/lib/db';
 import { Plus, FunnelSimple } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
@@ -41,23 +41,26 @@ export default async function WorkflowsPage({
   const { status, page: pageRaw } = await searchParams;
   const page = Math.max(1, Number(pageRaw ?? '1'));
 
-  const [workflows, total] = await Promise.all([
-    prisma.workflow.findMany({
-      where: { orgId: session.orgId, ...(status ? { status } : {}) },
-      include: {
-        template: { select: { name: true } },
-        createdBy: { select: { name: true } },
-        approvals: { select: { status: true } },
-        _count: { select: { comments: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-    }),
-    prisma.workflow.count({
-      where: { orgId: session.orgId, ...(status ? { status } : {}) },
-    }),
-  ]);
+  const { workflows, total } = await withOrg(session.orgId, async (tx) => {
+    const [workflows, total] = await Promise.all([
+      tx.workflow.findMany({
+        where: { orgId: session.orgId, ...(status ? { status } : {}) },
+        include: {
+          template: { select: { name: true } },
+          createdBy: { select: { name: true } },
+          approvals: { select: { status: true } },
+          _count: { select: { comments: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      }),
+      tx.workflow.count({
+        where: { orgId: session.orgId, ...(status ? { status } : {}) },
+      }),
+    ]);
+    return { workflows, total };
+  });
 
   const pages = Math.ceil(total / PAGE_SIZE);
   const filters = ['', 'pending', 'in_progress', 'approved', 'rejected'] as const;

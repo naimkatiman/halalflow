@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { withOrg } from '@/lib/db';
 import { CheckCircle, XCircle, Clock, Hourglass, ArrowsClockwise, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
@@ -18,24 +18,27 @@ export default async function DashboardPage() {
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
 
-  const [workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount] = await Promise.all([
-    prisma.workflow.findMany({
-      where: { orgId: session.orgId },
-      include: {
-        template: { select: { name: true } },
-        createdBy: { select: { name: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 10,
-    }),
-    prisma.workflowTemplate.count({ where: { orgId: session.orgId } }),
-    prisma.organization.findUnique({ where: { id: session.orgId } }),
-    prisma.workflow.count({ where: { orgId: session.orgId } }),
-    prisma.workflow.count({ where: { orgId: session.orgId, status: 'pending' } }),
-    prisma.workflow.count({ where: { orgId: session.orgId, status: 'in_progress' } }),
-    prisma.workflow.count({ where: { orgId: session.orgId, status: 'approved' } }),
-    prisma.workflow.count({ where: { orgId: session.orgId, status: 'rejected' } }),
-  ]);
+  const { workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount } = await withOrg(session.orgId, async (tx) => {
+    const [workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount] = await Promise.all([
+      tx.workflow.findMany({
+        where: { orgId: session.orgId },
+        include: {
+          template: { select: { name: true } },
+          createdBy: { select: { name: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 10,
+      }),
+      tx.workflowTemplate.count({ where: { orgId: session.orgId } }),
+      tx.organization.findUnique({ where: { id: session.orgId } }),
+      tx.workflow.count({ where: { orgId: session.orgId } }),
+      tx.workflow.count({ where: { orgId: session.orgId, status: 'pending' } }),
+      tx.workflow.count({ where: { orgId: session.orgId, status: 'in_progress' } }),
+      tx.workflow.count({ where: { orgId: session.orgId, status: 'approved' } }),
+      tx.workflow.count({ where: { orgId: session.orgId, status: 'rejected' } }),
+    ]);
+    return { workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount };
+  });
 
   const stats = {
     total: totalWorkflows,

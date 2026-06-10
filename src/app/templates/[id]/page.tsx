@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { withOrg } from '@/lib/db';
 import { ArrowLeft, Plus } from '@phosphor-icons/react/dist/ssr';
 import { ExportButton } from './ExportButton';
 import type { Metadata } from 'next';
@@ -20,17 +20,19 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
   if (!session.orgId) redirect('/onboarding');
 
   const { id } = await params;
-  const template = await prisma.workflowTemplate.findFirst({
-    where: { id, orgId: session.orgId },
-    include: {
-      steps: { orderBy: { order: 'asc' } },
-      workflows: {
-        include: { createdBy: { select: { name: true } } },
-        orderBy: { createdAt: 'desc' },
-        take: 5,
+  const template = await withOrg(session.orgId, async (tx) => {
+    return tx.workflowTemplate.findFirst({
+      where: { id, orgId: session.orgId },
+      include: {
+        steps: { orderBy: { order: 'asc' } },
+        workflows: {
+          include: { createdBy: { select: { name: true } } },
+          orderBy: { createdAt: 'desc' },
+          take: 5,
+        },
+        _count: { select: { workflows: true } },
       },
-      _count: { select: { workflows: true } },
-    },
+    });
   });
   if (!template) notFound();
 

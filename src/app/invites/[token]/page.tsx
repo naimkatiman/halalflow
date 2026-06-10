@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { prismaAdmin } from '@/lib/db';
 import { GitBranch, CheckCircle, XCircle } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default async function InvitePage({
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   const { token } = await params;
 
-  const invite = await prisma.invitation.findUnique({
+  const invite = await prismaAdmin.invitation.findUnique({
     where: { token },
     include: { org: { select: { name: true } } },
   });
@@ -48,15 +48,15 @@ export default async function InvitePage({
 
   // Auto-accept if logged in with matching email
   if (emailMatch) {
-    const existingMember = await prisma.orgMember.findUnique({
+    const existingMember = await prismaAdmin.orgMember.findUnique({
       where: { orgId_userId: { orgId: invite.orgId, userId: session.userId } },
     });
     if (!existingMember) {
-      await prisma.$transaction([
-        prisma.orgMember.create({
+      await prismaAdmin.$transaction([
+        prismaAdmin.orgMember.create({
           data: { orgId: invite.orgId, userId: session.userId, role: invite.role },
         }),
-        prisma.invitation.update({
+        prismaAdmin.invitation.update({
           where: { id: invite.id },
           data: { acceptedAt: new Date() },
         }),

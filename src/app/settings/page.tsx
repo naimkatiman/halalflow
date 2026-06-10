@@ -3,7 +3,7 @@ import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { prismaAdmin, withOrg } from '@/lib/db';
 import { InviteMemberForm } from './InviteMemberForm';
 import { OrgSwitcher } from './OrgSwitcher';
 import { Buildings, Users, PaperPlaneTilt } from '@phosphor-icons/react/dist/ssr';
@@ -19,27 +19,31 @@ export default async function SettingsPage() {
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
 
-  const org = await prisma.organization.findUnique({
-    where: { id: session.orgId },
-    include: {
-      members: {
-        include: { user: { select: { id: true, name: true, email: true } } },
-        orderBy: { createdAt: 'asc' },
+  const canInvite = ['owner', 'admin'].includes(session.orgRole);
+
+  const { org, pendingInvites } = await withOrg(session.orgId, async (tx) => {
+    const org = await tx.organization.findUnique({
+      where: { id: session.orgId },
+      include: {
+        members: {
+          include: { user: { select: { id: true, name: true, email: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
       },
-    },
+    });
+    const pendingInvites = canInvite && org
+      ? await tx.invitation.findMany({
+          where: { orgId: session.orgId, acceptedAt: null, expiresAt: { gt: new Date() } },
+          orderBy: { createdAt: 'asc' },
+        })
+      : [];
+    return { org, pendingInvites };
   });
   if (!org) redirect('/onboarding');
 
-  const canInvite = ['owner', 'admin'].includes(session.orgRole);
-
-  const pendingInvites = canInvite
-    ? await prisma.invitation.findMany({
-        where: { orgId: session.orgId, acceptedAt: null, expiresAt: { gt: new Date() } },
-        orderBy: { createdAt: 'asc' },
-      })
-    : [];
-
-  const memberships = await prisma.orgMember.findMany({
+  // Cross-org: which workspaces this user can switch between. RLS would hide
+  // every org but the active one, so this lookup uses the BYPASSRLS admin client.
+  const memberships = await prismaAdmin.orgMember.findMany({
     where: { userId: session.userId },
     include: { org: true },
     orderBy: { createdAt: 'asc' },
