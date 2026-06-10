@@ -99,3 +99,41 @@ column to ignore stale events); GET routes are not subscription-gated (writes ar
 ## Discipline
 One concern per commit. Split commits >15 files by layer (API vs pages). Lead messages
 with the outcome. Hold the production SQLite→Postgres cutover for explicit go-ahead.
+
+## Session 2026-06-11 — audit, bug fixes, UX uplift, security follow-ups
+
+User gave the explicit go for "complete until PR and production". Merged origin/main
+(4 commits) into the branch first.
+
+**Bug audit (headless browser walk + code-review agents) — all fixed:**
+- **CSP blocked hydration in production** (`script-src` lacked `unsafe-inline`): no
+  React handler ever attached in a real browser — login itself was dead. curl-based
+  checks never caught it because they don't run JS. Fixed; `unsafe-eval` is dev-only now.
+- requiredRole strict-equality lockout (owner couldn't approve admin/member steps) →
+  `src/lib/roles.ts` hierarchy, used by API + page gate.
+- zod `error.issues` arrays crashed six forms ("Objects are not valid as a React
+  child", losing typed data) → `zodErrorMessage()` plain strings across 11 routes.
+- 9 handlers 500'd for org-less sessions (missing `!session.orgId` guard) → 400.
+- Invite double-submit raced to a 500 → P2002 caught, 409.
+- `/login?redirect=` was dropped (invite dead end) → honored for same-site paths.
+- Onboarding-created orgs had no starter templates (signup-with-org did) → parity.
+- Import/Export silent failures → anchored error alerts.
+- `/workflows/new` flashed "need a template" while loading; fetch errors invisible →
+  skeleton + retryable error + real Suspense fallback.
+- Unreachable "Pending" status (tile stuck at 0, dead filter) → removed; `in_progress`
+  reads "Awaiting approval" everywhere.
+
+**UX uplift:** navbar workspace chip + Billing nav + no /api/auth/me 401 noise on
+public pages; self-approval explainer with invite CTA on own workflows; honest invite
+feedback (`emailSent`) + copy-invite-link in form and Settings; Settings "Slug" →
+copyable "Workspace link"; reject = confirm step + "Resubmit as new workflow" on
+rejected; Delete exposed for templates (owner/admin, blocked with clear 409 while
+in use) and workflows (creator/owner/admin); landing Pricing+FAQ section (honest:
+free trial, no invented prices) with nav anchor.
+
+**Security follow-ups closed:** `lastStripeEventAt` migration + webhook ordering
+guard (stale events no-op); subscription gate extended to reads, workflow DELETE,
+template PUT/DELETE (was creates/approvals only). Both inert until Stripe is keyed.
+
+**Verified:** tsc 0, eslint clean, build green, RLS isolation 5/5, headless walk of
+all routes (desktop+mobile) with zero console errors / zero flow failures.
