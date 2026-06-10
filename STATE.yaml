@@ -1,16 +1,27 @@
 project: halalflow
-updated: 2026-06-10T10:15:09+08:00
+updated: 2026-06-10T11:15:10+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T10:15:09+08:00
-  change: "Trim email before sending in LoginForm, RegisterForm, and InviteMemberForm — prevents zod email validation failures from accidental leading/trailing whitespace and keeps client-side behavior consistent with server-side normalization"
+  date: 2026-06-10T11:15:10+08:00
+  change: "Add zod .trim() to template and step description in creation, update, and import APIs and trim step description in NewTemplateForm — prevents whitespace-only or whitespace-padded descriptions from entering the DB and keeps all template endpoints consistent with the step update API that already trims descriptions"
   files:
-    - src/app/login/LoginForm.tsx
-    - src/app/register/RegisterForm.tsx
-    - src/app/settings/InviteMemberForm.tsx
+    - src/app/api/templates/route.ts
+    - src/app/api/templates/[id]/route.ts
+    - src/app/api/templates/import/route.ts
+    - src/app/templates/new/NewTemplateForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-10T10:15:09+08:00
+    change: "Trim email before sending in LoginForm, RegisterForm, and InviteMemberForm — prevents zod email validation failures from accidental leading/trailing whitespace and keeps client-side behavior consistent with server-side normalization"
+    files:
+      - src/app/login/LoginForm.tsx
+      - src/app/register/RegisterForm.tsx
+      - src/app/settings/InviteMemberForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-10T05:15:06+08:00
