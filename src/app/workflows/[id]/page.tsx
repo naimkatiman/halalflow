@@ -151,6 +151,24 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             </ol>
           </div>
 
+          {currentApproval && isActive && workflow.createdById === session.userId && (
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+              <p className="text-sm text-blue-800">
+                You submitted this request, so a different committee member must review and approve it
+                {currentApproval.step.requiredRole && (
+                  <> (needs the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role or above)</>
+                )}
+                .
+              </p>
+              <Link
+                href="/settings"
+                className="inline-block text-sm font-medium text-blue-700 hover:text-blue-900 mt-2"
+              >
+                Invite a committee member →
+              </Link>
+            </div>
+          )}
+
           {currentApproval && isActive && workflow.createdById !== session.userId && (
             canApprove ? (
               <ApprovalActions workflowId={workflow.id} stepName={currentApproval.step.name} />

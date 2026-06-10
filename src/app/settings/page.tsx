@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prismaAdmin, withOrg } from '@/lib/db';
 import { InviteMemberForm } from './InviteMemberForm';
+import { CopyInviteLink } from './CopyInviteLink';
 import { OrgSwitcher } from './OrgSwitcher';
 import { Buildings, Users, PaperPlaneTilt } from '@phosphor-icons/react/dist/ssr';
 
@@ -77,9 +78,12 @@ export default async function SettingsPage() {
             <span className="text-sm text-zinc-500">Name</span>
             <span className="text-sm font-medium text-zinc-950">{org.name}</span>
           </div>
-          <div className="flex items-center justify-between py-2 border-b border-zinc-100">
-            <span className="text-sm text-zinc-500">Slug</span>
-            <span className="text-sm font-mono text-zinc-700">{org.slug}</span>
+          <div className="flex items-center justify-between gap-3 py-2 border-b border-zinc-100">
+            <span className="text-sm text-zinc-500 shrink-0">Workspace link</span>
+            <span className="flex items-center gap-3 min-w-0">
+              <span className="text-sm font-mono text-zinc-700 truncate">/t/{org.slug}</span>
+              <CopyInviteLink url={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/t/${org.slug}`} label="Copy" />
+            </span>
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-zinc-500">Your role</span>
@@ -115,11 +119,14 @@ export default async function SettingsPage() {
               <p className="text-xs font-semibold text-zinc-700">Pending invitations ({pendingInvites.length})</p>
             </div>
             {pendingInvites.map((invite) => (
-              <div key={invite.id} className="flex items-center justify-between py-1">
-                <span className="text-sm text-zinc-600">{invite.email}</span>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
-                  {invite.role}
-                </span>
+              <div key={invite.id} className="flex items-center justify-between gap-3 py-1">
+                <span className="text-sm text-zinc-600 truncate">{invite.email}</span>
+                <div className="flex items-center gap-3 shrink-0">
+                  <CopyInviteLink url={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/invites/${invite.token}`} />
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
+                    {invite.role}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

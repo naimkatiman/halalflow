@@ -123,12 +123,16 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     const inviteUrl = `${process.env.NEXT_PUBLIC_BASE_URL || ""}/invites/${result.token}`;
+    let emailSent = false;
     if (result.callerName) {
-      await sendInviteEmail(normalizedEmail, result.orgName, inviteUrl, result.callerName);
+      const delivery = await sendInviteEmail(normalizedEmail, result.orgName, inviteUrl, result.callerName);
+      emailSent = delivery.ok;
     }
 
+    // inviteUrl goes back to the inviter so they can share it directly
+    // (WhatsApp etc.) — essential when email delivery is not configured.
     return NextResponse.json(
-      { invite: result.invite, type: "invitation" },
+      { invite: result.invite, type: "invitation", inviteUrl, emailSent },
       { status: 201, headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {
