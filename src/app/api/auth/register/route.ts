@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/db";
+import { prismaAdmin } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { generateCsrfToken } from "@/lib/csrf";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -32,18 +32,18 @@ export async function POST(request: NextRequest) {
     const { name, email, password, inviteToken } = registerSchema.parse(body);
     const normalizedEmail = email.toLowerCase().trim();
 
-    const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    const existing = await prismaAdmin.user.findUnique({ where: { email: normalizedEmail } });
     if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 409, headers: { "Cache-Control": "no-store" } });
 
     const hashed = await bcrypt.hash(password, 12);
-    const user = await prisma.user.create({ data: { name, email: normalizedEmail, password: hashed } });
+    const user = await prismaAdmin.user.create({ data: { name, email: normalizedEmail, password: hashed } });
 
     let orgId = "";
     let orgRole = "";
 
     // Auto-accept pending invitation if token matches
     if (inviteToken) {
-      const invite = await prisma.invitation.findUnique({
+      const invite = await prismaAdmin.invitation.findUnique({
         where: { token: inviteToken },
       });
       if (
@@ -52,11 +52,11 @@ export async function POST(request: NextRequest) {
         invite.expiresAt > new Date() &&
         invite.email.toLowerCase() === normalizedEmail
       ) {
-        await prisma.$transaction([
-          prisma.orgMember.create({
+        await prismaAdmin.$transaction([
+          prismaAdmin.orgMember.create({
             data: { orgId: invite.orgId, userId: user.id, role: invite.role },
           }),
-          prisma.invitation.update({
+          prismaAdmin.invitation.update({
             where: { id: invite.id },
             data: { acceptedAt: new Date() },
           }),

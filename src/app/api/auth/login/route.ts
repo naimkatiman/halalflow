@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/db";
+import { prismaAdmin } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { generateCsrfToken } from "@/lib/csrf";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prismaAdmin.user.findUnique({
       where: { email: normalizedEmail },
       include: {
         memberships: { include: { org: true }, orderBy: { createdAt: "asc" }, take: 1 },

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { prismaAdmin } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
@@ -19,7 +19,7 @@ export async function GET() {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
 
-    const memberships = await prisma.orgMember.findMany({
+    const memberships = await prismaAdmin.orgMember.findMany({
       where: { userId: session.userId },
       include: { org: true },
     });
@@ -46,10 +46,10 @@ export async function POST(request: NextRequest) {
     const { name } = createSchema.parse(body);
 
     let slug = slugify(name);
-    const existing = await prisma.organization.findUnique({ where: { slug } });
+    const existing = await prismaAdmin.organization.findUnique({ where: { slug } });
     if (existing) slug = `${slug}-${Date.now()}`;
 
-    const org = await prisma.organization.create({
+    const org = await prismaAdmin.organization.create({
       data: {
         name,
         slug,
