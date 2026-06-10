@@ -8,14 +8,14 @@ import { z } from "zod";
 
 const stepSchema = z.object({
   name: z.string().min(1).max(100).trim(),
-  description: z.string().max(2000).optional(),
+  description: z.string().max(2000).trim().optional(),
   order: z.number().int().min(0),
   requiredRole: z.enum(["owner", "admin", "member"]).optional(),
 });
 
 const createSchema = z.object({
   name: z.string().min(1).max(100).trim(),
-  description: z.string().max(2000).optional(),
+  description: z.string().max(2000).trim().optional(),
   steps: z.array(stepSchema).min(1),
 });
 

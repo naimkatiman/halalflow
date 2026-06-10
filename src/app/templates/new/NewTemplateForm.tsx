@@ -56,7 +56,7 @@ export function NewTemplateForm() {
         body: JSON.stringify({
           name: name.trim(),
           description: description.trim() || undefined,
-          steps: steps.map((s, i) => ({ name: s.name.trim(), description: s.description || undefined, order: i, requiredRole: s.requiredRole || undefined })),
+          steps: steps.map((s, i) => ({ name: s.name.trim(), description: s.description.trim() || undefined, order: i, requiredRole: s.requiredRole || undefined })),
         }),
       });
       const data = await res.json();
