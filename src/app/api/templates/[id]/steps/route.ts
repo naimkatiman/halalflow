@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
@@ -25,20 +25,21 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
-    const existing = await prisma.workflowTemplate.findFirst({ where: { id, orgId: session.orgId } });
+    const existing = await withOrg(session.orgId, async (tx) => {
+      return tx.workflowTemplate.findFirst({ where: { id, orgId: session.orgId } });
+    });
     if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
 
     const body = await request.json();
     const steps = stepsSchema.parse(body);
 
-    await prisma.$transaction([
-      prisma.templateStep.deleteMany({ where: { templateId: id } }),
-      prisma.templateStep.createMany({
+    const updated = await withOrg(session.orgId, async (tx) => {
+      await tx.templateStep.deleteMany({ where: { templateId: id } });
+      await tx.templateStep.createMany({
         data: steps.map((s) => ({ orgId: session.orgId, templateId: id, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })),
-      }),
-    ]);
-
-    const updated = await prisma.templateStep.findMany({ where: { templateId: id }, orderBy: { order: "asc" } });
+      });
+      return tx.templateStep.findMany({ where: { templateId: id }, orderBy: { order: "asc" } });
+    });
     return NextResponse.json({ steps: updated }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });

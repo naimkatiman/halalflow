@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 
 function slugify(text: string): string {
@@ -22,29 +22,39 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     }
 
     const { id } = await params;
-    const workflow = await prisma.workflow.findFirst({
-      where: { id, orgId: session.orgId },
-      include: {
-        template: true,
-        org: true,
-        createdBy: { select: { name: true } },
-        approvals: {
-          include: {
-            step: true,
-            approver: { select: { id: true, name: true, email: true } },
+    const result = await withOrg(session.orgId, async (tx) => {
+      const workflow = await tx.workflow.findFirst({
+        where: { id, orgId: session.orgId },
+        include: {
+          template: true,
+          org: true,
+          createdBy: { select: { name: true } },
+          approvals: {
+            include: {
+              step: true,
+              approver: { select: { id: true, name: true, email: true } },
+            },
+            orderBy: { createdAt: "asc" },
           },
-          orderBy: { createdAt: "asc" },
         },
-      },
+      });
+
+      if (!workflow) {
+        return { error: "Not found", status: 404 } as const;
+      }
+
+      if (workflow.status !== "approved") {
+        return { error: "Workflow not approved", status: 403 } as const;
+      }
+
+      return { workflow } as const;
     });
 
-    if (!workflow) {
-      return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
+    if ("error" in result) {
+      return NextResponse.json({ error: result.error }, { status: result.status, headers: { "Cache-Control": "no-store" } });
     }
 
-    if (workflow.status !== "approved") {
-      return NextResponse.json({ error: "Workflow not approved" }, { status: 403, headers: { "Cache-Control": "no-store" } });
-    }
+    const { workflow } = result;
 
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([612, 792]); // US Letter

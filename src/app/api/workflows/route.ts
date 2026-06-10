@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
@@ -26,29 +26,32 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
     const limit = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(searchParams.get("limit") ?? String(DEFAULT_PAGE_SIZE))));
 
-    const [workflows, total] = await Promise.all([
-      prisma.workflow.findMany({
-        where: { orgId: session.orgId, ...(status ? { status } : {}) },
-        include: {
-          template: { select: { id: true, name: true } },
-          createdBy: { select: { id: true, name: true, email: true } },
-          approvals: {
-            include: {
-              step: { select: { order: true, name: true } },
-              approver: { select: { id: true, name: true } },
+    const { workflows, total } = await withOrg(session.orgId, async (tx) => {
+      const [workflows, total] = await Promise.all([
+        tx.workflow.findMany({
+          where: { orgId: session.orgId, ...(status ? { status } : {}) },
+          include: {
+            template: { select: { id: true, name: true } },
+            createdBy: { select: { id: true, name: true, email: true } },
+            approvals: {
+              include: {
+                step: { select: { order: true, name: true } },
+                approver: { select: { id: true, name: true } },
+              },
+              orderBy: { createdAt: "asc" },
             },
-            orderBy: { createdAt: "asc" },
+            _count: { select: { comments: true } },
           },
-          _count: { select: { comments: true } },
-        },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.workflow.count({
-        where: { orgId: session.orgId, ...(status ? { status } : {}) },
-      }),
-    ]);
+          orderBy: { createdAt: "desc" },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        tx.workflow.count({
+          where: { orgId: session.orgId, ...(status ? { status } : {}) },
+        }),
+      ]);
+      return { workflows, total };
+    });
 
     return NextResponse.json(
       { workflows, pagination: { page, limit, total, pages: Math.ceil(total / limit) } },
@@ -72,42 +75,49 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { templateId, title, description } = createSchema.parse(body);
 
-    const template = await prisma.workflowTemplate.findFirst({
-      where: { id: templateId, orgId: session.orgId },
-      include: { steps: { orderBy: { order: "asc" } } },
-    });
-    if (!template) return NextResponse.json({ error: "Template not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
-    if (template.steps.length === 0) return NextResponse.json({ error: "Template has no steps" }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    const result = await withOrg(session.orgId, async (tx) => {
+      const template = await tx.workflowTemplate.findFirst({
+        where: { id: templateId, orgId: session.orgId },
+        include: { steps: { orderBy: { order: "asc" } } },
+      });
+      if (!template) return { error: "Template not found", status: 404 } as const;
+      if (template.steps.length === 0) return { error: "Template has no steps", status: 400 } as const;
 
-    const workflow = await prisma.workflow.create({
-      data: {
-        orgId: session.orgId,
-        templateId,
-        title,
-        description,
-        status: "in_progress",
-        currentStep: 0,
-        createdById: session.userId,
-        approvals: {
-          create: template.steps.map((step) => ({ orgId: session.orgId, stepId: step.id, status: "pending" })),
-        },
-        auditLogs: {
-          create: {
-            orgId: session.orgId,
-            userId: session.userId,
-            action: "created",
-            detail: `Workflow created from template "${template.name}"`,
+      const workflow = await tx.workflow.create({
+        data: {
+          orgId: session.orgId,
+          templateId,
+          title,
+          description,
+          status: "in_progress",
+          currentStep: 0,
+          createdById: session.userId,
+          approvals: {
+            create: template.steps.map((step) => ({ orgId: session.orgId, stepId: step.id, status: "pending" })),
+          },
+          auditLogs: {
+            create: {
+              orgId: session.orgId,
+              userId: session.userId,
+              action: "created",
+              detail: `Workflow created from template "${template.name}"`,
+            },
           },
         },
-      },
-      include: {
-        template: { select: { id: true, name: true } },
-        approvals: { include: { step: true }, orderBy: { createdAt: "asc" } },
-      },
+        include: {
+          template: { select: { id: true, name: true } },
+          approvals: { include: { step: true }, orderBy: { createdAt: "asc" } },
+        },
+      });
+      return { workflow } as const;
     });
 
+    if ("error" in result) {
+      return NextResponse.json({ error: result.error }, { status: result.status, headers: { "Cache-Control": "no-store" } });
+    }
+
     return NextResponse.json(
-      { workflow },
+      { workflow: result.workflow },
       { status: 201, headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
@@ -33,14 +33,16 @@ export async function POST(request: NextRequest) {
 
     const sortedSteps = [...steps].sort((a, b) => a.order - b.order);
 
-    const template = await prisma.workflowTemplate.create({
-      data: {
-        orgId: session.orgId,
-        name,
-        description,
-        steps: { create: sortedSteps.map((s) => ({ orgId: session.orgId, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
-      },
-      include: { steps: { orderBy: { order: "asc" } } },
+    const template = await withOrg(session.orgId, async (tx) => {
+      return tx.workflowTemplate.create({
+        data: {
+          orgId: session.orgId,
+          name,
+          description,
+          steps: { create: sortedSteps.map((s) => ({ orgId: session.orgId, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
+        },
+        include: { steps: { orderBy: { order: "asc" } } },
+      });
     });
 
     return NextResponse.json(

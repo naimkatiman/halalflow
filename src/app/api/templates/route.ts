@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
@@ -32,18 +32,21 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
     const limit = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(searchParams.get("limit") ?? String(DEFAULT_PAGE_SIZE))));
 
-    const [templates, total] = await Promise.all([
-      prisma.workflowTemplate.findMany({
-        where: { orgId: session.orgId },
-        include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.workflowTemplate.count({
-        where: { orgId: session.orgId },
-      }),
-    ]);
+    const { templates, total } = await withOrg(session.orgId, async (tx) => {
+      const [templates, total] = await Promise.all([
+        tx.workflowTemplate.findMany({
+          where: { orgId: session.orgId },
+          include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
+          orderBy: { createdAt: "desc" },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        tx.workflowTemplate.count({
+          where: { orgId: session.orgId },
+        }),
+      ]);
+      return { templates, total };
+    });
 
     return NextResponse.json(
       { templates, pagination: { page, limit, total, pages: Math.ceil(total / limit) } },
@@ -67,14 +70,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { name, description, steps } = createSchema.parse(body);
 
-    const template = await prisma.workflowTemplate.create({
-      data: {
-        orgId: session.orgId,
-        name,
-        description,
-        steps: { create: steps.map((s) => ({ orgId: session.orgId, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
-      },
-      include: { steps: { orderBy: { order: "asc" } } },
+    const template = await withOrg(session.orgId, async (tx) => {
+      return tx.workflowTemplate.create({
+        data: {
+          orgId: session.orgId,
+          name,
+          description,
+          steps: { create: steps.map((s) => ({ orgId: session.orgId, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
+        },
+        include: { steps: { orderBy: { order: "asc" } } },
+      });
     });
 
     return NextResponse.json(

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
@@ -17,10 +17,12 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
-    const template = await prisma.workflowTemplate.findFirst({
-      where: { id, orgId: session.orgId },
-      include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
-    });
+    const template = await withOrg(session.orgId, async (tx) =>
+      tx.workflowTemplate.findFirst({
+        where: { id, orgId: session.orgId },
+        include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
+      }),
+    );
     if (!template) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
 
     return NextResponse.json({ template }, { headers: { "Cache-Control": "no-store" } });
@@ -40,14 +42,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
-    const existing = await prisma.workflowTemplate.findFirst({ where: { id, orgId: session.orgId } });
-    if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
+    const result = await withOrg(session.orgId, async (tx) => {
+      const existing = await tx.workflowTemplate.findFirst({ where: { id, orgId: session.orgId } });
+      if (!existing) return { error: "Not found", status: 404 } as const;
 
-    const body = await request.json();
-    const data = updateSchema.parse(body);
-    const template = await prisma.workflowTemplate.update({ where: { id }, data });
+      const body = await request.json();
+      const data = updateSchema.parse(body);
+      const template = await tx.workflowTemplate.update({ where: { id }, data });
+      return { template } as const;
+    });
+    if ("error" in result) return NextResponse.json({ error: result.error }, { status: result.status, headers: { "Cache-Control": "no-store" } });
 
-    return NextResponse.json({ template }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
+    return NextResponse.json({ template: result.template }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
     console.error("PUT /api/templates/[id] error:", error);
@@ -65,10 +71,15 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
-    const existing = await prisma.workflowTemplate.findFirst({ where: { id, orgId: session.orgId } });
-    if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
+    const result = await withOrg(session.orgId, async (tx) => {
+      const existing = await tx.workflowTemplate.findFirst({ where: { id, orgId: session.orgId } });
+      if (!existing) return { error: "Not found", status: 404 } as const;
 
-    await prisma.workflowTemplate.delete({ where: { id } });
+      await tx.workflowTemplate.delete({ where: { id } });
+      return { ok: true } as const;
+    });
+    if ("error" in result) return NextResponse.json({ error: result.error }, { status: result.status, headers: { "Cache-Control": "no-store" } });
+
     return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
   } catch (error) {
     console.error("DELETE /api/templates/[id] error:", error);
