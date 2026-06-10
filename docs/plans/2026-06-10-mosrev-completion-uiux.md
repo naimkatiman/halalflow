@@ -89,6 +89,13 @@ Two-sided marketplace, vendor/donor roles, custom domains, payouts, mobile,
   the 3 DB URLs set on Railway, `migrate deploy` + `db:seed`, then `railway up`. Irreversible;
   awaits explicit go (and a direct push to origin/main, which PR review currently blocks).
 
+## Security review (2026-06-10)
+Ran a code-reviewer pass on the billing/auth/RLS code. 0 critical. Fixed both HIGH
+(server-side paywall on mutating API routes; atomic signup transaction) + the cheap
+items (webhook reads real status; admin-URL warning). **Remaining follow-ups (low risk,
+inert until Stripe is keyed):** webhook out-of-order event guard (needs a `lastStripeEventAt`
+column to ignore stale events); GET routes are not subscription-gated (writes are).
+
 ## Discipline
 One concern per commit. Split commits >15 files by layer (API vs pages). Lead messages
 with the outcome. Hold the production SQLite→Postgres cutover for explicit go-ahead.
