@@ -9,7 +9,7 @@ import { generateInviteToken, getInviteExpiryDate } from "@/lib/invite-token";
 import { sendInviteEmail } from "@/lib/notifications/invite-email";
 
 const inviteSchema = z.object({
-  email: z.string().email(),
+  email: z.string().trim().email(),
   role: z.enum(["admin", "member"]).default("member"),
 });
 

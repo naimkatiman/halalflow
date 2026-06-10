@@ -10,7 +10,7 @@ import { z } from "zod";
 
 const approveSchema = z.object({
   action: z.enum(["approved", "rejected"]),
-  note: z.string().max(1000).optional(),
+  note: z.string().max(1000).trim().optional(),
 });
 
 type WorkflowForNotification = {
