@@ -21,7 +21,11 @@ const nextConfig: NextConfig = {
           key: "Content-Security-Policy",
           value: [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-eval'",
+            // Next.js App Router bootstraps hydration via inline scripts, so
+            // 'unsafe-inline' is required without per-request nonces (which would
+            // force dynamic rendering on every route). 'unsafe-eval' is dev-only:
+            // React uses eval for enhanced debugging, never in production.
+            `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: https:",
             "font-src 'self' data:",
