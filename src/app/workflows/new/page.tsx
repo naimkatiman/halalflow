@@ -3,9 +3,9 @@ import { Suspense } from 'react';
 import { NewWorkflowForm } from './NewWorkflowForm';
 
 export const metadata: Metadata = {
-  title: 'New Workflow — HalalFlow',
+  title: 'New Workflow — MosRev',
   description:
-    'Submit a new structured approval workflow from a template in your HalalFlow organization.',
+    'Submit a new structured approval workflow from a template in your MosRev organization.',
 };
 
 export default function NewWorkflowPage() {

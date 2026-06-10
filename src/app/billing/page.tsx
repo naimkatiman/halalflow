@@ -10,7 +10,7 @@ import { SubscribeButton } from './SubscribeButton';
 import { CheckCircle, Info, Warning } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Billing — HalalFlow',
+  title: 'Billing — MosRev',
   description: 'Manage your workspace subscription.',
 };
 

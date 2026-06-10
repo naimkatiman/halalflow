@@ -9,7 +9,7 @@ import { ExportButton } from './ExportButton';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Template Details — HalalFlow',
+  title: 'Template Details — MosRev',
   description:
     'View a reusable workflow template with its defined approval steps, export it as JSON, or create a new workflow from it.',
 };

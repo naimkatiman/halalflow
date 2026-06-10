@@ -10,7 +10,7 @@ import { Plus, Clipboard } from '@phosphor-icons/react/dist/ssr';
 import { ImportButton } from './ImportButton';
 
 export const metadata: Metadata = {
-  title: 'Templates — HalalFlow',
+  title: 'Templates — MosRev',
   description:
     'Create and manage reusable workflow templates for your organization. Define multi-step approval processes.',
 };

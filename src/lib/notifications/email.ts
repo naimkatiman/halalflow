@@ -23,7 +23,7 @@ export type EmailSendResult =
 
 function getEmailConfig() {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.HALALFLOW_EMAIL_FROM?.trim();
+  const from = process.env.MOSREV_EMAIL_FROM?.trim();
   return { apiKey, from };
 }
 
@@ -39,7 +39,7 @@ export async function sendEmail(message: EmailMessage): Promise<EmailSendResult>
     return {
       ok: false,
       skipped: true,
-      reason: 'Email notifications are disabled until RESEND_API_KEY and HALALFLOW_EMAIL_FROM are set.',
+      reason: 'Email notifications are disabled until RESEND_API_KEY and MOSREV_EMAIL_FROM are set.',
     };
   }
 
@@ -88,7 +88,7 @@ export type WorkflowDecisionEmailInput = {
 };
 
 export function buildWorkflowDecisionEmail(input: WorkflowDecisionEmailInput) {
-  const subject = `[HalalFlow] ${input.workflowTitle} — ${input.workflowStatus}`;
+  const subject = `[MosRev] ${input.workflowTitle} — ${input.workflowStatus}`;
   const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
   const workflowUrl = input.workflowId ? `${baseUrl}/workflows/${input.workflowId}` : null;
 
@@ -117,7 +117,7 @@ export function buildWorkflowDecisionEmail(input: WorkflowDecisionEmailInput) {
   ${input.note?.trim() ? `<p style="font-size: 14px; line-height: 1.6; margin-bottom: 16px; padding: 12px; background: #f4f4f5; border-radius: 8px;"><strong>Note:</strong> ${escapeHtml(input.note.trim())}</p>` : ''}
   ${workflowUrl ? `<a href="${escapeHtml(workflowUrl)}" style="display: inline-block; background: #059669; color: #fff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 10px 20px; border-radius: 8px;">View Workflow</a>` : ''}
   <p style="font-size: 12px; color: #71717a; margin-top: 16px;">
-    This is an automated notification from HalalFlow.
+    This is an automated notification from MosRev.
   </p>
 </body>
 </html>`;

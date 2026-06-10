@@ -41,7 +41,7 @@ export function Navbar() {
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 font-bold text-zinc-950 text-sm">
             <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
-            HalalFlow
+            MosRev
           </Link>
         </div>
       </header>
@@ -54,7 +54,7 @@ export function Navbar() {
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
             <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
-            HalalFlow
+            MosRev
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
             <a href="#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
@@ -133,7 +133,7 @@ export function Navbar() {
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
             <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
-            HalalFlow
+            MosRev
           </Link>
           <nav className="hidden sm:flex items-center gap-1">
             {nav.map(({ href, label, icon: Icon }) => (

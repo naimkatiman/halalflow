@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from "next/server";
 // to /login. Pages still re-validate (and decrypt) the session server-side
 // (defense in depth) — this just avoids rendering protected shells for clearly
 // unauthenticated visitors. SESSION_COOKIE must match sessionOptions.cookieName.
-const SESSION_COOKIE = "halalflow_session";
+const SESSION_COOKIE = "mosrev_session";
 
 export function proxy(request: NextRequest) {
   if (request.cookies.has(SESSION_COOKIE)) {

@@ -9,7 +9,7 @@ import { requireActiveSubscription } from '@/lib/require-subscription';
 import { CheckCircle, XCircle, Clock, Hourglass, ArrowsClockwise, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Dashboard — HalalFlow',
+  title: 'Dashboard — MosRev',
   description:
     'Overview of your organization\'s workflows, recent activity, and key statistics.',
 };

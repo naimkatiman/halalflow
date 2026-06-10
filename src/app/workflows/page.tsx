@@ -9,7 +9,7 @@ import { requireActiveSubscription } from '@/lib/require-subscription';
 import { Plus, FunnelSimple } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Workflows — HalalFlow',
+  title: 'Workflows — MosRev',
   description:
     'View and manage approval workflows across your organization. Track status, submit new requests, and review audit logs.',
 };

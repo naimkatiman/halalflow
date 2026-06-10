@@ -9,9 +9,9 @@ import { OrgSwitcher } from './OrgSwitcher';
 import { Buildings, Users, PaperPlaneTilt } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Settings — HalalFlow',
+  title: 'Settings — MosRev',
   description:
-    "Manage your organization's members, switch workspaces, and configure HalalFlow preferences.",
+    "Manage your organization's members, switch workspaces, and configure MosRev preferences.",
 };
 
 export default async function SettingsPage() {

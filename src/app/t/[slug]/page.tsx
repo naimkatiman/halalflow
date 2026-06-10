@@ -10,7 +10,7 @@ import { EnterWorkspace } from './EnterWorkspace';
 import { LockKey } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Open workspace — HalalFlow',
+  title: 'Open workspace — MosRev',
   robots: { index: false },
 };
 

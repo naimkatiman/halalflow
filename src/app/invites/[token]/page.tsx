@@ -8,9 +8,9 @@ import { prismaAdmin } from '@/lib/db';
 import { GitBranch, CheckCircle, XCircle } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Invitation — HalalFlow',
+  title: 'Invitation — MosRev',
   description:
-    'Accept your invitation to join a HalalFlow organization and start managing structured approval workflows.',
+    'Accept your invitation to join a MosRev organization and start managing structured approval workflows.',
 };
 
 export default async function InvitePage({
@@ -73,7 +73,7 @@ export default async function InvitePage({
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
           <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" aria-hidden="true" />
-          <span className="font-bold text-zinc-950">HalalFlow</span>
+          <span className="font-bold text-zinc-950">MosRev</span>
         </div>
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm text-center">
           <CheckCircle className="w-10 h-10 text-emerald-500 mx-auto mb-4" weight="duotone" aria-hidden="true" />
