@@ -2,11 +2,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { GitBranch } from '@phosphor-icons/react';
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Only same-site paths — "//host" or "https://…" would be an open redirect.
+  const redirectParam = searchParams.get('redirect');
+  const safeRedirect =
+    redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//') ? redirectParam : null;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,7 +32,9 @@ export function LoginForm() {
         setError(data.error || 'Login failed');
         return;
       }
-      if (!data.org) {
+      if (safeRedirect) {
+        router.push(safeRedirect);
+      } else if (!data.org) {
         router.push('/onboarding');
       } else {
         router.push('/dashboard');
