@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { prismaAdmin } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 
@@ -11,7 +11,7 @@ export async function GET(
 ) {
   try {
     const { token } = await params;
-    const invite = await prisma.invitation.findUnique({
+    const invite = await prismaAdmin.invitation.findUnique({
       where: { token },
       include: { org: { select: { name: true } } },
     });
@@ -48,7 +48,7 @@ export async function POST(
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
 
     const { token } = await params;
-    const invite = await prisma.invitation.findUnique({
+    const invite = await prismaAdmin.invitation.findUnique({
       where: { token },
       include: { org: true },
     });
@@ -57,7 +57,7 @@ export async function POST(
       return NextResponse.json({ error: "Invalid or expired invitation" }, { status: 410, headers: { "Cache-Control": "no-store" } });
     }
 
-    const user = await prisma.user.findUnique({ where: { id: session.userId } });
+    const user = await prismaAdmin.user.findUnique({ where: { id: session.userId } });
     if (!user || user.email.toLowerCase() !== invite.email.toLowerCase()) {
       return NextResponse.json(
         { error: "This invitation is for a different email address" },
@@ -65,22 +65,32 @@ export async function POST(
       );
     }
 
-    const existingMember = await prisma.orgMember.findUnique({
+    const existingMember = await prismaAdmin.orgMember.findUnique({
       where: { orgId_userId: { orgId: invite.orgId, userId: user.id } },
     });
     if (existingMember) {
       return NextResponse.json({ error: "Already a member" }, { status: 409, headers: { "Cache-Control": "no-store" } });
     }
 
-    await prisma.$transaction([
-      prisma.orgMember.create({
-        data: { orgId: invite.orgId, userId: user.id, role: invite.role },
-      }),
-      prisma.invitation.update({
-        where: { id: invite.id },
-        data: { acceptedAt: new Date() },
-      }),
-    ]);
+    try {
+      await prismaAdmin.$transaction([
+        prismaAdmin.orgMember.create({
+          data: { orgId: invite.orgId, userId: user.id, role: invite.role },
+        }),
+        prismaAdmin.invitation.update({
+          where: { id: invite.id },
+          data: { acceptedAt: new Date() },
+        }),
+      ]);
+    } catch (err) {
+      // Double-submit race: both requests pass the existingMember check, the
+      // second create hits the orgId_userId unique constraint. Same outcome
+      // as the pre-check, so same response.
+      if (typeof err === "object" && err !== null && "code" in err && (err as { code?: string }).code === "P2002") {
+        return NextResponse.json({ error: "Already a member" }, { status: 409, headers: { "Cache-Control": "no-store" } });
+      }
+      throw err;
+    }
 
     // Update session org context
     session.orgId = invite.orgId;

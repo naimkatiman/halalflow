@@ -28,7 +28,7 @@ export function Hero() {
             <br className="hidden sm:block" /> the halal way
           </h1>
           <p className="mt-4 max-w-[46ch] text-base leading-relaxed text-emerald-800">
-            HalalFlow gives mosques, zakat bodies, cooperatives and Muslim SMEs one
+            MosRev gives mosques, zakat bodies, cooperatives and Muslim SMEs one
             place to route, approve, and audit every multi-step financial decision.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">

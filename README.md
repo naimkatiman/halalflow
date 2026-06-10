@@ -1,10 +1,10 @@
-# HalalFlow — Islamic Finance Workflow Engine
+# MosRev — Islamic Finance Workflow Engine
 
 Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, NGOs, cooperatives, and Muslim SMEs.
 
 ## What it does
 
-HalalFlow helps teams manage structured approval workflows:
+MosRev helps teams manage structured approval workflows:
 
 - Mosque expense approvals
 - Zakat distribution requests

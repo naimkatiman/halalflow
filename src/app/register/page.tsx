@@ -3,9 +3,9 @@ import { Suspense } from 'react';
 import { RegisterForm } from './RegisterForm';
 
 export const metadata: Metadata = {
-  title: 'Register — HalalFlow',
+  title: 'Register — MosRev',
   description:
-    'Create a HalalFlow account to start managing structured approval workflows for your organization.',
+    'Create a MosRev account to start managing structured approval workflows for your organization.',
 };
 
 export default function RegisterPage() {

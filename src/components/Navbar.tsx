@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X } from '@phosphor-icons/react';
+import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
@@ -12,6 +12,7 @@ interface NavUser {
   name: string;
   email: string;
   orgId: string;
+  orgName?: string | null;
 }
 
 export function Navbar() {
@@ -20,12 +21,18 @@ export function Navbar() {
   const [user, setUser] = useState<NavUser | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const isPublicPage =
+    pathname === '/' || pathname === '/login' || pathname === '/register' || pathname === '/onboarding';
+
   useEffect(() => {
+    // Public pages render without a session — probing /api/auth/me there just
+    // logs a 401 in every visitor's console.
+    if (isPublicPage) return;
     fetch('/api/auth/me')
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => { if (data?.user) setUser(data.user); })
       .catch((err) => { console.error('Navbar auth check failed:', err); });
-  }, []);
+  }, [isPublicPage]);
 
   const handleLogout = async () => {
     await fetchWithCsrf('/api/auth/logout', { method: 'POST' });
@@ -41,7 +48,7 @@ export function Navbar() {
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 font-bold text-zinc-950 text-sm">
             <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
-            HalalFlow
+            MosRev
           </Link>
         </div>
       </header>
@@ -54,11 +61,12 @@ export function Navbar() {
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
             <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
-            HalalFlow
+            MosRev
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
             <a href="#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
             <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
+            <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login" className="hidden sm:block text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
@@ -98,6 +106,13 @@ export function Navbar() {
             >
               How it works
             </a>
+            <a
+              href="#pricing"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Pricing
+            </a>
             <div className="pt-2 border-t border-zinc-100 flex flex-col gap-2">
               <Link
                 href="/login"
@@ -124,6 +139,7 @@ export function Navbar() {
     { href: '/dashboard', label: 'Dashboard', icon: SquaresFour },
     { href: '/workflows', label: 'Workflows', icon: CheckSquare },
     { href: '/templates', label: 'Templates', icon: Clipboard },
+    { href: '/billing', label: 'Billing', icon: CreditCard },
     { href: '/settings', label: 'Settings', icon: GearSix },
   ];
 
@@ -133,7 +149,7 @@ export function Navbar() {
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
             <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
-            HalalFlow
+            MosRev
           </Link>
           <nav className="hidden sm:flex items-center gap-1">
             {nav.map(({ href, label, icon: Icon }) => (
@@ -155,6 +171,16 @@ export function Navbar() {
           </nav>
         </div>
         <div className="flex items-center gap-3">
+          {user?.orgName && (
+            <Link
+              href="/settings"
+              title={`Workspace: ${user.orgName}`}
+              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
+            >
+              <Buildings className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
+              <span className="truncate">{user.orgName}</span>
+            </Link>
+          )}
           {user && (
             <>
               <span className="text-xs text-zinc-500 hidden sm:block truncate max-w-[160px]">{user.name}</span>

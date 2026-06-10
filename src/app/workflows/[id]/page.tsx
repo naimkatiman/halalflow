@@ -3,14 +3,16 @@ import { cookies } from 'next/headers';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { withOrg } from '@/lib/db';
+import { roleSatisfies } from '@/lib/roles';
 import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle, FileArrowDown } from '@phosphor-icons/react/dist/ssr';
 import { ApprovalActions } from './ApprovalActions';
 import { CommentForm } from './CommentForm';
+import { DeleteButton } from '@/components/DeleteButton';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Workflow Details — HalalFlow',
+  title: 'Workflow Details — MosRev',
   description:
     'Track the status of a submitted workflow, view approval steps, add comments, and see the full audit log.',
 };
@@ -23,10 +25,10 @@ const STATUS_CLS: Record<string, string> = {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  in_progress: 'In Progress',
+  in_progress: 'Awaiting approval',
   approved: 'Approved',
   rejected: 'Rejected',
-  pending: 'Pending',
+  pending: 'Awaiting approval',
 };
 
 export default async function WorkflowPage({ params }: { params: Promise<{ id: string }> }) {
@@ -35,35 +37,38 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
   if (!session.orgId) redirect('/onboarding');
 
   const { id } = await params;
-  const workflow = await prisma.workflow.findFirst({
-    where: { id, orgId: session.orgId },
-    include: {
-      template: { include: { steps: { orderBy: { order: 'asc' } } } },
-      createdBy: { select: { id: true, name: true, email: true } },
-      approvals: {
-        include: {
-          step: true,
-          approver: { select: { id: true, name: true, email: true } },
+  const workflow = await withOrg(session.orgId, async (tx) =>
+    tx.workflow.findFirst({
+      where: { id, orgId: session.orgId },
+      include: {
+        template: { include: { steps: { orderBy: { order: 'asc' } } } },
+        createdBy: { select: { id: true, name: true, email: true } },
+        approvals: {
+          include: {
+            step: true,
+            approver: { select: { id: true, name: true, email: true } },
+          },
+          orderBy: { createdAt: 'asc' },
         },
-        orderBy: { createdAt: 'asc' },
+        comments: {
+          include: { user: { select: { id: true, name: true, email: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
+        auditLogs: {
+          include: { user: { select: { id: true, name: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
       },
-      comments: {
-        include: { user: { select: { id: true, name: true, email: true } } },
-        orderBy: { createdAt: 'asc' },
-      },
-      auditLogs: {
-        include: { user: { select: { id: true, name: true } } },
-        orderBy: { createdAt: 'asc' },
-      },
-    },
-  });
+    })
+  );
   if (!workflow) notFound();
 
   const currentApproval = workflow.approvals.find(
     (a) => a.status === 'pending' && a.step.order === workflow.currentStep
   );
   const isActive = ['in_progress', 'pending'].includes(workflow.status);
-  const canApprove = !currentApproval?.step.requiredRole || currentApproval.step.requiredRole === session.orgRole;
+  const canApprove = !currentApproval?.step.requiredRole || roleSatisfies(session.orgRole, currentApproval.step.requiredRole);
+  const canDelete = workflow.createdById === session.userId || ['owner', 'admin'].includes(session.orgRole);
   const sc = STATUS_CLS[workflow.status] ?? STATUS_CLS['pending'];
 
   const formatDate = (d: Date) =>
@@ -91,6 +96,13 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             </p>
           )}
         </div>
+        {canDelete && (
+          <DeleteButton
+            endpoint={`/api/workflows/${workflow.id}`}
+            redirectTo="/workflows"
+            confirmMessage="Delete this workflow and its history?"
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -148,16 +160,46 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             </ol>
           </div>
 
+          {currentApproval && isActive && workflow.createdById === session.userId && (
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+              <p className="text-sm text-blue-800">
+                You submitted this request, so a different committee member must review and approve it
+                {currentApproval.step.requiredRole && (
+                  <> (needs the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role or above)</>
+                )}
+                .
+              </p>
+              <Link
+                href="/settings"
+                className="inline-block text-sm font-medium text-blue-700 hover:text-blue-900 mt-2"
+              >
+                Invite a committee member →
+              </Link>
+            </div>
+          )}
+
           {currentApproval && isActive && workflow.createdById !== session.userId && (
             canApprove ? (
               <ApprovalActions workflowId={workflow.id} stepName={currentApproval.step.name} />
             ) : (
               <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
                 <p className="text-sm text-amber-800">
-                  This step requires the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role to approve.
+                  This step requires the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role (or above) to approve.
                 </p>
               </div>
             )
+          )}
+
+          {workflow.status === 'rejected' && (
+            <div className="bg-zinc-50 border border-zinc-200/70 rounded-xl p-4 flex items-center justify-between gap-3 flex-wrap">
+              <p className="text-sm text-zinc-600">This request was rejected. You can revise it and submit it again.</p>
+              <Link
+                href={`/workflows/new?templateId=${workflow.templateId}`}
+                className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
+              >
+                Resubmit as new workflow →
+              </Link>
+            </div>
           )}
 
           <div className="bg-white border border-zinc-200/70 rounded-xl p-5">

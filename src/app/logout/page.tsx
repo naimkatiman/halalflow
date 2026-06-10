@@ -3,8 +3,8 @@ import { Suspense } from 'react';
 import { LogoutHandler } from './LogoutHandler';
 
 export const metadata: Metadata = {
-  title: 'Sign out — HalalFlow',
-  description: 'You are being signed out of HalalFlow.',
+  title: 'Sign out — MosRev',
+  description: 'You are being signed out of MosRev.',
 };
 
 export default function LogoutPage() {

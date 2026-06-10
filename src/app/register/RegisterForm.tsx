@@ -12,6 +12,7 @@ export function RegisterForm() {
   const prefilledEmail = searchParams.get('email');
 
   const [name, setName] = useState('');
+  const [orgName, setOrgName] = useState('');
   const [email, setEmail] = useState(prefilledEmail || '');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +30,13 @@ export function RegisterForm() {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), email: email.trim(), password, inviteToken }),
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          inviteToken,
+          orgName: inviteToken ? undefined : orgName.trim() || undefined,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -56,7 +63,7 @@ export function RegisterForm() {
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
           <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" aria-hidden="true" />
-          <span className="font-bold text-zinc-950">HalalFlow</span>
+          <span className="font-bold text-zinc-950">MosRev</span>
         </div>
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm">
           <h1 className="text-xl font-bold text-zinc-950 mb-1">Create account</h1>
@@ -76,6 +83,22 @@ export function RegisterForm() {
                 placeholder="Ahmad Ibrahim"
               />
             </div>
+            {!inviteToken && (
+              <div>
+                <label htmlFor="orgName" className="block text-sm font-medium text-zinc-700 mb-1.5">Organization name</label>
+                <input
+                  id="orgName"
+                  type="text"
+                  value={orgName}
+                  onChange={(e) => setOrgName(e.target.value)}
+                  maxLength={100}
+                  autoComplete="organization"
+                  className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                  placeholder="Al-Noor Mosque Trust"
+                />
+                <p className="text-xs text-zinc-400 mt-1">Creates your workspace. Leave blank to set up later.</p>
+              </div>
+            )}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-zinc-700 mb-1.5">Email</label>
               <input

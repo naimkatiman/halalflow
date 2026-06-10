@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from '@phosphor-icons/react';
 import { fetchWithCsrf } from '@/lib/csrf-client';
+import { CopyInviteLink } from './CopyInviteLink';
 
 export function InviteMemberForm({ orgId }: { orgId: string }) {
   const router = useRouter();
@@ -12,11 +13,13 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [inviteUrl, setInviteUrl] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setInviteUrl('');
     setLoading(true);
     try {
       const res = await fetchWithCsrf(`/api/orgs/${orgId}/members`, {
@@ -32,7 +35,12 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
       setEmail('');
       setRole('member');
       if (data.type === 'invitation') {
-        setSuccess(`Invitation sent to ${data.invite.email}`);
+        setSuccess(
+          data.emailSent
+            ? `Invitation emailed to ${data.invite.email}.`
+            : `Invitation created for ${data.invite.email}. Share the link with them directly:`
+        );
+        if (typeof data.inviteUrl === 'string') setInviteUrl(data.inviteUrl);
       } else {
         setSuccess(`${data.member.user.name} added as ${data.member.role}`);
       }
@@ -79,7 +87,12 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
         </button>
       </div>
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
-      {success && <p className="text-xs text-emerald-600" role="status">{success}</p>}
+      {success && (
+        <p className="text-xs text-emerald-600 flex items-center gap-2 flex-wrap" role="status">
+          {success}
+          {inviteUrl && <CopyInviteLink url={inviteUrl} label="Copy invite link" />}
+        </p>
+      )}
     </form>
   );
 }

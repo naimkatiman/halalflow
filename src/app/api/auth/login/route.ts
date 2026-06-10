@@ -1,8 +1,9 @@
+import { zodErrorMessage } from "@/lib/api-errors";
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/db";
+import { prismaAdmin } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { generateCsrfToken } from "@/lib/csrf";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prismaAdmin.user.findUnique({
       where: { email: normalizedEmail },
       include: {
         memberships: { include: { org: true }, orderBy: { createdAt: "asc" }, take: 1 },
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
       org: membership ? { id: membership.orgId, name: membership.org.name, role: membership.role } : null,
     }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    if (error instanceof z.ZodError) return NextResponse.json({ error: zodErrorMessage(error) }, { status: 400, headers: { "Cache-Control": "no-store" } });
     console.error("POST /api/auth/login error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }

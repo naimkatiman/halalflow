@@ -1,8 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { defaultTemplates } from "./seed-templates";
+import { defaultTemplates } from "../src/lib/default-templates";
 
-const prisma = new PrismaClient();
+// Seeding writes to RLS-protected tables, so it connects as the BYPASSRLS
+// admin role. Falls back to DATABASE_URL only if the admin URL is unset.
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL_ADMIN ?? process.env.DATABASE_URL,
+});
 
 async function main() {
   const password = await bcrypt.hash("changeme123", 12);
@@ -71,7 +75,7 @@ async function main() {
           orgId: org.id,
           name: t.name,
           description: t.description,
-          steps: { create: t.steps },
+          steps: { create: t.steps.map((s) => ({ ...s, orgId: org.id })) },
         },
       });
     }

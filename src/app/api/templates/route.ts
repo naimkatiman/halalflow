@@ -1,9 +1,11 @@
+import { zodErrorMessage } from "@/lib/api-errors";
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
+import { isOrgSubscribed } from "@/lib/require-subscription";
 import { z } from "zod";
 
 const stepSchema = z.object({
@@ -27,23 +29,27 @@ export async function GET(request: NextRequest) {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
     if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    if (!(await isOrgSubscribed(session.orgId))) return NextResponse.json({ error: "Subscription required" }, { status: 402, headers: { "Cache-Control": "no-store" } });
 
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
     const limit = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(searchParams.get("limit") ?? String(DEFAULT_PAGE_SIZE))));
 
-    const [templates, total] = await Promise.all([
-      prisma.workflowTemplate.findMany({
-        where: { orgId: session.orgId },
-        include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.workflowTemplate.count({
-        where: { orgId: session.orgId },
-      }),
-    ]);
+    const { templates, total } = await withOrg(session.orgId, async (tx) => {
+      const [templates, total] = await Promise.all([
+        tx.workflowTemplate.findMany({
+          where: { orgId: session.orgId },
+          include: { steps: { orderBy: { order: "asc" } }, _count: { select: { workflows: true } } },
+          orderBy: { createdAt: "desc" },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        tx.workflowTemplate.count({
+          where: { orgId: session.orgId },
+        }),
+      ]);
+      return { templates, total };
+    });
 
     return NextResponse.json(
       { templates, pagination: { page, limit, total, pages: Math.ceil(total / limit) } },
@@ -60,21 +66,25 @@ export async function POST(request: NextRequest) {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
     if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    if (!(await isOrgSubscribed(session.orgId))) return NextResponse.json({ error: "Subscription required" }, { status: 402, headers: { "Cache-Control": "no-store" } });
 
     const csrf = await validateCsrfToken(request);
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
+    if (!(await isOrgSubscribed(session.orgId))) return NextResponse.json({ error: "Subscription required" }, { status: 402, headers: { "Cache-Control": "no-store" } });
 
     const body = await request.json();
     const { name, description, steps } = createSchema.parse(body);
 
-    const template = await prisma.workflowTemplate.create({
-      data: {
-        orgId: session.orgId,
-        name,
-        description,
-        steps: { create: steps.map((s) => ({ name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
-      },
-      include: { steps: { orderBy: { order: "asc" } } },
+    const template = await withOrg(session.orgId, async (tx) => {
+      return tx.workflowTemplate.create({
+        data: {
+          orgId: session.orgId,
+          name,
+          description,
+          steps: { create: steps.map((s) => ({ orgId: session.orgId, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
+        },
+        include: { steps: { orderBy: { order: "asc" } } },
+      });
     });
 
     return NextResponse.json(
@@ -82,7 +92,7 @@ export async function POST(request: NextRequest) {
       { status: 201, headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {
-    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    if (error instanceof z.ZodError) return NextResponse.json({ error: zodErrorMessage(error) }, { status: 400, headers: { "Cache-Control": "no-store" } });
     console.error("POST /api/templates error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }

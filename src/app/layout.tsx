@@ -10,22 +10,22 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
-  title: "HalalFlow — Islamic Finance Workflow",
+  title: "MosRev — Islamic Finance Workflow",
   description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",
   appleWebApp: {
     capable: true,
-    title: "HalalFlow",
+    title: "MosRev",
     statusBarStyle: "default",
   },
   openGraph: {
-    title: "HalalFlow — Islamic Finance Workflow",
+    title: "MosRev — Islamic Finance Workflow",
     description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",
     type: "website",
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HalalFlow — Islamic Finance Workflow",
+    title: "MosRev — Islamic Finance Workflow",
     description: "Open-source workflow engine for Islamic finance operators, mosques, zakat organizations, and Muslim SMEs.",
   },
 };
@@ -50,9 +50,9 @@ export default function RootLayout({
         </main>
         <footer className="border-t border-zinc-200/50 py-5 px-6">
           <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-zinc-400">
-            <span>HalalFlow — Islamic Finance Workflow Engine</span>
+            <span>MosRev — Islamic Finance Workflow Engine</span>
             <div className="flex items-center gap-4">
-              <a href="https://github.com/naimkatiman/halalflow" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-600 transition-colors" aria-label="HalalFlow GitHub repository (opens in new tab)">GitHub</a>
+              <a href="https://github.com/naimkatiman/halalflow" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-600 transition-colors" aria-label="MosRev GitHub repository (opens in new tab)">GitHub</a>
               <span>Open Source</span>
             </div>
           </div>

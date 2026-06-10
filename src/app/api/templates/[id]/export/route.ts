@@ -1,21 +1,29 @@
+import { isOrgSubscribed } from "@/lib/require-subscription";
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: { "Cache-Control": "no-store" } });
+    if (!session.orgId) return NextResponse.json({ error: "No active organization" }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    if (!(await isOrgSubscribed(session.orgId))) return NextResponse.json({ error: "Subscription required" }, { status: 402, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
-    const template = await prisma.workflowTemplate.findFirst({
-      where: { id, orgId: session.orgId },
-      include: { steps: { orderBy: { order: "asc" } } },
+    const result = await withOrg(session.orgId, async (tx) => {
+      const template = await tx.workflowTemplate.findFirst({
+        where: { id, orgId: session.orgId },
+        include: { steps: { orderBy: { order: "asc" } } },
+      });
+      if (!template) return { error: "Not found", status: 404 } as const;
+      return { template } as const;
     });
-    if (!template) return NextResponse.json({ error: "Not found" }, { status: 404, headers: { "Cache-Control": "no-store" } });
+    if ("error" in result) return NextResponse.json({ error: result.error }, { status: result.status, headers: { "Cache-Control": "no-store" } });
 
+    const template = result.template;
     const exportData = {
       name: template.name,
       description: template.description,

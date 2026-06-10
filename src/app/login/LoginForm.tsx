@@ -2,11 +2,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { GitBranch } from '@phosphor-icons/react';
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Only same-site paths — "//host" or "https://…" would be an open redirect.
+  const redirectParam = searchParams.get('redirect');
+  const safeRedirect =
+    redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//') ? redirectParam : null;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,7 +32,9 @@ export function LoginForm() {
         setError(data.error || 'Login failed');
         return;
       }
-      if (!data.org) {
+      if (safeRedirect) {
+        router.push(safeRedirect);
+      } else if (!data.org) {
         router.push('/onboarding');
       } else {
         router.push('/dashboard');
@@ -46,7 +53,7 @@ export function LoginForm() {
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
           <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" aria-hidden="true" />
-          <span className="font-bold text-zinc-950">HalalFlow</span>
+          <span className="font-bold text-zinc-950">MosRev</span>
         </div>
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm">
           <h1 className="text-xl font-bold text-zinc-950 mb-1">Sign in</h1>

@@ -1,9 +1,11 @@
+import { zodErrorMessage } from "@/lib/api-errors";
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
+import { isOrgSubscribed } from "@/lib/require-subscription";
 import { z } from "zod";
 
 const importStepSchema = z.object({
@@ -27,20 +29,23 @@ export async function POST(request: NextRequest) {
 
     const csrf = await validateCsrfToken(request);
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
+    if (!(await isOrgSubscribed(session.orgId))) return NextResponse.json({ error: "Subscription required" }, { status: 402, headers: { "Cache-Control": "no-store" } });
 
     const body = await request.json();
     const { name, description, steps } = importSchema.parse(body);
 
     const sortedSteps = [...steps].sort((a, b) => a.order - b.order);
 
-    const template = await prisma.workflowTemplate.create({
-      data: {
-        orgId: session.orgId,
-        name,
-        description,
-        steps: { create: sortedSteps.map((s) => ({ name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
-      },
-      include: { steps: { orderBy: { order: "asc" } } },
+    const template = await withOrg(session.orgId, async (tx) => {
+      return tx.workflowTemplate.create({
+        data: {
+          orgId: session.orgId,
+          name,
+          description,
+          steps: { create: sortedSteps.map((s) => ({ orgId: session.orgId, name: s.name, description: s.description, order: s.order, requiredRole: s.requiredRole })) },
+        },
+        include: { steps: { orderBy: { order: "asc" } } },
+      });
     });
 
     return NextResponse.json(
@@ -48,7 +53,7 @@ export async function POST(request: NextRequest) {
       { status: 201, headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } }
     );
   } catch (error) {
-    if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    if (error instanceof z.ZodError) return NextResponse.json({ error: zodErrorMessage(error) }, { status: 400, headers: { "Cache-Control": "no-store" } });
     console.error("POST /api/templates/import error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }

@@ -4,12 +4,13 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { withOrg } from '@/lib/db';
+import { requireActiveSubscription } from '@/lib/require-subscription';
 import { Plus, Clipboard } from '@phosphor-icons/react/dist/ssr';
 import { ImportButton } from './ImportButton';
 
 export const metadata: Metadata = {
-  title: 'Templates — HalalFlow',
+  title: 'Templates — MosRev',
   description:
     'Create and manage reusable workflow templates for your organization. Define multi-step approval processes.',
 };
@@ -24,25 +25,29 @@ export default async function TemplatesPage({
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
+  await requireActiveSubscription(session.orgId);
 
   const { page: pageRaw } = await searchParams;
   const page = Math.max(1, Number(pageRaw ?? '1'));
 
-  const [templates, total] = await Promise.all([
-    prisma.workflowTemplate.findMany({
-      where: { orgId: session.orgId },
-      include: {
-        steps: { orderBy: { order: 'asc' } },
-        _count: { select: { workflows: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-    }),
-    prisma.workflowTemplate.count({
-      where: { orgId: session.orgId },
-    }),
-  ]);
+  const { templates, total } = await withOrg(session.orgId, async (tx) => {
+    const [templates, total] = await Promise.all([
+      tx.workflowTemplate.findMany({
+        where: { orgId: session.orgId },
+        include: {
+          steps: { orderBy: { order: 'asc' } },
+          _count: { select: { workflows: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      }),
+      tx.workflowTemplate.count({
+        where: { orgId: session.orgId },
+      }),
+    ]);
+    return { templates, total };
+  });
 
   const pages = Math.ceil(total / PAGE_SIZE);
 

@@ -4,6 +4,11 @@ export interface SeedTemplate {
   steps: { name: string; description: string; order: number }[];
 }
 
+/**
+ * Default workflow templates seeded into every new organization at signup
+ * provisioning (and by `prisma/seed.ts`). Single source of truth — import from
+ * here, do not duplicate.
+ */
 export const defaultTemplates: SeedTemplate[] = [
   {
     name: "Mosque Expense Approval",

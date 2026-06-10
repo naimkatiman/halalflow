@@ -34,7 +34,7 @@ function getSessionPassword(): string {
 
 export const sessionOptions: SessionOptions = {
   password: getSessionPassword(),
-  cookieName: "halalflow_session",
+  cookieName: "mosrev_session",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,

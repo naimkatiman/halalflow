@@ -3,15 +3,16 @@ import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { prismaAdmin, withOrg } from '@/lib/db';
 import { InviteMemberForm } from './InviteMemberForm';
+import { CopyInviteLink } from './CopyInviteLink';
 import { OrgSwitcher } from './OrgSwitcher';
 import { Buildings, Users, PaperPlaneTilt } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Settings — HalalFlow',
+  title: 'Settings — MosRev',
   description:
-    "Manage your organization's members, switch workspaces, and configure HalalFlow preferences.",
+    "Manage your organization's members, switch workspaces, and configure MosRev preferences.",
 };
 
 export default async function SettingsPage() {
@@ -19,27 +20,31 @@ export default async function SettingsPage() {
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
 
-  const org = await prisma.organization.findUnique({
-    where: { id: session.orgId },
-    include: {
-      members: {
-        include: { user: { select: { id: true, name: true, email: true } } },
-        orderBy: { createdAt: 'asc' },
+  const canInvite = ['owner', 'admin'].includes(session.orgRole);
+
+  const { org, pendingInvites } = await withOrg(session.orgId, async (tx) => {
+    const org = await tx.organization.findUnique({
+      where: { id: session.orgId },
+      include: {
+        members: {
+          include: { user: { select: { id: true, name: true, email: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
       },
-    },
+    });
+    const pendingInvites = canInvite && org
+      ? await tx.invitation.findMany({
+          where: { orgId: session.orgId, acceptedAt: null, expiresAt: { gt: new Date() } },
+          orderBy: { createdAt: 'asc' },
+        })
+      : [];
+    return { org, pendingInvites };
   });
   if (!org) redirect('/onboarding');
 
-  const canInvite = ['owner', 'admin'].includes(session.orgRole);
-
-  const pendingInvites = canInvite
-    ? await prisma.invitation.findMany({
-        where: { orgId: session.orgId, acceptedAt: null, expiresAt: { gt: new Date() } },
-        orderBy: { createdAt: 'asc' },
-      })
-    : [];
-
-  const memberships = await prisma.orgMember.findMany({
+  // Cross-org: which workspaces this user can switch between. RLS would hide
+  // every org but the active one, so this lookup uses the BYPASSRLS admin client.
+  const memberships = await prismaAdmin.orgMember.findMany({
     where: { userId: session.userId },
     include: { org: true },
     orderBy: { createdAt: 'asc' },
@@ -73,9 +78,12 @@ export default async function SettingsPage() {
             <span className="text-sm text-zinc-500">Name</span>
             <span className="text-sm font-medium text-zinc-950">{org.name}</span>
           </div>
-          <div className="flex items-center justify-between py-2 border-b border-zinc-100">
-            <span className="text-sm text-zinc-500">Slug</span>
-            <span className="text-sm font-mono text-zinc-700">{org.slug}</span>
+          <div className="flex items-center justify-between gap-3 py-2 border-b border-zinc-100">
+            <span className="text-sm text-zinc-500 shrink-0">Workspace link</span>
+            <span className="flex items-center gap-3 min-w-0">
+              <span className="text-sm font-mono text-zinc-700 truncate">/t/{org.slug}</span>
+              <CopyInviteLink url={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/t/${org.slug}`} label="Copy" />
+            </span>
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-zinc-500">Your role</span>
@@ -111,11 +119,14 @@ export default async function SettingsPage() {
               <p className="text-xs font-semibold text-zinc-700">Pending invitations ({pendingInvites.length})</p>
             </div>
             {pendingInvites.map((invite) => (
-              <div key={invite.id} className="flex items-center justify-between py-1">
-                <span className="text-sm text-zinc-600">{invite.email}</span>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
-                  {invite.role}
-                </span>
+              <div key={invite.id} className="flex items-center justify-between gap-3 py-1">
+                <span className="text-sm text-zinc-600 truncate">{invite.email}</span>
+                <div className="flex items-center gap-3 shrink-0">
+                  <CopyInviteLink url={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/invites/${invite.token}`} />
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
+                    {invite.role}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

@@ -19,6 +19,8 @@ export function NewWorkflowForm() {
   const preselectedId = searchParams.get('templateId') ?? '';
 
   const [templates, setTemplates] = useState<Template[]>([]);
+  const [templatesLoading, setTemplatesLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [templateId, setTemplateId] = useState(preselectedId);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -27,7 +29,13 @@ export function NewWorkflowForm() {
 
   useEffect(() => {
     fetch('/api/templates')
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) {
+          const d = await r.json().catch(() => null);
+          throw new Error(typeof d?.error === 'string' ? d.error : 'Could not load templates');
+        }
+        return r.json();
+      })
       .then((d) => {
         setTemplates(d.templates ?? []);
         if (preselectedId) setTemplateId(preselectedId);
@@ -35,7 +43,11 @@ export function NewWorkflowForm() {
           setTemplateId((prev) => prev || d.templates[0].id);
         }
       })
-      .catch((err) => { console.error('NewWorkflowForm template fetch failed:', err); });
+      .catch((err) => {
+        console.error('NewWorkflowForm template fetch failed:', err);
+        setLoadError(err instanceof Error ? err.message : 'Could not load templates');
+      })
+      .finally(() => setTemplatesLoading(false));
   }, [preselectedId]);
 
   const selectedTemplate = templates.find((t) => t.id === templateId);
@@ -73,7 +85,25 @@ export function NewWorkflowForm() {
         <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">New Workflow</h1>
       </div>
 
-      {templates.length === 0 ? (
+      {templatesLoading ? (
+        <div className="bg-white border border-zinc-200/70 rounded-xl p-6 space-y-4" aria-busy="true">
+          <div className="h-4 w-32 bg-zinc-100 rounded animate-pulse" />
+          <div className="h-9 bg-zinc-100 rounded-lg animate-pulse" />
+          <div className="h-9 bg-zinc-100 rounded-lg animate-pulse" />
+          <div className="h-9 w-2/3 bg-zinc-100 rounded-lg animate-pulse" />
+        </div>
+      ) : loadError ? (
+        <div className="bg-white border border-zinc-200/70 rounded-xl p-8 text-center">
+          <p className="text-sm text-red-600 mb-3" role="alert">{loadError}</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+          >
+            Try again
+          </button>
+        </div>
+      ) : templates.length === 0 ? (
         <div className="bg-white border border-zinc-200/70 rounded-xl p-8 text-center">
           <p className="text-sm text-zinc-500 mb-3">You need at least one template to create a workflow.</p>
           <Link href="/templates/new" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">

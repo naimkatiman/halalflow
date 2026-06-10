@@ -4,20 +4,21 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
-import { prisma } from '@/lib/db';
+import { withOrg } from '@/lib/db';
+import { requireActiveSubscription } from '@/lib/require-subscription';
 import { Plus, FunnelSimple } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
-  title: 'Workflows — HalalFlow',
+  title: 'Workflows — MosRev',
   description:
     'View and manage approval workflows across your organization. Track status, submit new requests, and review audit logs.',
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  in_progress: 'In Progress',
+  in_progress: 'Awaiting approval',
   approved: 'Approved',
   rejected: 'Rejected',
-  pending: 'Pending',
+  pending: 'Awaiting approval',
 };
 
 const STATUS_CLS: Record<string, string> = {
@@ -37,30 +38,34 @@ export default async function WorkflowsPage({
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
+  await requireActiveSubscription(session.orgId);
 
   const { status, page: pageRaw } = await searchParams;
   const page = Math.max(1, Number(pageRaw ?? '1'));
 
-  const [workflows, total] = await Promise.all([
-    prisma.workflow.findMany({
-      where: { orgId: session.orgId, ...(status ? { status } : {}) },
-      include: {
-        template: { select: { name: true } },
-        createdBy: { select: { name: true } },
-        approvals: { select: { status: true } },
-        _count: { select: { comments: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-    }),
-    prisma.workflow.count({
-      where: { orgId: session.orgId, ...(status ? { status } : {}) },
-    }),
-  ]);
+  const { workflows, total } = await withOrg(session.orgId, async (tx) => {
+    const [workflows, total] = await Promise.all([
+      tx.workflow.findMany({
+        where: { orgId: session.orgId, ...(status ? { status } : {}) },
+        include: {
+          template: { select: { name: true } },
+          createdBy: { select: { name: true } },
+          approvals: { select: { status: true } },
+          _count: { select: { comments: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      }),
+      tx.workflow.count({
+        where: { orgId: session.orgId, ...(status ? { status } : {}) },
+      }),
+    ]);
+    return { workflows, total };
+  });
 
   const pages = Math.ceil(total / PAGE_SIZE);
-  const filters = ['', 'pending', 'in_progress', 'approved', 'rejected'] as const;
+  const filters = ['', 'in_progress', 'approved', 'rejected'] as const;
 
   return (
     <div className="space-y-6">
