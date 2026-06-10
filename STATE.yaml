@@ -1,17 +1,25 @@
 project: halalflow
-updated: 2026-06-10T05:15:06+08:00
+updated: 2026-06-10T10:15:09+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T05:15:06+08:00
-  change: "Add zod .trim() to comment body API schema and trim body in CommentForm before sending — prevents whitespace-only or whitespace-padded comments from entering the DB and keeps the API consistent with other text fields"
+  date: 2026-06-10T10:15:09+08:00
+  change: "Trim email before sending in LoginForm, RegisterForm, and InviteMemberForm — prevents zod email validation failures from accidental leading/trailing whitespace and keeps client-side behavior consistent with server-side normalization"
   files:
-    - src/app/api/workflows/[id]/comments/route.ts
-    - src/app/workflows/[id]/CommentForm.tsx
+    - src/app/login/LoginForm.tsx
+    - src/app/register/RegisterForm.tsx
+    - src/app/settings/InviteMemberForm.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-10T05:15:06+08:00
+    change: "Add zod .trim() to comment body API schema and trim body in CommentForm before sending — prevents whitespace-only or whitespace-padded comments from entering the DB and keeps the API consistent with other text fields"
+    files:
+      - src/app/api/workflows/[id]/comments/route.ts
+      - src/app/workflows/[id]/CommentForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-10T04:15:07+08:00
     change: "Add zod .trim() to template step update API schema — aligns with creation and import APIs that already trim step names/descriptions, preventing whitespace-only or whitespace-padded step data from entering the DB via edits"
     files:
