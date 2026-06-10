@@ -1,17 +1,25 @@
 project: halalflow
-updated: 2026-06-10T14:18:07+08:00
+updated: 2026-06-10T15:15:06+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T14:18:07+08:00
-  change: "Ignore .claude/ worktree directory in eslint.config.mjs and .gitignore — prevents eslint from scanning build artifacts inside Claude Code worktrees and stops git from tracking them"
+  date: 2026-06-10T15:15:06+08:00
+  change: "Add zod .trim() to email schemas in login, register, and invite APIs — prevents accidental leading/trailing whitespace in email addresses from failing validation when users or scripts hit the API directly, keeping auth and invite endpoints consistent with other trimmed text fields"
   files:
-    - eslint.config.mjs
-    - .gitignore
+    - src/app/api/auth/login/route.ts
+    - src/app/api/auth/register/route.ts
+    - src/app/api/orgs/[id]/members/route.ts
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
+  - date: 2026-06-10T14:18:07+08:00
+    change: "Ignore .claude/ worktree directory in eslint.config.mjs and .gitignore — prevents eslint from scanning build artifacts inside Claude Code worktrees and stops git from tracking them"
+    files:
+      - eslint.config.mjs
+      - .gitignore
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
   - date: 2026-06-10T12:15:07+08:00
     change: "Add zod .trim() to approval note API schema and trim note in ApprovalActions before sending — prevents whitespace-only or whitespace-padded approval notes from entering the DB and keeps the approval endpoint consistent with other text fields"
     files:
