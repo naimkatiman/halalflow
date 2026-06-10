@@ -10,12 +10,19 @@ import { isSubscriptionActive } from "@/lib/subscription";
  * Call after the auth/orgId guards in protected content pages.
  */
 export async function requireActiveSubscription(orgId: string): Promise<void> {
-  if (!isStripeConfigured()) return;
+  if (await isOrgSubscribed(orgId)) return;
+  redirect("/billing");
+}
+
+/**
+ * Boolean form for API route handlers (which return a 402 instead of
+ * redirecting). Always true when Stripe is unconfigured (paywall off).
+ */
+export async function isOrgSubscribed(orgId: string): Promise<boolean> {
+  if (!isStripeConfigured()) return true;
   const org = await prismaAdmin.organization.findUnique({
     where: { id: orgId },
     select: { subscriptionStatus: true },
   });
-  if (!isSubscriptionActive(org?.subscriptionStatus)) {
-    redirect("/billing");
-  }
+  return isSubscriptionActive(org?.subscriptionStatus);
 }

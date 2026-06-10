@@ -56,14 +56,17 @@ export async function POST(request: NextRequest) {
         break;
       }
       case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session;
-        const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id;
+        const checkout = event.data.object as Stripe.Checkout.Session;
+        const customerId = typeof checkout.customer === "string" ? checkout.customer : checkout.customer?.id;
         const subscriptionId =
-          typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
+          typeof checkout.subscription === "string" ? checkout.subscription : checkout.subscription?.id;
         if (customerId && subscriptionId) {
+          // Read the real status from Stripe rather than assuming "active" — a
+          // trial checkout should land as "trialing", not be force-activated.
+          const sub = await stripe.subscriptions.retrieve(subscriptionId);
           await prismaAdmin.organization.updateMany({
             where: { stripeCustomerId: customerId },
-            data: { stripeSubscriptionId: subscriptionId, subscriptionStatus: "active" },
+            data: { stripeSubscriptionId: subscriptionId, subscriptionStatus: sub.status, currentPeriodEnd: periodEnd(sub) },
           });
         }
         break;

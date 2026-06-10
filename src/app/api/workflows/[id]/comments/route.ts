@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { withOrg } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
+import { isOrgSubscribed } from "@/lib/require-subscription";
 import { z } from "zod";
 
 const commentSchema = z.object({
@@ -17,6 +18,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     const csrf = await validateCsrfToken(request);
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
+    if (!(await isOrgSubscribed(session.orgId))) return NextResponse.json({ error: "Subscription required" }, { status: 402, headers: { "Cache-Control": "no-store" } });
 
     const { id } = await params;
 

@@ -28,6 +28,17 @@ export const prisma =
  * application layer, since RLS is not enforcing isolation here.
  */
 const adminUrl = process.env.DATABASE_URL_ADMIN;
+if (
+  !adminUrl &&
+  process.env.NODE_ENV === "production" &&
+  process.env.NEXT_PHASE !== "phase-production-build"
+) {
+  // Falling back to the RLS-enforced app role means provisioning, Stripe
+  // webhooks, and cross-org lookups will fail closed. Surface it loudly.
+  console.warn(
+    "DATABASE_URL_ADMIN is not set — prismaAdmin is using the least-privilege app role; admin/cross-org operations will not work.",
+  );
+}
 export const prismaAdmin =
   globalForPrisma.prismaAdmin ??
   new PrismaClient({

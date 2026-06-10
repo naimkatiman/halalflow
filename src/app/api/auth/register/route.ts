@@ -43,69 +43,83 @@ export async function POST(request: NextRequest) {
     if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 409, headers: { "Cache-Control": "no-store" } });
 
     const hashed = await bcrypt.hash(password, 12);
-    const user = await prismaAdmin.user.create({ data: { name, email: normalizedEmail, password: hashed } });
 
-    let orgId = "";
-    let orgRole = "";
+    // Create the user together with any invite acceptance / org provisioning in
+    // ONE transaction: a failure (slug collision, template insert, …) rolls the
+    // user back too, so we never leave an orphaned, permanently-locked account.
+    let result: {
+      user: { id: string; email: string; name: string; role: string };
+      orgId: string;
+      orgRole: string;
+      newOrgId: string | null;
+    };
+    try {
+      result = await prismaAdmin.$transaction(async (tx) => {
+        const user = await tx.user.create({ data: { name, email: normalizedEmail, password: hashed } });
+        let orgId = "";
+        let orgRole = "";
+        let newOrgId: string | null = null;
 
-    if (inviteToken) {
-      // Auto-accept pending invitation if token matches
-      const invite = await prismaAdmin.invitation.findUnique({ where: { token: inviteToken } });
-      if (
-        invite &&
-        !invite.acceptedAt &&
-        invite.expiresAt > new Date() &&
-        invite.email.toLowerCase() === normalizedEmail
-      ) {
-        await prismaAdmin.$transaction([
-          prismaAdmin.orgMember.create({
-            data: { orgId: invite.orgId, userId: user.id, role: invite.role },
-          }),
-          prismaAdmin.invitation.update({
-            where: { id: invite.id },
-            data: { acceptedAt: new Date() },
-          }),
-        ]);
-        orgId = invite.orgId;
-        orgRole = invite.role;
-      }
-    } else if (orgName) {
-      // Provision a brand-new org + owner membership + default templates in one
-      // transaction (admin client: no org context exists yet to satisfy RLS).
-      let slug = slugify(orgName) || "workspace";
-      const clash = await prismaAdmin.organization.findUnique({ where: { slug } });
-      if (clash) slug = `${slug}-${Date.now().toString(36)}`;
-
-      const org = await prismaAdmin.$transaction(async (tx) => {
-        const created = await tx.organization.create({
-          data: { name: orgName, slug, members: { create: { userId: user.id, role: "owner" } } },
-        });
-        for (const t of defaultTemplates) {
-          await tx.workflowTemplate.create({
-            data: {
-              orgId: created.id,
-              name: t.name,
-              description: t.description,
-              steps: { create: t.steps.map((s) => ({ orgId: created.id, name: s.name, description: s.description, order: s.order })) },
-            },
+        if (inviteToken) {
+          const invite = await tx.invitation.findUnique({ where: { token: inviteToken } });
+          if (
+            invite &&
+            !invite.acceptedAt &&
+            invite.expiresAt > new Date() &&
+            invite.email.toLowerCase() === normalizedEmail
+          ) {
+            await tx.orgMember.create({ data: { orgId: invite.orgId, userId: user.id, role: invite.role } });
+            await tx.invitation.update({ where: { id: invite.id }, data: { acceptedAt: new Date() } });
+            orgId = invite.orgId;
+            orgRole = invite.role;
+          }
+          // Invalid/expired/mismatched invite → orgId stays empty → onboarding.
+        } else if (orgName) {
+          let slug = slugify(orgName) || "workspace";
+          const clash = await tx.organization.findUnique({ where: { slug } });
+          if (clash) slug = `${slug}-${Date.now().toString(36)}`;
+          const org = await tx.organization.create({
+            data: { name: orgName, slug, members: { create: { userId: user.id, role: "owner" } } },
           });
+          for (const t of defaultTemplates) {
+            await tx.workflowTemplate.create({
+              data: {
+                orgId: org.id,
+                name: t.name,
+                description: t.description,
+                steps: { create: t.steps.map((s) => ({ orgId: org.id, name: s.name, description: s.description, order: s.order })) },
+              },
+            });
+          }
+          orgId = org.id;
+          orgRole = "owner";
+          newOrgId = org.id;
         }
-        return created;
-      });
-      orgId = org.id;
-      orgRole = "owner";
 
-      // Create the Stripe customer AFTER the org is committed. Non-fatal: if
-      // Stripe is unconfigured or the call fails, the org still works (trialing).
+        return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, orgId, orgRole, newOrgId };
+      });
+    } catch (err) {
+      // Unique violation (race on email or org slug). Nothing was committed —
+      // the whole transaction rolled back — so the request is safe to retry.
+      if (typeof err === "object" && err !== null && "code" in err && (err as { code?: string }).code === "P2002") {
+        return NextResponse.json(
+          { error: "That email or workspace name is already taken. Please try again." },
+          { status: 409, headers: { "Cache-Control": "no-store" } }
+        );
+      }
+      throw err;
+    }
+
+    const { user, orgId, orgRole, newOrgId } = result;
+
+    // Create the Stripe customer AFTER commit. Non-fatal: if Stripe is
+    // unconfigured or the call fails, the org still works (trialing).
+    if (newOrgId) {
       const stripe = getStripe();
       if (stripe) {
         try {
-          const customer = await stripe.customers.create({
-            email: normalizedEmail,
-            name: orgName,
-            metadata: { orgId },
-          });
-          await prismaAdmin.organization.update({ where: { id: orgId }, data: { stripeCustomerId: customer.id } });
+          const customer = await stripe.customers.create({ email: normalizedEmail, name: orgName, metadata: { orgId: newOrgId } });
+          await prismaAdmin.organization.update({ where: { id: newOrgId }, data: { stripeCustomerId: customer.id } });
         } catch (err) {
           console.error("Stripe customer creation failed (non-fatal):", err);
         }
