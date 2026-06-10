@@ -66,6 +66,7 @@ export function Navbar() {
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
             <a href="#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
             <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
+            <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login" className="hidden sm:block text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
@@ -104,6 +105,13 @@ export function Navbar() {
               onClick={() => setMobileOpen(false)}
             >
               How it works
+            </a>
+            <a
+              href="#pricing"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Pricing
             </a>
             <div className="pt-2 border-t border-zinc-100 flex flex-col gap-2">
               <Link
