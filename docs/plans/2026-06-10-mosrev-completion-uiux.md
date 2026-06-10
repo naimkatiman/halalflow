@@ -63,6 +63,24 @@ states, responsive, a11y (focus, labels, contrast), consistent design tokens, Na
 Two-sided marketplace, vendor/donor roles, custom domains, payouts, mobile,
 "super app" breadth. Stripe live verification (needs owner account).
 
+## Status (end of session 2026-06-10)
+- **Phase 2b — DONE & verified.** All 25 tenant queries scoped (withOrg / prismaAdmin /
+  withOrg(id)). Proof: `scripts/rls-isolation-check.ts` (5/5, fails closed), green build,
+  live HTTP — login + org-scoped reads return real data; cross-org reads denied
+  (`orgs/[id]`=404, `members`=403, `switch`=403); 401 on anon.
+- **Phase 3 — DONE & verified.** `/t/<slug>` membership routing + nodejs `proxy` auth
+  guard. Live: non-member → access-denied, no data leak, no session change; unknown → 404.
+- **UI/UX — DONE (bounded).** Layout-matching loading skeletons (dashboard/workflows/
+  templates), `:focus-visible` rings, Skeleton/EmptyState primitives. The app already had
+  error/global-error/not-found boundaries, strong a11y, responsive nav — left intact.
+- **Phase 4 (Stripe) — DEFERRED.** Needs (a) approval to add the `stripe` dependency and
+  (b) the owner's Stripe account to verify `stripe trigger`. Design unchanged: schema
+  fields + webhook (prismaAdmin) + register provisioning + paywall that no-ops when
+  `STRIPE_SECRET_KEY` is unset.
+- **Phase 5 (rebrand) — DEFERRED (decision).** HalalFlow→MosRev is a product-identity call
+  (~28 files, own domain). One mechanical commit when confirmed; cookie at `session.ts`.
+- **Production cutover — HELD.** Irreversible SQLite→Postgres switch awaits explicit go.
+
 ## Discipline
 One concern per commit. Split commits >15 files by layer (API vs pages). Lead messages
 with the outcome. Hold the production SQLite→Postgres cutover for explicit go-ahead.
