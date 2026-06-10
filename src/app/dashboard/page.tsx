@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { requireActiveSubscription } from '@/lib/require-subscription';
-import { CheckCircle, XCircle, Clock, Hourglass, ArrowsClockwise, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
+import { CheckCircle, XCircle, Clock, ArrowsClockwise, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
   title: 'Dashboard — MosRev',
@@ -20,8 +20,8 @@ export default async function DashboardPage() {
   if (!session.orgId) redirect('/onboarding');
   await requireActiveSubscription(session.orgId);
 
-  const { workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount } = await withOrg(session.orgId, async (tx) => {
-    const [workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount] = await Promise.all([
+  const { workflows, templates, org, totalWorkflows, inProgressCount, approvedCount, rejectedCount } = await withOrg(session.orgId, async (tx) => {
+    const [workflows, templates, org, totalWorkflows, inProgressCount, approvedCount, rejectedCount] = await Promise.all([
       tx.workflow.findMany({
         where: { orgId: session.orgId },
         include: {
@@ -34,25 +34,23 @@ export default async function DashboardPage() {
       tx.workflowTemplate.count({ where: { orgId: session.orgId } }),
       tx.organization.findUnique({ where: { id: session.orgId } }),
       tx.workflow.count({ where: { orgId: session.orgId } }),
-      tx.workflow.count({ where: { orgId: session.orgId, status: 'pending' } }),
       tx.workflow.count({ where: { orgId: session.orgId, status: 'in_progress' } }),
       tx.workflow.count({ where: { orgId: session.orgId, status: 'approved' } }),
       tx.workflow.count({ where: { orgId: session.orgId, status: 'rejected' } }),
     ]);
-    return { workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount };
+    return { workflows, templates, org, totalWorkflows, inProgressCount, approvedCount, rejectedCount };
   });
 
   const stats = {
     total: totalWorkflows,
-    pending: pendingCount,
     inProgress: inProgressCount,
     approved: approvedCount,
     rejected: rejectedCount,
   };
 
   const statusConfig: Record<string, { label: string; cls: string }> = {
-    in_progress: { label: 'In Progress', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-    pending: { label: 'Pending', cls: 'bg-amber-50 text-amber-700 border-amber-100' },
+    in_progress: { label: 'Awaiting approval', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
+    pending: { label: 'Awaiting approval', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
     approved: { label: 'Approved', cls: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
     rejected: { label: 'Rejected', cls: 'bg-red-50 text-red-700 border-red-100' },
 
@@ -74,11 +72,10 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total', value: stats.total, icon: Clock, color: 'text-zinc-600', href: '/workflows' },
-          { label: 'Pending', value: stats.pending, icon: Hourglass, color: 'text-amber-600', href: '/workflows?status=pending' },
-          { label: 'In Progress', value: stats.inProgress, icon: ArrowsClockwise, color: 'text-blue-600', href: '/workflows?status=in_progress' },
+          { label: 'Awaiting approval', value: stats.inProgress, icon: ArrowsClockwise, color: 'text-blue-600', href: '/workflows?status=in_progress' },
           { label: 'Approved', value: stats.approved, icon: CheckCircle, color: 'text-emerald-600', href: '/workflows?status=approved' },
           { label: 'Rejected', value: stats.rejected, icon: XCircle, color: 'text-red-600', href: '/workflows?status=rejected' },
         ].map(({ label, value, icon: Icon, color, href }) => (

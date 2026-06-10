@@ -24,10 +24,10 @@ const STATUS_CLS: Record<string, string> = {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  in_progress: 'In Progress',
+  in_progress: 'Awaiting approval',
   approved: 'Approved',
   rejected: 'Rejected',
-  pending: 'Pending',
+  pending: 'Awaiting approval',
 };
 
 export default async function WorkflowPage({ params }: { params: Promise<{ id: string }> }) {

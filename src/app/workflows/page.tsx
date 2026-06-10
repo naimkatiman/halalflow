@@ -15,10 +15,10 @@ export const metadata: Metadata = {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  in_progress: 'In Progress',
+  in_progress: 'Awaiting approval',
   approved: 'Approved',
   rejected: 'Rejected',
-  pending: 'Pending',
+  pending: 'Awaiting approval',
 };
 
 const STATUS_CLS: Record<string, string> = {
@@ -65,7 +65,7 @@ export default async function WorkflowsPage({
   });
 
   const pages = Math.ceil(total / PAGE_SIZE);
-  const filters = ['', 'pending', 'in_progress', 'approved', 'rejected'] as const;
+  const filters = ['', 'in_progress', 'approved', 'rejected'] as const;
 
   return (
     <div className="space-y-6">
