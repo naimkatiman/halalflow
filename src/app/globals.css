@@ -48,6 +48,44 @@ body {
   border-radius: 2px;
 }
 
+/* Consistent keyboard focus ring across interactive elements. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* Skeleton loading shimmer — used by the Skeleton primitive. */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(39, 39, 42, 0.06);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -72,5 +110,8 @@ body {
   .animate-fade-up {
     animation: none;
     opacity: 1;
+  }
+  .skeleton::after {
+    animation: none;
   }
 }
