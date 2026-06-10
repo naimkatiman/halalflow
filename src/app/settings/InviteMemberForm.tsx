@@ -22,7 +22,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
       const res = await fetchWithCsrf(`/api/orgs/${orgId}/members`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, role }),
+        body: JSON.stringify({ email: email.trim(), role }),
       });
       const data = await res.json();
       if (!res.ok) {
