@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prismaAdmin } from "@/lib/db";
+import { getStripe } from "@/lib/stripe";
+import { defaultTemplates } from "@/lib/default-templates";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { z } from "zod";
@@ -50,13 +52,38 @@ export async function POST(request: NextRequest) {
     const existing = await prismaAdmin.organization.findUnique({ where: { slug } });
     if (existing) slug = `${slug}-${Date.now()}`;
 
-    const org = await prismaAdmin.organization.create({
-      data: {
-        name,
-        slug,
-        members: { create: { userId: session.userId, role: "owner" } },
-      },
+    // Provision exactly like signup-with-org: org + owner + starter templates
+    // in one transaction, so both paths land on the same first-run experience.
+    const org = await prismaAdmin.$transaction(async (tx) => {
+      const created = await tx.organization.create({
+        data: {
+          name,
+          slug,
+          members: { create: { userId: session.userId, role: "owner" } },
+        },
+      });
+      for (const t of defaultTemplates) {
+        await tx.workflowTemplate.create({
+          data: {
+            orgId: created.id,
+            name: t.name,
+            description: t.description,
+            steps: { create: t.steps.map((s) => ({ orgId: created.id, name: s.name, description: s.description, order: s.order })) },
+          },
+        });
+      }
+      return created;
     });
+
+    const stripe = getStripe();
+    if (stripe) {
+      try {
+        const customer = await stripe.customers.create({ email: session.email, name, metadata: { orgId: org.id } });
+        await prismaAdmin.organization.update({ where: { id: org.id }, data: { stripeCustomerId: customer.id } });
+      } catch (err) {
+        console.error("Stripe customer creation failed (non-fatal):", err);
+      }
+    }
 
     session.orgId = org.id;
     session.orgRole = "owner";
