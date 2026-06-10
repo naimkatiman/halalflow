@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X } from '@phosphor-icons/react';
+import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
@@ -12,6 +12,7 @@ interface NavUser {
   name: string;
   email: string;
   orgId: string;
+  orgName?: string | null;
 }
 
 export function Navbar() {
@@ -20,12 +21,18 @@ export function Navbar() {
   const [user, setUser] = useState<NavUser | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const isPublicPage =
+    pathname === '/' || pathname === '/login' || pathname === '/register' || pathname === '/onboarding';
+
   useEffect(() => {
+    // Public pages render without a session — probing /api/auth/me there just
+    // logs a 401 in every visitor's console.
+    if (isPublicPage) return;
     fetch('/api/auth/me')
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => { if (data?.user) setUser(data.user); })
       .catch((err) => { console.error('Navbar auth check failed:', err); });
-  }, []);
+  }, [isPublicPage]);
 
   const handleLogout = async () => {
     await fetchWithCsrf('/api/auth/logout', { method: 'POST' });
@@ -124,6 +131,7 @@ export function Navbar() {
     { href: '/dashboard', label: 'Dashboard', icon: SquaresFour },
     { href: '/workflows', label: 'Workflows', icon: CheckSquare },
     { href: '/templates', label: 'Templates', icon: Clipboard },
+    { href: '/billing', label: 'Billing', icon: CreditCard },
     { href: '/settings', label: 'Settings', icon: GearSix },
   ];
 
@@ -155,6 +163,16 @@ export function Navbar() {
           </nav>
         </div>
         <div className="flex items-center gap-3">
+          {user?.orgName && (
+            <Link
+              href="/settings"
+              title={`Workspace: ${user.orgName}`}
+              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
+            >
+              <Buildings className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
+              <span className="truncate">{user.orgName}</span>
+            </Link>
+          )}
           {user && (
             <>
               <span className="text-xs text-zinc-500 hidden sm:block truncate max-w-[160px]">{user.name}</span>
