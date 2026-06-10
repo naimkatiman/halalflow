@@ -181,6 +181,18 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             )
           )}
 
+          {workflow.status === 'rejected' && (
+            <div className="bg-zinc-50 border border-zinc-200/70 rounded-xl p-4 flex items-center justify-between gap-3 flex-wrap">
+              <p className="text-sm text-zinc-600">This request was rejected. You can revise it and submit it again.</p>
+              <Link
+                href={`/workflows/new?templateId=${workflow.templateId}`}
+                className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
+              >
+                Resubmit as new workflow →
+              </Link>
+            </div>
+          )}
+
           <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
             <h2 className="font-semibold text-zinc-950 text-sm mb-4 flex items-center gap-1.5">
               <ChatCircle className="w-4 h-4 text-zinc-400" aria-hidden="true" />
