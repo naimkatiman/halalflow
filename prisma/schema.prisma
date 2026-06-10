@@ -23,11 +23,17 @@ model User {
 }
 
 model Organization {
-  id            String             @id @default(cuid())
-  name          String
-  slug          String             @unique
-  createdAt     DateTime           @default(now())
-  members       OrgMember[]
+  id                   String             @id @default(cuid())
+  name                 String
+  slug                 String             @unique
+  createdAt            DateTime           @default(now())
+  // Subscription (Stripe). Defaults to "trialing"; the paywall no-ops entirely
+  // when STRIPE_SECRET_KEY is unset, so these stay inert until Stripe is wired.
+  stripeCustomerId     String?            @unique
+  stripeSubscriptionId String?            @unique
+  subscriptionStatus   String             @default("trialing")
+  currentPeriodEnd     DateTime?
+  members              OrgMember[]
   templates     WorkflowTemplate[]
   workflows     Workflow[]
   invitations   Invitation[]
