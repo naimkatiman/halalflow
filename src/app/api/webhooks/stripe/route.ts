@@ -45,12 +45,19 @@ export async function POST(request: NextRequest) {
       case "customer.subscription.deleted": {
         const sub = event.data.object as Stripe.Subscription;
         const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+        const eventAt = new Date(event.created * 1000);
+        // Stripe delivers webhooks out of order; the lastStripeEventAt filter
+        // makes stale events a no-op instead of overwriting newer state.
         await prismaAdmin.organization.updateMany({
-          where: { stripeCustomerId: customerId },
+          where: {
+            stripeCustomerId: customerId,
+            OR: [{ lastStripeEventAt: null }, { lastStripeEventAt: { lt: eventAt } }],
+          },
           data: {
             stripeSubscriptionId: sub.id,
             subscriptionStatus: sub.status,
             currentPeriodEnd: periodEnd(sub),
+            lastStripeEventAt: eventAt,
           },
         });
         break;
@@ -64,9 +71,18 @@ export async function POST(request: NextRequest) {
           // Read the real status from Stripe rather than assuming "active" — a
           // trial checkout should land as "trialing", not be force-activated.
           const sub = await stripe.subscriptions.retrieve(subscriptionId);
+          const eventAt = new Date(event.created * 1000);
           await prismaAdmin.organization.updateMany({
-            where: { stripeCustomerId: customerId },
-            data: { stripeSubscriptionId: subscriptionId, subscriptionStatus: sub.status, currentPeriodEnd: periodEnd(sub) },
+            where: {
+              stripeCustomerId: customerId,
+              OR: [{ lastStripeEventAt: null }, { lastStripeEventAt: { lt: eventAt } }],
+            },
+            data: {
+              stripeSubscriptionId: subscriptionId,
+              subscriptionStatus: sub.status,
+              currentPeriodEnd: periodEnd(sub),
+              lastStripeEventAt: eventAt,
+            },
           });
         }
         break;

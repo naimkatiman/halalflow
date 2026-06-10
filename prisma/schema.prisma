@@ -33,6 +33,9 @@ model Organization {
   stripeSubscriptionId String?            @unique
   subscriptionStatus   String             @default("trialing")
   currentPeriodEnd     DateTime?
+  // Stripe event ordering: webhooks can arrive out of order; updates carry the
+  // event's created timestamp and skip when a newer one was already applied.
+  lastStripeEventAt    DateTime?
   members              OrgMember[]
   templates     WorkflowTemplate[]
   workflows     Workflow[]
