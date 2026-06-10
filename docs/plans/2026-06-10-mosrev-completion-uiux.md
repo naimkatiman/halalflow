@@ -73,13 +73,21 @@ Two-sided marketplace, vendor/donor roles, custom domains, payouts, mobile,
 - **UI/UX — DONE (bounded).** Layout-matching loading skeletons (dashboard/workflows/
   templates), `:focus-visible` rings, Skeleton/EmptyState primitives. The app already had
   error/global-error/not-found boundaries, strong a11y, responsive nav — left intact.
-- **Phase 4 (Stripe) — DEFERRED.** Needs (a) approval to add the `stripe` dependency and
-  (b) the owner's Stripe account to verify `stripe trigger`. Design unchanged: schema
-  fields + webhook (prismaAdmin) + register provisioning + paywall that no-ops when
-  `STRIPE_SECRET_KEY` is unset.
-- **Phase 5 (rebrand) — DEFERRED (decision).** HalalFlow→MosRev is a product-identity call
-  (~28 files, own domain). One mechanical commit when confirmed; cookie at `session.ts`.
-- **Production cutover — HELD.** Irreversible SQLite→Postgres switch awaits explicit go.
+- **Phase 4 (Stripe) — DONE (code-complete, inert until keyed).** Subscription fields +
+  migration, stripe SDK, signed webhook (prismaAdmin), checkout route (owner/admin, CSRF),
+  signup org provisioning + Stripe customer, and a paywall gate on dashboard/workflows/
+  templates that **no-ops when `STRIPE_SECRET_KEY` is unset** (verified: pages stay 200,
+  /billing shows trial mode, checkout/webhook 503 when unconfigured). Live `stripe trigger`
+  verification still pending the owner's Stripe key.
+  - **To activate:** set `STRIPE_SECRET_KEY` + `STRIPE_PRICE_ID` (recurring price) +
+    `STRIPE_WEBHOOK_SECRET`; locally `stripe listen --forward-to localhost:3000/api/webhooks/stripe`,
+    then `stripe trigger customer.subscription.updated` to confirm status sync.
+- **Phase 5 (rebrand) — DONE.** HalalFlow→MosRev across UI/metadata/emails/README; cookie
+  `mosrev_session` (session.ts + proxy in lockstep), `MOSREV_EMAIL_FROM`, package name.
+  GitHub repo URL left as-is. Cookie rename invalidates old sessions (one-time re-login).
+- **Production cutover — HELD.** Needs a provisioned prod Postgres (roles via rls-roles.sql),
+  the 3 DB URLs set on Railway, `migrate deploy` + `db:seed`, then `railway up`. Irreversible;
+  awaits explicit go (and a direct push to origin/main, which PR review currently blocks).
 
 ## Discipline
 One concern per commit. Split commits >15 files by layer (API vs pages). Lead messages
