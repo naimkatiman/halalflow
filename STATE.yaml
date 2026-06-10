@@ -1,17 +1,26 @@
 project: halalflow
-updated: 2026-06-10T11:15:10+08:00
+updated: 2026-06-10T12:15:07+08:00
 product: Islamic Finance Workflow Engine
 
 latest_cycle:
-  date: 2026-06-10T11:15:10+08:00
-  change: "Add zod .trim() to template and step description in creation, update, and import APIs and trim step description in NewTemplateForm — prevents whitespace-only or whitespace-padded descriptions from entering the DB and keeps all template endpoints consistent with the step update API that already trims descriptions"
+  date: 2026-06-10T12:15:07+08:00
+  change: "Add zod .trim() to approval note API schema and trim note in ApprovalActions before sending — prevents whitespace-only or whitespace-padded approval notes from entering the DB and keeps the approval endpoint consistent with other text fields"
   files:
-    - src/app/api/templates/route.ts
-    - src/app/api/templates/[id]/route.ts
-    - src/app/api/templates/import/route.ts
-    - src/app/templates/new/NewTemplateForm.tsx
+    - src/app/api/workflows/[id]/approve/route.ts
+    - src/app/workflows/[id]/ApprovalActions.tsx
     - STATE.yaml
   verification: "npm run lint clean; npm run build green; committed"
+
+previous_cycles:
+  - date: 2026-06-10T11:15:10+08:00
+    change: "Add zod .trim() to template and step description in creation, update, and import APIs and trim step description in NewTemplateForm — prevents whitespace-only or whitespace-padded descriptions from entering the DB and keeps all template endpoints consistent with the step update API that already trims descriptions"
+    files:
+      - src/app/api/templates/route.ts
+      - src/app/api/templates/[id]/route.ts
+      - src/app/api/templates/import/route.ts
+      - src/app/templates/new/NewTemplateForm.tsx
+      - STATE.yaml
+    verification: "npm run lint clean; npm run build green; committed"
 
 previous_cycles:
   - date: 2026-06-10T10:15:09+08:00

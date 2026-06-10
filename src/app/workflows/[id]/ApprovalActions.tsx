@@ -18,7 +18,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
       const res = await fetchWithCsrf(`/api/workflows/${workflowId}/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, note: note || undefined }),
+        body: JSON.stringify({ action, note: note.trim() || undefined }),
       });
       const data = await res.json();
       if (!res.ok) {
