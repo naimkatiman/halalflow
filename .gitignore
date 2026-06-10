@@ -51,3 +51,6 @@ next-env.d.ts
 
 # Brainstorming visual companion
 .superpowers/
+
+# Claude Code worktrees
+.claude/
