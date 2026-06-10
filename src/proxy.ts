@@ -23,6 +23,7 @@ export const config = {
     "/workflows/:path*",
     "/templates/:path*",
     "/settings/:path*",
+    "/billing/:path*",
     "/t/:path*",
   ],
 };

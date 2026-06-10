@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
+import { requireActiveSubscription } from '@/lib/require-subscription';
 import { CheckCircle, XCircle, Clock, Hourglass, ArrowsClockwise, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default async function DashboardPage() {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!session.isLoggedIn) redirect('/login');
   if (!session.orgId) redirect('/onboarding');
+  await requireActiveSubscription(session.orgId);
 
   const { workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount } = await withOrg(session.orgId, async (tx) => {
     const [workflows, templates, org, totalWorkflows, pendingCount, inProgressCount, approvedCount, rejectedCount] = await Promise.all([
