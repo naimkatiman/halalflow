@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { defaultTemplates } from "./seed-templates";
+import { defaultTemplates } from "../src/lib/default-templates";
 
 // Seeding writes to RLS-protected tables, so it connects as the BYPASSRLS
 // admin role. Falls back to DATABASE_URL only if the admin URL is unset.
