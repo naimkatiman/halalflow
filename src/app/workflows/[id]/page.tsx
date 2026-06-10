@@ -8,6 +8,7 @@ import { roleSatisfies } from '@/lib/roles';
 import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle, FileArrowDown } from '@phosphor-icons/react/dist/ssr';
 import { ApprovalActions } from './ApprovalActions';
 import { CommentForm } from './CommentForm';
+import { DeleteButton } from '@/components/DeleteButton';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -67,6 +68,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
   );
   const isActive = ['in_progress', 'pending'].includes(workflow.status);
   const canApprove = !currentApproval?.step.requiredRole || roleSatisfies(session.orgRole, currentApproval.step.requiredRole);
+  const canDelete = workflow.createdById === session.userId || ['owner', 'admin'].includes(session.orgRole);
   const sc = STATUS_CLS[workflow.status] ?? STATUS_CLS['pending'];
 
   const formatDate = (d: Date) =>
@@ -94,6 +96,13 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             </p>
           )}
         </div>
+        {canDelete && (
+          <DeleteButton
+            endpoint={`/api/workflows/${workflow.id}`}
+            redirectTo="/workflows"
+            confirmMessage="Delete this workflow and its history?"
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

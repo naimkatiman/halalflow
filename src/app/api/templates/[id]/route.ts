@@ -79,6 +79,16 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
       const existing = await tx.workflowTemplate.findFirst({ where: { id, orgId: session.orgId } });
       if (!existing) return { error: "Not found", status: 404 } as const;
 
+      // Workflow.template has no cascade — deleting an in-use template would
+      // hit the FK and 500. The workflow history must outlive intent anyway.
+      const inUse = await tx.workflow.count({ where: { templateId: id, orgId: session.orgId } });
+      if (inUse > 0) {
+        return {
+          error: `This template is used by ${inUse} workflow${inUse === 1 ? "" : "s"} and cannot be deleted while that history exists.`,
+          status: 409,
+        } as const;
+      }
+
       await tx.workflowTemplate.delete({ where: { id } });
       return { ok: true } as const;
     });

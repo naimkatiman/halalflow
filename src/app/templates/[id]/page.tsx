@@ -6,6 +6,7 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { ArrowLeft, Plus } from '@phosphor-icons/react/dist/ssr';
 import { ExportButton } from './ExportButton';
+import { DeleteButton } from '@/components/DeleteButton';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -44,11 +45,13 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
   };
 
   const statusLabels: Record<string, string> = {
-    in_progress: 'In Progress',
+    in_progress: 'Awaiting approval',
     approved: 'Approved',
     rejected: 'Rejected',
-    pending: 'Pending',
+    pending: 'Awaiting approval',
   };
+
+  const canManage = ['owner', 'admin'].includes(session.orgRole);
 
 
   return (
@@ -62,6 +65,13 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
           {template.description && <p className="text-sm text-zinc-500 mt-0.5">{template.description}</p>}
         </div>
         <div className="flex items-center gap-2">
+          {canManage && template._count.workflows === 0 && (
+            <DeleteButton
+              endpoint={`/api/templates/${template.id}`}
+              redirectTo="/templates"
+              confirmMessage="Delete this template?"
+            />
+          )}
           <ExportButton templateId={template.id} templateName={template.name} />
           <Link
             href={`/workflows/new?templateId=${template.id}`}
