@@ -72,15 +72,25 @@ export async function POST(
       return NextResponse.json({ error: "Already a member" }, { status: 409, headers: { "Cache-Control": "no-store" } });
     }
 
-    await prismaAdmin.$transaction([
-      prismaAdmin.orgMember.create({
-        data: { orgId: invite.orgId, userId: user.id, role: invite.role },
-      }),
-      prismaAdmin.invitation.update({
-        where: { id: invite.id },
-        data: { acceptedAt: new Date() },
-      }),
-    ]);
+    try {
+      await prismaAdmin.$transaction([
+        prismaAdmin.orgMember.create({
+          data: { orgId: invite.orgId, userId: user.id, role: invite.role },
+        }),
+        prismaAdmin.invitation.update({
+          where: { id: invite.id },
+          data: { acceptedAt: new Date() },
+        }),
+      ]);
+    } catch (err) {
+      // Double-submit race: both requests pass the existingMember check, the
+      // second create hits the orgId_userId unique constraint. Same outcome
+      // as the pre-check, so same response.
+      if (typeof err === "object" && err !== null && "code" in err && (err as { code?: string }).code === "P2002") {
+        return NextResponse.json({ error: "Already a member" }, { status: 409, headers: { "Cache-Control": "no-store" } });
+      }
+      throw err;
+    }
 
     // Update session org context
     session.orgId = invite.orgId;
