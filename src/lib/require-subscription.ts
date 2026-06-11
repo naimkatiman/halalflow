@@ -22,7 +22,13 @@ export async function isOrgSubscribed(orgId: string): Promise<boolean> {
   if (!isStripeConfigured()) return true;
   const org = await prismaAdmin.organization.findUnique({
     where: { id: orgId },
-    select: { subscriptionStatus: true },
+    select: {
+      subscriptionStatus: true,
+      stripeSubscriptionId: true,
+      currentPeriodEnd: true,
+      createdAt: true,
+    },
   });
-  return isSubscriptionActive(org?.subscriptionStatus);
+  // Unknown org fails closed — the paywall is on and there is nothing to bill.
+  return org ? isSubscriptionActive(org) : false;
 }

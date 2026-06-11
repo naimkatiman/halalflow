@@ -73,3 +73,25 @@ npm start
 ## Rollback
 
 If you need to revert to SQLite locally, change `provider` back to `"sqlite"`, restore the local `DATABASE_URL`, and run `npx prisma generate`.
+
+## Stripe webhook outage (paywall runbook)
+
+`isSubscriptionActive` fails closed: an `active`/`trialing` org whose
+`currentPeriodEnd` is more than 3 days in the past is treated as a missed
+renewal webhook and loses access. If Stripe confirms a prolonged webhook
+outage (approaching 72 hours), keep paying orgs alive by extending their
+recorded period end until deliveries resume:
+
+```sql
+-- run as the admin (BYPASSRLS) role; affects only already-paying orgs
+UPDATE "Organization"
+SET "currentPeriodEnd" = now() + interval '7 days'
+WHERE "subscriptionStatus" IN ('active', 'trialing')
+  AND "stripeSubscriptionId" IS NOT NULL
+  AND "currentPeriodEnd" < now();
+```
+
+Stripe replays missed webhooks for up to 3 days automatically; for longer
+gaps, resend events from the Stripe dashboard (Developers → Webhooks →
+endpoint → Resend) so real state overwrites the manual extension. The
+`lastStripeEventAt` guard already ignores out-of-order replays.
