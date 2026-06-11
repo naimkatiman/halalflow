@@ -36,13 +36,19 @@ export default async function BillingPage({
   const org = await withOrg(session.orgId, (tx) =>
     tx.organization.findUnique({
       where: { id: session.orgId },
-      select: { name: true, subscriptionStatus: true, currentPeriodEnd: true },
+      select: {
+        name: true,
+        subscriptionStatus: true,
+        stripeSubscriptionId: true,
+        currentPeriodEnd: true,
+        createdAt: true,
+      },
     })
   );
   if (!org) redirect('/onboarding');
 
   const configured = isStripeConfigured();
-  const active = isSubscriptionActive(org.subscriptionStatus);
+  const active = isSubscriptionActive(org);
   const canManage = ['owner', 'admin'].includes(session.orgRole);
   const badgeCls = STATUS_STYLE[org.subscriptionStatus] ?? 'bg-zinc-100 text-zinc-700 border-zinc-200';
 
