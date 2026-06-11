@@ -15,12 +15,14 @@ their gate year.
 Theme: turn the shipped product into a paid product with real organizations.
 
 Q3 2026
-- Rotate seeded prod admin credentials; set `RESEND_API_KEY` so invites really send.
+- Rotate seeded prod admin credentials (change-password shipped 2026-06-11; rotate
+  via Settings after deploy); set `RESEND_API_KEY` so invites really send.
 - Live Stripe decision (own account vs shared tradeclaw account), durable
   dashboard API key, real price on the live product (RM/MYR pricing decision —
   Malaysian masjids are the beachhead market).
 - Trial lifecycle complete: expiry enforced (done 2026-06-11), reminder email
-  at day 23, win-back email at day 37.
+  at day 23 + win-back at day 37 (code shipped 2026-06-11; live once the
+  Railway cron service and `RESEND_API_KEY` exist — see docs/cron.md).
 - Onboard 5 pilot masjids by hand. Sit with a treasurer; watch them use it.
 
 Q4 2026
