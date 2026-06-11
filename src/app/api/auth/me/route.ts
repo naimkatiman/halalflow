@@ -3,6 +3,8 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prismaAdmin } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
+import { isStripeConfigured } from "@/lib/stripe";
+import { isOnDefaultTrial, trialDaysLeft } from "@/lib/subscription";
 
 export async function GET() {
   try {
@@ -11,8 +13,23 @@ export async function GET() {
 
     // Own-org lookup keyed by the session — safe for prismaAdmin.
     const org = session.orgId
-      ? await prismaAdmin.organization.findUnique({ where: { id: session.orgId }, select: { name: true } })
+      ? await prismaAdmin.organization.findUnique({
+          where: { id: session.orgId },
+          select: {
+            name: true,
+            subscriptionStatus: true,
+            stripeSubscriptionId: true,
+            createdAt: true,
+          },
+        })
       : null;
+
+    // Surfaced so the UI can count down the card-free trial; null whenever
+    // billing is off or the org has a real Stripe subscription.
+    const trial =
+      org && isStripeConfigured() && isOnDefaultTrial(org)
+        ? { daysLeft: trialDaysLeft(org) }
+        : null;
 
     return NextResponse.json(
       {
@@ -24,6 +41,7 @@ export async function GET() {
           orgId: session.orgId,
           orgRole: session.orgRole,
           orgName: org?.name ?? null,
+          trial,
         },
       },
       { headers: { "Cache-Control": "no-store" } }

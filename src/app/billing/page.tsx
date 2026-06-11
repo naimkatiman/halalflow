@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { isStripeConfigured } from '@/lib/stripe';
-import { isSubscriptionActive } from '@/lib/subscription';
+import { isOnDefaultTrial, isSubscriptionActive, trialDaysLeft, trialEndsAt } from '@/lib/subscription';
 import { SubscribeButton } from './SubscribeButton';
 import { CheckCircle, Info, Warning } from '@phosphor-icons/react/dist/ssr';
 
@@ -49,6 +49,8 @@ export default async function BillingPage({
 
   const configured = isStripeConfigured();
   const active = isSubscriptionActive(org);
+  const onTrial = configured && isOnDefaultTrial(org);
+  const daysLeft = trialDaysLeft(org);
   const canManage = ['owner', 'admin'].includes(session.orgRole);
   const badgeCls = STATUS_STYLE[org.subscriptionStatus] ?? 'bg-zinc-100 text-zinc-700 border-zinc-200';
 
@@ -89,6 +91,12 @@ export default async function BillingPage({
             <span className="text-zinc-900">{org.currentPeriodEnd.toLocaleDateString()}</span>
           </div>
         )}
+        {onTrial && active && (
+          <div className="flex items-center justify-between py-2 border-t border-zinc-100 text-sm">
+            <span className="text-zinc-500">Trial ends</span>
+            <span className="text-zinc-900">{trialEndsAt(org).toLocaleDateString()}</span>
+          </div>
+        )}
 
         {!configured ? (
           <div className="flex items-start gap-2 bg-zinc-50 border border-zinc-200/70 rounded-lg px-3 py-2.5">
@@ -97,8 +105,33 @@ export default async function BillingPage({
               Billing isn&apos;t enabled on this deployment — every workspace runs in trial mode with full access.
             </p>
           </div>
+        ) : onTrial && active ? (
+          <div className="space-y-3 pt-1">
+            <p className="text-sm text-zinc-600">
+              Your free trial has {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left. Subscribe to keep full
+              access when it ends{canManage ? '.' : ' — an owner or admin can subscribe at any time.'}
+            </p>
+            {canManage && <SubscribeButton />}
+          </div>
+        ) : onTrial ? (
+          <div className="space-y-3 pt-1">
+            <p className="text-sm text-zinc-600">
+              Your free trial has ended.
+              {canManage
+                ? ' Subscribe to restore access for your team.'
+                : ' Ask an owner or admin to subscribe and restore access.'}
+            </p>
+            {canManage && <SubscribeButton />}
+          </div>
         ) : active ? (
-          <p className="text-sm text-zinc-600">Your workspace is in good standing. Thank you for subscribing.</p>
+          org.subscriptionStatus === 'past_due' ? (
+            <p className="text-sm text-zinc-600">
+              Your last payment didn&apos;t go through. Stripe is retrying — update your payment method from the
+              receipt email to keep access.
+            </p>
+          ) : (
+            <p className="text-sm text-zinc-600">Your workspace is in good standing. Thank you for subscribing.</p>
+          )
         ) : canManage ? (
           <div className="space-y-3 pt-1">
             <p className="text-sm text-zinc-600">Subscribe to keep full access to this workspace.</p>

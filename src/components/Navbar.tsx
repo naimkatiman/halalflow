@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard } from '@phosphor-icons/react';
+import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard, Clock } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
@@ -13,6 +13,7 @@ interface NavUser {
   email: string;
   orgId: string;
   orgName?: string | null;
+  trial?: { daysLeft: number } | null;
 }
 
 export function Navbar() {
@@ -171,6 +172,20 @@ export function Navbar() {
           </nav>
         </div>
         <div className="flex items-center gap-3">
+          {user?.trial && (
+            <Link
+              href="/billing"
+              title={
+                user.trial.daysLeft > 0
+                  ? `Free trial: ${user.trial.daysLeft} ${user.trial.daysLeft === 1 ? 'day' : 'days'} left`
+                  : 'Your free trial has ended'
+              }
+              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:border-amber-300 hover:text-amber-900 transition-colors"
+            >
+              <Clock className="w-3 h-3 shrink-0" aria-hidden="true" />
+              <span>{user.trial.daysLeft > 0 ? `Trial · ${user.trial.daysLeft}d left` : 'Trial ended'}</span>
+            </Link>
+          )}
           {user?.orgName && (
             <Link
               href="/settings"
