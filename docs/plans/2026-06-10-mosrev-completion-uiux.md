@@ -137,3 +137,49 @@ template PUT/DELETE (was creates/approvals only). Both inert until Stripe is key
 
 **Verified:** tsc 0, eslint clean, build green, RLS isolation 5/5, headless walk of
 all routes (desktop+mobile) with zero console errors / zero flow failures.
+
+## Session 2026-06-11 (2) — trial expiry fix, trial visibility, product docs
+
+Goal (user): audit, fix bugs, make the app complete and lovable, create the
+long-range roadmap from the PRD (neither existed — both created).
+
+**Audit baseline (all green before changes):** tsc 0, eslint clean, 4/4
+migrations, RLS isolation 5/5, build green. `npm audit`: 3 moderate findings,
+all the postcss advisory vendored inside next — rides the next framework
+upgrade (logged in ROADMAP standing backlog).
+
+**Bug fixed — default trial never expired.** `isSubscriptionActive` treated
+bare `trialing` (the schema default) as a forever pass: an org that never
+checked out kept access for life once Stripe was keyed. Now decisions take the
+full subscription state (`src/lib/subscription.ts`): card-free trials end
+TRIAL_DAYS=30 after `org.createdAt` (mirrors the Stripe price trial),
+`past_due` rides on status through Stripe's retry window, active/trialing with
+`currentPeriodEnd` >3 days stale fail closed (missed-webhook backstop), and
+unknown orgs in `isOrgSubscribed` fail closed. Still a total no-op without
+`STRIPE_SECRET_KEY`.
+
+**Bug fixed — trialing orgs read "Thank you for subscribing".** Billing page
+now branches honestly: days-left + subscribe CTA while trialing, explicit
+"trial has ended" state, past_due payment-retry copy. Plus a "Trial ends" date
+row (active trials only — review catch), `/api/auth/me` returns
+`trial.daysLeft`, and the navbar shows an amber "Trial · Nd left" chip
+linking to /billing.
+
+**Docs:** `docs/PRD.md` (first PRD, derived from shipped v1) and
+`docs/ROADMAP.md` (7-year plan 2026–2033 with yearly exit gates; deferred
+items — marketplace, custom domains, mobile, payouts — sequenced to gate
+years). Webhook-outage paywall runbook added to `docs/deployment.md`.
+
+**Verified:** tsc 0, eslint clean, prod build green, RLS 5/5, headless walks
+on :3010 with a dummy Stripe key — fresh trial 9/9 PASS (countdown UI, access
+kept) and expired simulation (org backdated 40d, then restored to the exact
+original timestamp): dashboard → /billing redirect, GET /api/workflows 402,
+"trial has ended" copy, chip "Trial ended", no "Trial ends" row. Code-reviewer
+agent on the diff: 0 critical / 0 high; both MEDIUMs closed (row scoping fixed,
+runbook documented).
+
+**Deferred (unchanged, need Naim):** rotate seeded prod admin password,
+`RESEND_API_KEY`, durable Stripe dashboard key + live-account decision, delete
+the "Paywall Probe Masjid" probe org from prod. Dev-only note: Next dev
+occasionally logs a `Performance.measure` negative-timestamp error and once
+wedged at 92% CPU — dev tooling, absent from the prod build.
