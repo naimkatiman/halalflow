@@ -5,9 +5,10 @@ import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prismaAdmin, withOrg } from '@/lib/db';
 import { InviteMemberForm } from './InviteMemberForm';
+import { ChangePasswordForm } from './ChangePasswordForm';
 import { CopyInviteLink } from './CopyInviteLink';
 import { OrgSwitcher } from './OrgSwitcher';
-import { Buildings, Users, PaperPlaneTilt } from '@phosphor-icons/react/dist/ssr';
+import { Buildings, Users, PaperPlaneTilt, LockKey } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
   title: 'Settings — MosRev',
@@ -132,6 +133,14 @@ export default async function SettingsPage() {
           </div>
         )}
         {canInvite && <InviteMemberForm orgId={session.orgId} />}
+      </div>
+
+      <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <LockKey className="w-4 h-4 text-zinc-400" aria-hidden="true" />
+          <h2 className="font-semibold text-zinc-950 text-sm">Account security</h2>
+        </div>
+        <ChangePasswordForm />
       </div>
     </div>
   );

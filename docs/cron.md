@@ -43,3 +43,13 @@ Expect 200 from the endpoint and a log line every 5 minutes on the cron service.
 ## Why not Vercel cron
 
 The app runs on Railway with a SQLite volume mounted at `/data`. Vercel cannot mount that volume, and we have no `vercel.json` in this repo. Do not add one — it will mislead future readers.
+
+## Live jobs
+
+| Endpoint | Suggested schedule | What it does |
+|---|---|---|
+| `/api/cron/trial-emails` | `0 1 * * *` (daily 09:00 MYT) | Day-23 trial reminder + day-37 win-back to org owners/admins. Idempotent: orgs are stamped (`trialReminderSentAt` / `trialWinbackSentAt`) only on a confirmed Resend send. No-ops with a JSON `skipped` reason until `STRIPE_SECRET_KEY` and `RESEND_API_KEY`+`MOSREV_EMAIL_FROM` are set. |
+
+Setup for this job: set `CRON_SECRET` on the `halalflow` web service, then create the
+Railway cron service per the steps above with the daily schedule — 5-minute cadence is
+unnecessary here, though harmless thanks to the sent-stamps.

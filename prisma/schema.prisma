@@ -36,6 +36,10 @@ model Organization {
   // Stripe event ordering: webhooks can arrive out of order; updates carry the
   // event's created timestamp and skip when a newer one was already applied.
   lastStripeEventAt    DateTime?
+  // Trial lifecycle emails: stamped only when the day-23 reminder / day-37
+  // win-back actually sent, so the cron never double-sends.
+  trialReminderSentAt  DateTime?
+  trialWinbackSentAt   DateTime?
   members              OrgMember[]
   templates     WorkflowTemplate[]
   workflows     Workflow[]

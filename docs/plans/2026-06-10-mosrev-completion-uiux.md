@@ -183,3 +183,41 @@ runbook documented).
 the "Paywall Probe Masjid" probe org from prod. Dev-only note: Next dev
 occasionally logs a `Performance.measure` negative-timestamp error and once
 wedged at 92% CPU — dev tooling, absent from the prod build.
+
+## Session 2026-06-11 (3) — Q3 roadmap: change-password + trial lifecycle emails
+
+User: "proceed with the Q3 2026 roadmap items." Of the five, two were code
+(built this session), three need Naim (Resend key, Stripe decisions, pilot
+onboarding). Credential rotation pivoted: prod-DB access for a direct hash
+update was correctly blocked by the permission layer, and the product had NO
+change-password at all — so the gap became a feature. Rotate via Settings
+after deploy.
+
+**Shipped:**
+- `POST /api/auth/change-password` + Settings "Account security" card
+  (current-password proof, min-8/bcrypt-12 parity with register, CSRF,
+  rate-limited per user). Rate limit runs BEFORE CSRF validation — review
+  caught that a 429 after token rotation strands the client's CSRF token.
+- Migration: `Organization.trialReminderSentAt/trialWinbackSentAt`.
+- `GET /api/cron/trial-emails` (Bearer CRON_SECRET, docs/cron.md pattern):
+  day-23 reminder + day-37 win-back to owners/admins, claim-then-send
+  idempotency (atomic updateMany claim, released on failed send), win-back
+  bounded to a 30-day window so first deploy can't bulk-mail dead orgs,
+  timing-safe auth, single 401 (no config fingerprinting). No-ops without
+  Stripe/Resend.
+
+**Review:** 0 critical; 2 HIGH (CSRF/429 ordering, unbounded win-back) +
+3 MEDIUM (double-send race, timing-unsafe compare, config disclosure) +
+1 LOW (org name in subjects) — ALL fixed and re-verified.
+
+**Verified:** tsc 0, eslint clean, build green, RLS 5/5; headless: full
+change-password loop (wrong-current rejected, old pw dead after change,
+revert works), 13-request burst → 10×400 then 429s and never a CSRF 403;
+cron: 401/401 unauth, day-24 → reminder candidate with stamp released on
+failed send, day-38 → win-back, day-80 → aged out. Local DB restored.
+
+**Still Naim's:** RESEND_API_KEY + MOSREV_EMAIL_FROM (domain verified in
+Resend), CRON_SECRET + Railway cron service (docs/cron.md), live-Stripe
+decisions, pilot masjids, and the actual password rotation via Settings
+after this deploys. Known cosmetic noise (pre-existing): navbar logs
+"auth check failed: Failed to fetch" when navigation aborts its mount fetch.
