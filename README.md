@@ -51,6 +51,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Demo credentials: `admin@halalflow.app` / `changeme123`
 
+## Demo mode
+
+Set `DEMO_MODE="true"` to run the full billing lifecycle — trial countdown, reminder
+emails, paywall, checkout, subscription, win-back — without Stripe or Resend keys.
+Billing is simulated and outgoing emails are captured to an in-app outbox instead of
+being sent. Real keys take precedence when set. Presenter runbook and click-path:
+[docs/demo-mode.md](docs/demo-mode.md).
+
 ## Architecture
 
 ```
