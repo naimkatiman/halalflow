@@ -274,7 +274,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => { setMobileOpen(false); handleLogout(); }}
-              className="flex sm:hidden items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
+              className="flex lg:hidden items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
             >
               <SignOut className="w-4 h-4" aria-hidden="true" />
               Sign out
