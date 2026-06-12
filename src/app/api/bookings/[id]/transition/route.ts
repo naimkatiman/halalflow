@@ -7,7 +7,7 @@ import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { isOrgSubscribed } from "@/lib/require-subscription";
 import { roleSatisfies } from "@/lib/roles";
-import { BOOKING_ACTIONS, canTransition, resolveAction, validateActionInput } from "@/lib/bookings";
+import { BOOKING_ACTIONS, EVENT_TYPE_LABELS, canTransition, resolveAction, validateActionInput } from "@/lib/bookings";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
@@ -48,8 +48,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       if (!inputCheck.ok) return { error: inputCheck.error, status: 400 } as const;
 
       const now = new Date();
-      const updated = await tx.facilityBooking.update({
-        where: { id: booking.id },
+      // Compare-and-swap on the status we read: a concurrent transition makes
+      // count 0, so we never double-apply a transition or double-post the ledger.
+      const updated = await tx.facilityBooking.updateMany({
+        where: { id: booking.id, status: booking.status },
         data: {
           status: target,
           ...(parsed.action === "approve" && {
@@ -69,6 +71,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           }),
         },
       });
+      if (updated.count === 0) {
+        return { error: "Booking was updated by someone else", status: 409 } as const;
+      }
 
       if (parsed.action === "record_payment") {
         await tx.ledgerEntry.create({
@@ -77,7 +82,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             fund: "sewaan",
             direction: "in",
             amount: parsed.paymentAmount!,
-            description: `Sewaan: ${booking.applicantName} (${booking.eventType})`,
+            description: `Sewaan: ${booking.applicantName} (${EVENT_TYPE_LABELS[booking.eventType] ?? booking.eventType})`,
             refType: "booking",
             refId: booking.id,
             entryDate: now,
@@ -86,7 +91,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         });
       }
 
-      return { data: updated } as const;
+      const fresh = await tx.facilityBooking.findFirst({ where: { id: booking.id } });
+      return { data: fresh } as const;
     });
 
     if ("error" in result) {

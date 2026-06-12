@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const rawFund = searchParams.get("fund") ?? "";
     const fund = (FUNDS as ReadonlyArray<string>).includes(rawFund) ? rawFund : null;
-    const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
+    const page = Math.max(1, Math.floor(Number(searchParams.get("page")) || 1));
 
     const { entries, total, allEntries } = await withOrg(session.orgId, async (tx) => {
       const where = { orgId: session.orgId, ...(fund ? { fund } : {}) };

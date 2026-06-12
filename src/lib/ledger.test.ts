@@ -36,4 +36,8 @@ describe("ledgerCsv", () => {
     const csv = ledgerCsv([{ ...entries[0], description: "Sewa\rdewan" }]);
     expect(csv).toContain('"Sewa\rdewan"');
   });
+  it("neutralizes Excel formula injection in descriptions", () => {
+    const csv = ledgerCsv([{ ...entries[0], description: "=HYPERLINK(\"http://evil\")" }]);
+    expect(csv).toContain("'=HYPERLINK");
+  });
 });

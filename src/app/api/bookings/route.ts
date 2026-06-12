@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const rawStatus = searchParams.get("status") ?? "";
     const status = (BOOKING_STATUSES as ReadonlyArray<string>).includes(rawStatus) ? rawStatus : null;
-    const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
+    const page = Math.max(1, Math.floor(Number(searchParams.get("page")) || 1));
 
     const { bookings, total } = await withOrg(session.orgId, async (tx) => {
       const where = { orgId: session.orgId, ...(status ? { status } : {}) };
