@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard, Clock, Tray } from '@phosphor-icons/react';
+import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard, Clock, Tray, CalendarCheck, Coins, UsersThree } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
@@ -157,6 +157,10 @@ export function Navbar() {
     { href: '/dashboard', label: 'Dashboard', icon: SquaresFour },
     { href: '/workflows', label: 'Workflows', icon: CheckSquare },
     { href: '/templates', label: 'Templates', icon: Clipboard },
+    { href: '/bookings', label: 'Tempahan', icon: CalendarCheck },
+    { href: '/facilities', label: 'Kemudahan', icon: Buildings },
+    { href: '/finance', label: 'Kewangan', icon: Coins },
+    { href: '/community', label: 'Komuniti', icon: UsersThree },
     { href: '/billing', label: 'Billing', icon: CreditCard },
     { href: '/settings', label: 'Settings', icon: GearSix },
     ...(user?.demo ? [{ href: '/demo/outbox', label: 'Outbox', icon: Tray }] : []),
