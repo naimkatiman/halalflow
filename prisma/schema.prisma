@@ -41,13 +41,18 @@ model Organization {
   trialReminderSentAt  DateTime?
   trialWinbackSentAt   DateTime?
   members              OrgMember[]
-  templates     WorkflowTemplate[]
-  workflows     Workflow[]
-  invitations   Invitation[]
-  templateSteps TemplateStep[]
-  approvals     Approval[]
-  comments      Comment[]
-  auditLogs     AuditLog[]
+  templates            WorkflowTemplate[]
+  workflows            Workflow[]
+  invitations          Invitation[]
+  templateSteps        TemplateStep[]
+  approvals            Approval[]
+  comments             Comment[]
+  auditLogs            AuditLog[]
+  mosqueProfile        MosqueProfile?
+  facilities           Facility[]
+  bookings             FacilityBooking[]
+  ledgerEntries        LedgerEntry[]
+  ramadanPrograms      RamadanProgram[]
 }
 
 model OrgMember {
@@ -197,4 +202,126 @@ model DemoEmail {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+// ============================================================================
+// Community & Rental module — mosque profile, facility booking, tabung ledger,
+// Ramadan programs. All tables are org-scoped with RLS (org_isolation policy).
+// ============================================================================
+
+model MosqueProfile {
+  id              String       @id @default(cuid())
+  orgId           String       @unique
+  org             Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  displayName     String
+  description     String?
+  address         String?
+  city            String?
+  state           String
+  phone           String?
+  whatsapp        String?
+  photoUrl        String?
+  visitorsWelcome Boolean      @default(false)
+  visitorHours    String?
+  dressCode       String?
+  tourAvailable   Boolean      @default(false)
+  tourNote        String?
+  pantryAvailable Boolean      @default(false)
+  pantryType      String?
+  pantryHours     String?
+  pantryNote      String?
+  published       Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([published, state])
+}
+
+model Facility {
+  id          String            @id @default(cuid())
+  orgId       String
+  org         Organization      @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name        String
+  type        String
+  capacity    Int               @default(0)
+  description String?
+  photoUrl    String?
+  rateKariah  Int               @default(0)
+  rateAwam    Int               @default(0)
+  deposit     Int               @default(0)
+  rateNote    String?
+  rules       String?
+  active      Boolean           @default(true)
+  bookings    FacilityBooking[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([orgId, active])
+}
+
+model FacilityBooking {
+  id             String       @id @default(cuid())
+  orgId          String
+  org            Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  facilityId     String
+  facility       Facility     @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  eventType      String
+  eventDate      DateTime
+  startTime      String
+  endTime        String
+  pax            Int          @default(0)
+  notes          String?
+  applicantName  String
+  applicantPhone String
+  applicantEmail String?
+  isKariah       Boolean      @default(false)
+  status         String       @default("requested")
+  quotedAmount   Int?
+  depositAmount  Int?
+  declineReason  String?
+  paymentNote    String?
+  decidedById    String?
+  decidedAt      DateTime?
+  paidAt         DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([orgId, status])
+  @@index([orgId, eventDate])
+  @@index([facilityId])
+}
+
+model LedgerEntry {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  fund        String
+  direction   String
+  amount      Int
+  description String
+  refType     String?
+  refId       String?
+  entryDate   DateTime     @default(now())
+  createdById String?
+  createdAt   DateTime     @default(now())
+
+  @@index([orgId, fund])
+  @@index([orgId, entryDate])
+}
+
+model RamadanProgram {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  type        String
+  title       String?
+  description String
+  time        String?
+  schedule    String?
+  isFree      Boolean      @default(true)
+  sponsorName String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([orgId, type])
 }
