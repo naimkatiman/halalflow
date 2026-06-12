@@ -69,6 +69,8 @@ export function Navbar() {
             <a href="#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
             <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
             <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
+            <Link href="/masjid" className="hover:text-zinc-900 transition-colors">Direktori Masjid</Link>
+            <Link href="/ramadan" className="hover:text-zinc-900 transition-colors">Ramadan</Link>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login" className="hidden sm:block text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
@@ -115,6 +117,20 @@ export function Navbar() {
             >
               Pricing
             </a>
+            <Link
+              href="/masjid"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Direktori Masjid
+            </Link>
+            <Link
+              href="/ramadan"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Ramadan
+            </Link>
             <div className="pt-2 border-t border-zinc-100 flex flex-col gap-2">
               <Link
                 href="/login"
