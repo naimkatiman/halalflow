@@ -68,9 +68,9 @@ export function Navbar() {
             MosRev
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
-            <a href="/#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
-            <a href="/#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
-            <a href="/#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
+            <Link href="/#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</Link>
+            <Link href="/#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</Link>
+            <Link href="/#pricing" className="hover:text-zinc-900 transition-colors">Pricing</Link>
             <Link href="/masjid" className="hover:text-zinc-900 transition-colors">Direktori Masjid</Link>
             <Link href="/ramadan" className="hover:text-zinc-900 transition-colors">Ramadan</Link>
           </nav>
@@ -98,27 +98,27 @@ export function Navbar() {
         </div>
         {mobileOpen && (
           <div id="mobile-nav-menu" className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-2">
-            <a
+            <Link
               href="/#use-cases"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               Use cases
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#how-it-works"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               How it works
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#pricing"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               Pricing
-            </a>
+            </Link>
             <Link
               href="/masjid"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
