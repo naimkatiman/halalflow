@@ -4,9 +4,10 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
-import { isStripeConfigured } from '@/lib/stripe';
+import { isBillingEnabled, isDemoBilling } from '@/lib/demo';
 import { isOnDefaultTrial, isSubscriptionActive, trialDaysLeft, trialEndsAt } from '@/lib/subscription';
 import { SubscribeButton } from './SubscribeButton';
+import { DemoControls } from './DemoControls';
 import { CheckCircle, Info, Warning } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
@@ -47,9 +48,10 @@ export default async function BillingPage({
   );
   if (!org) redirect('/onboarding');
 
-  const configured = isStripeConfigured();
+  const billingEnabled = isBillingEnabled();
+  const demoBilling = isDemoBilling();
   const active = isSubscriptionActive(org);
-  const onTrial = configured && isOnDefaultTrial(org);
+  const onTrial = billingEnabled && isOnDefaultTrial(org);
   const daysLeft = trialDaysLeft(org);
   const canManage = ['owner', 'admin'].includes(session.orgRole);
   const badgeCls = STATUS_STYLE[org.subscriptionStatus] ?? 'bg-zinc-100 text-zinc-700 border-zinc-200';
@@ -80,9 +82,16 @@ export default async function BillingPage({
             <h2 className="font-semibold text-zinc-950 text-sm">Subscription</h2>
             <p className="text-xs text-zinc-500 mt-0.5">Current status of this workspace</p>
           </div>
-          <span className={`text-xs font-medium px-2 py-0.5 rounded-full border capitalize ${badgeCls}`}>
-            {org.subscriptionStatus.replace('_', ' ')}
-          </span>
+          <div className="flex items-center gap-1.5">
+            {demoBilling && (
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full border bg-amber-50 text-amber-700 border-amber-200">
+                Demo
+              </span>
+            )}
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full border capitalize ${badgeCls}`}>
+              {org.subscriptionStatus.replace('_', ' ')}
+            </span>
+          </div>
         </div>
 
         {org.currentPeriodEnd && (
@@ -98,7 +107,7 @@ export default async function BillingPage({
           </div>
         )}
 
-        {!configured ? (
+        {!billingEnabled ? (
           <div className="flex items-start gap-2 bg-zinc-50 border border-zinc-200/70 rounded-lg px-3 py-2.5">
             <Info className="w-4 h-4 text-zinc-400 mt-0.5 shrink-0" weight="duotone" aria-hidden="true" />
             <p className="text-sm text-zinc-600">
@@ -141,6 +150,8 @@ export default async function BillingPage({
           <p className="text-sm text-zinc-600">This workspace needs an active subscription. Ask an owner or admin to subscribe.</p>
         )}
       </div>
+
+      {demoBilling && canManage && <DemoControls />}
     </div>
   );
 }

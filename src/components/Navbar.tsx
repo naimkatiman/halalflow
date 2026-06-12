@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard, Clock } from '@phosphor-icons/react';
+import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard, Clock, Tray } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
@@ -14,6 +14,7 @@ interface NavUser {
   orgId: string;
   orgName?: string | null;
   trial?: { daysLeft: number } | null;
+  demo?: boolean;
 }
 
 export function Navbar() {
@@ -142,16 +143,24 @@ export function Navbar() {
     { href: '/templates', label: 'Templates', icon: Clipboard },
     { href: '/billing', label: 'Billing', icon: CreditCard },
     { href: '/settings', label: 'Settings', icon: GearSix },
+    ...(user?.demo ? [{ href: '/demo/outbox', label: 'Outbox', icon: Tray }] : []),
   ];
 
   return (
     <header className="border-b border-zinc-200/50 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
         <div className="flex items-center gap-6">
-          <Link href="/dashboard" className="flex items-center gap-2 font-bold text-zinc-950 text-sm shrink-0">
-            <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
-            MosRev
-          </Link>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href="/dashboard" className="flex items-center gap-2 font-bold text-zinc-950 text-sm">
+              <GitBranch className="w-4 h-4 text-emerald-600" weight="bold" aria-hidden="true" />
+              MosRev
+            </Link>
+            {user?.demo && (
+              <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5">
+                Demo
+              </span>
+            )}
+          </div>
           <nav className="hidden sm:flex items-center gap-1">
             {nav.map(({ href, label, icon: Icon }) => (
               <Link

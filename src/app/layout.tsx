@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
+import { isDemoMode } from "@/lib/demo";
 
 export const viewport: Viewport = {
   themeColor: "#059669",
@@ -44,6 +45,11 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        {isDemoMode() && (
+          <div className="bg-amber-50 text-amber-800 text-xs text-center px-4 py-1.5 border-b border-amber-100">
+            Demo mode — payments and emails are simulated. No real charges, no real emails.
+          </div>
+        )}
         <Navbar />
         <main id="main-content" tabIndex={-1} className="flex-1 max-w-screen-xl mx-auto w-full px-6 py-8 outline-none">
           {children}
