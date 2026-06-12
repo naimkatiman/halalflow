@@ -32,4 +32,8 @@ describe("ledgerCsv", () => {
     const csv = ledgerCsv([{ ...entries[0], description: 'Sewa "dewan", deposit' }]);
     expect(csv).toContain('"Sewa ""dewan"", deposit"');
   });
+  it("quotes fields containing carriage returns", () => {
+    const csv = ledgerCsv([{ ...entries[0], description: "Sewa\rdewan" }]);
+    expect(csv).toContain('"Sewa\rdewan"');
+  });
 });

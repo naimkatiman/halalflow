@@ -34,7 +34,7 @@ export function fundTotals(entries: LedgerLike[]): Record<string, number> {
 }
 
 function csvCell(value: string): string {
-  if (/[",\n]/.test(value)) return `"${value.replace(/"/g, '""')}"`;
+  if (/[",\n\r]/.test(value)) return `"${value.replace(/"/g, '""')}"`;
   return value;
 }
 
