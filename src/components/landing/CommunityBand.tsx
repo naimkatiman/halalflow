@@ -3,7 +3,7 @@ import { Buildings, MoonStars, ArrowRight } from "@phosphor-icons/react/dist/ssr
 
 export function CommunityBand() {
   return (
-    <section className="animate-fade-up overflow-hidden rounded-3xl border border-emerald-100 bg-emerald-50 px-6 py-12 sm:px-12 sm:py-14">
+    <section className="relative animate-fade-up overflow-hidden rounded-3xl border border-emerald-100 bg-emerald-50 px-6 py-12 sm:px-12 sm:py-14">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-40"

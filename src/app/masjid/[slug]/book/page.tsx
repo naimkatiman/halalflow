@@ -21,6 +21,7 @@ export default async function BookPage({
   const { facility: preselect } = await searchParams;
   const org = await getMosqueBySlug(slug);
   if (!org) notFound();
+  if (org.facilities.length === 0) notFound();
   return (
     <div className="max-w-screen-md mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">

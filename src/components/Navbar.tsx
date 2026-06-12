@@ -24,7 +24,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isPublicPage =
-    pathname === '/' || pathname === '/login' || pathname === '/register' || pathname === '/onboarding';
+    pathname === '/' || pathname === '/login' || pathname === '/register' || pathname === '/onboarding' || pathname.startsWith('/masjid') || pathname.startsWith('/ramadan');
 
   useEffect(() => {
     // Public pages render without a session — probing /api/auth/me there just
