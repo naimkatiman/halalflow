@@ -19,9 +19,10 @@ const profileSchema = z.object({
   phone: z.string().trim().max(30).optional(),
   whatsapp: z.string().trim().max(30).optional(),
   photoUrl: z.string().trim().max(500)
-    .refine((v) => /^https:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//")), {
+    .refine((v) => v === "" || /^https:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//")), {
       message: "Photo must be an https URL or a local path",
     })
+    .or(z.literal(""))
     .optional(),
   visitorsWelcome: z.boolean().default(false),
   visitorHours: z.string().trim().max(200).optional(),
@@ -67,11 +68,13 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const parsed = profileSchema.parse(body);
 
+    const { photoUrl: parsedPhotoUrl, ...rest } = parsed;
+    const photoUrl = parsedPhotoUrl || null;
     const data = await withOrg(session.orgId, async (tx) =>
       tx.mosqueProfile.upsert({
         where: { orgId: session.orgId },
-        create: { ...parsed, orgId: session.orgId },
-        update: parsed,
+        create: { ...rest, photoUrl, orgId: session.orgId },
+        update: { ...rest, photoUrl },
       }),
     );
 

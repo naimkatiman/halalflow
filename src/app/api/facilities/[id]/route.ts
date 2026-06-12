@@ -19,9 +19,10 @@ const updateSchema = z.object({
   capacity: z.number().int().min(0).max(100000).optional(),
   description: z.string().trim().max(2000).optional(),
   photoUrl: z.string().trim().max(500)
-    .refine((v) => /^https:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//")), {
+    .refine((v) => v === "" || /^https:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//")), {
       message: "Photo must be an https URL or a local path",
     })
+    .or(z.literal(""))
     .optional(),
   rateKariah: z.number().int().min(0).max(100_000_000).optional(),
   rateAwam: z.number().int().min(0).max(100_000_000).optional(),
@@ -50,7 +51,14 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       const existing = await tx.facility.findFirst({ where: { id, orgId: session.orgId } });
       if (!existing) return { error: "Facility not found", status: 404 } as const;
 
-      const data = await tx.facility.update({ where: { id }, data: parsed });
+      const { photoUrl: parsedPhotoUrl, ...rest } = parsed;
+      const data = await tx.facility.update({
+        where: { id },
+        data: {
+          ...rest,
+          ...(parsedPhotoUrl !== undefined && { photoUrl: parsedPhotoUrl || null }),
+        },
+      });
       return { data } as const;
     });
 
