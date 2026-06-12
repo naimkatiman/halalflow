@@ -63,3 +63,18 @@ What changes: Subscribe goes to real Stripe Checkout, emails send through Resend
 - Demo endpoints (`/api/billing/demo-checkout`, `/api/billing/demo-controls`, `/demo/outbox`) return 404 outside demo mode. Without `DEMO_MODE`, behavior is identical to a build without the feature.
 - The outbox is global, not tenant-scoped. Every captured email from every org on the deployment is visible to anyone who can open `/demo/outbox`. Use demo mode only on throwaway demo deployments with seeded data.
 - The time machine works by mutating `organization.createdAt` (the trial clock is anchored to org creation). Day 23 / Day 31 / Day 37 also reset the org to a default trial state and clear the relevant email sent-stamps so sweeps can re-send. Reset sets `createdAt` to now. Do not point it at an org whose real creation date matters.
+
+## Demo imagery
+
+Free-license photos bundled for the community/rental demo (`public/images/`):
+
+| File | Source | Photographer | License |
+|---|---|---|---|
+| mosque-hero.jpg | https://unsplash.com/photos/gyKmF0vnfBs | Fahrul Azmi | Unsplash License |
+| mosque-exterior-1.jpg | https://unsplash.com/photos/7_COgbItdkQ | Esmonde Yong | Unsplash License |
+| mosque-exterior-2.jpg | https://unsplash.com/photos/ZADioNn1XKw | Terrence Low | Unsplash License |
+| mosque-interior-1.jpg | https://unsplash.com/photos/5C0e03S-2UI | SR | Unsplash License |
+| mosque-interior-2.jpg | https://unsplash.com/photos/5ztvgeVTT1E | Ahmed Farook | Unsplash License |
+| mosque-hall.jpg | https://unsplash.com/photos/PHQqesqU3PY | Yazid N | Unsplash License |
+| mosque-community.jpg | https://unsplash.com/photos/r0HlondEF0A | Alim | Unsplash License |
+| mosque-study.jpg | https://unsplash.com/photos/DBsQFuIbXg4 | Masjid Pogung Dalangan | Unsplash License |
