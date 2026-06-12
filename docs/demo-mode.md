@@ -77,4 +77,4 @@ Free-license photos bundled for the community/rental demo (`public/images/`):
 | mosque-interior-2.jpg | https://unsplash.com/photos/5ztvgeVTT1E | Ahmed Farook | Unsplash License |
 | mosque-hall.jpg | https://unsplash.com/photos/PHQqesqU3PY | Yazid N | Unsplash License |
 | mosque-community.jpg | https://unsplash.com/photos/r0HlondEF0A | Alim | Unsplash License |
-| mosque-study.jpg | https://unsplash.com/photos/DBsQFuIbXg4 | Masjid Pogung Dalangan | Unsplash License |
+| mosque-study.jpg | https://unsplash.com/photos/PsEXbDsSlV4 | Rumman Amin | Unsplash License |
