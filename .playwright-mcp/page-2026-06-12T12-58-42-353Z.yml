@@ -1,0 +1,96 @@
+- generic [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]: Demo mode — payments and emails are simulated. No real charges, no real emails.
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - link "MosRev" [ref=e8] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e9]
+            - text: MosRev
+          - generic [ref=e62]: Demo
+        - navigation [ref=e11]:
+          - link "Dashboard" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e13]
+            - text: Dashboard
+          - link "Workflows" [ref=e15] [cursor=pointer]:
+            - /url: /workflows
+            - img [ref=e16]
+            - text: Workflows
+          - link "Templates" [ref=e18] [cursor=pointer]:
+            - /url: /templates
+            - img [ref=e19]
+            - text: Templates
+          - link "Billing" [ref=e21] [cursor=pointer]:
+            - /url: /billing
+            - img [ref=e22]
+            - text: Billing
+          - link "Settings" [ref=e24] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e25]
+            - text: Settings
+          - link "Outbox" [ref=e63] [cursor=pointer]:
+            - /url: /demo/outbox
+            - img [ref=e64]
+            - text: Outbox
+      - generic [ref=e66]:
+        - link "Trial ended" [ref=e67] [cursor=pointer]:
+          - /url: /billing
+          - img [ref=e68]
+          - generic [ref=e70]: Trial ended
+        - link "Al-Noor Mosque Trust" [ref=e71] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e72]
+          - generic [ref=e74]: Al-Noor Mosque Trust
+        - generic [ref=e75]: Admin
+        - button "Sign out" [ref=e76]:
+          - img [ref=e77]
+          - generic [ref=e79]: Sign out
+  - main [ref=e27]:
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - heading "Email outbox" [level=1] [ref=e41]
+        - paragraph [ref=e42]: Emails the app would have sent — captured because demo mode is on.
+      - generic [ref=e43]:
+        - group [ref=e44]:
+          - 'generic "Your MosRev workspace Al-Noor Mosque Trust is waiting for you To: admin@halalflow.app 6/12/2026, 12:57:38 PM" [ref=e45] [cursor=pointer]':
+            - generic [ref=e46]:
+              - paragraph [ref=e47]: Your MosRev workspace Al-Noor Mosque Trust is waiting for you
+              - paragraph [ref=e48]: "To: admin@halalflow.app"
+            - generic [ref=e49]: 6/12/2026, 12:57:38 PM
+        - group [ref=e50]:
+          - 'generic "Your MosRev trial for Al-Noor Mosque Trust ends in 7 days To: admin@halalflow.app 6/12/2026, 12:55:21 PM" [active] [ref=e51] [cursor=pointer]':
+            - generic [ref=e52]:
+              - paragraph [ref=e53]: Your MosRev trial for Al-Noor Mosque Trust ends in 7 days
+              - paragraph [ref=e54]: "To: admin@halalflow.app"
+            - generic [ref=e55]: 6/12/2026, 12:55:21 PM
+          - iframe [ref=e81]:
+            - generic [active] [ref=f11e1]:
+              - heading "Your trial ends in 7 days" [level=2] [ref=f11e2]
+              - paragraph [ref=f11e3]:
+                - text: The free trial for
+                - strong [ref=f11e4]: Al-Noor Mosque Trust
+                - text: ends in
+                - strong [ref=f11e5]: 7 days
+                - text: . After that, your team keeps its data but loses access to workflows and approvals until a subscription is set up.
+              - link "Set up billing" [ref=f11e6] [cursor=pointer]:
+                - /url: https://mosrev-web-production.up.railway.app/billing
+              - paragraph [ref=f11e7]: You're receiving this because you manage this workspace on MosRev.
+        - group [ref=e56]:
+          - 'generic "[MosRev] Friday Donation Box — Week 24 — approved To: member@halalflow.app 6/12/2026, 12:54:05 PM" [ref=e57] [cursor=pointer]':
+            - generic [ref=e58]:
+              - paragraph [ref=e59]: "[MosRev] Friday Donation Box — Week 24 — approved"
+              - paragraph [ref=e60]: "To: member@halalflow.app"
+            - generic [ref=e61]: 6/12/2026, 12:54:05 PM
+  - contentinfo [ref=e32]:
+    - generic [ref=e33]:
+      - generic [ref=e34]: MosRev — Islamic Finance Workflow Engine
+      - generic [ref=e35]:
+        - link "MosRev GitHub repository (opens in new tab)" [ref=e36] [cursor=pointer]:
+          - /url: https://github.com/naimkatiman/halalflow
+          - text: GitHub
+        - generic [ref=e37]: Open Source
+  - alert [ref=e38]
