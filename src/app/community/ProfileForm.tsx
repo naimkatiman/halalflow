@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 import { MALAYSIAN_STATES } from '@/lib/states';
@@ -47,6 +48,8 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ initial, slug }: ProfileFormProps) {
+  const router = useRouter();
+
   const [displayName, setDisplayName] = useState(initial?.displayName ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
   const [address, setAddress] = useState(initial?.address ?? '');
@@ -61,6 +64,8 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
     !isBundled(initial?.photoUrl) ? (initial?.photoUrl ?? '') : ''
   );
   const [published, setPublished] = useState(initial?.published ?? false);
+  // Tracks the saved published state so "Lihat halaman awam" only shows after a successful save
+  const [savedPublished, setSavedPublished] = useState(initial?.published ?? false);
 
   const [visitorsWelcome, setVisitorsWelcome] = useState(initial?.visitorsWelcome ?? false);
   const [visitorHours, setVisitorHours] = useState(initial?.visitorHours ?? '');
@@ -91,22 +96,22 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
 
     const body = {
       displayName: displayName.trim(),
-      description: description.trim() || undefined,
-      address: address.trim() || undefined,
-      city: city.trim() || undefined,
+      description: description.trim(),
+      address: address.trim(),
+      city: city.trim(),
       state,
-      phone: phone.trim() || undefined,
-      whatsapp: whatsapp.trim() || undefined,
-      photoUrl: effectivePhoto,
+      phone: phone.trim(),
+      whatsapp: whatsapp.trim(),
+      photoUrl: effectivePhoto ?? '',
       visitorsWelcome,
-      visitorHours: visitorsWelcome ? (visitorHours.trim() || undefined) : undefined,
-      dressCode: visitorsWelcome ? (dressCode.trim() || undefined) : undefined,
+      visitorHours: visitorsWelcome ? visitorHours.trim() : '',
+      dressCode: visitorsWelcome ? dressCode.trim() : '',
       tourAvailable: visitorsWelcome ? tourAvailable : false,
-      tourNote: visitorsWelcome && tourAvailable ? (tourNote.trim() || undefined) : undefined,
+      tourNote: visitorsWelcome && tourAvailable ? tourNote.trim() : '',
       pantryAvailable,
       pantryType: pantryAvailable ? pantryType : undefined,
-      pantryHours: pantryAvailable ? (pantryHours.trim() || undefined) : undefined,
-      pantryNote: pantryAvailable ? (pantryNote.trim() || undefined) : undefined,
+      pantryHours: pantryAvailable ? pantryHours.trim() : '',
+      pantryNote: pantryAvailable ? pantryNote.trim() : '',
       published,
     };
 
@@ -122,7 +127,9 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
         setError(data.error || 'Gagal menyimpan profil');
         return;
       }
+      setSavedPublished(published);
       setSuccess(true);
+      router.refresh();
     } catch {
       setError('Ralat rangkaian — cuba semula');
     } finally {
@@ -137,7 +144,7 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
       <div className="px-6 py-4 border-b border-zinc-100 flex items-center justify-between flex-wrap gap-2">
         <div>
           <h2 className="font-semibold text-zinc-950">Profil komuniti</h2>
-          {published && (
+          {savedPublished && (
             <Link
               href={`/masjid/${slug}`}
               target="_blank"
@@ -161,16 +168,16 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
           </label>
         </div>
       </div>
-      {published && (
+      {savedPublished && (
         <p className="text-xs text-zinc-400 px-6 pt-3">
           Paparan awam di /masjid/{slug}
         </p>
       )}
 
       <form onSubmit={handleSubmit} className="p-6 space-y-6">
-        {/* Listing */}
+        {/* Maklumat asas */}
         <div className="space-y-4">
-          <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Listing</h3>
+          <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Maklumat asas</h3>
 
           <div>
             <label htmlFor="prof-name" className="block text-sm font-medium text-zinc-700 mb-1.5">Nama masjid / surau</label>
@@ -214,14 +221,28 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Foto</label>
-            <select value={photoSelect} onChange={(e) => setPhotoSelect(e.target.value)} className={`${inputCls} bg-white mb-2`} aria-label="Pilih foto">
+            <label htmlFor="prof-photo-select" className="block text-sm font-medium text-zinc-700 mb-1.5">Foto</label>
+            <select
+              id="prof-photo-select"
+              value={photoSelect}
+              onChange={(e) => setPhotoSelect(e.target.value)}
+              className={`${inputCls} bg-white mb-2`}
+            >
               <option value="">Tiada foto</option>
               {BUNDLED_PHOTOS.map((p) => (
                 <option key={p.value} value={p.value}>{p.label}</option>
               ))}
             </select>
-            <input type="url" value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} placeholder="Atau URL https:// (mengatasi pilihan di atas)" maxLength={500} className={inputCls} aria-label="URL foto tersuai" />
+            <label htmlFor="prof-photo-url" className="sr-only">URL foto tersuai</label>
+            <input
+              id="prof-photo-url"
+              type="url"
+              value={photoUrl}
+              onChange={(e) => setPhotoUrl(e.target.value)}
+              placeholder="Atau URL https:// (mengatasi pilihan di atas)"
+              maxLength={500}
+              className={inputCls}
+            />
           </div>
         </div>
 

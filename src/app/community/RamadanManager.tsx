@@ -41,6 +41,8 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
   const [showAdd, setShowAdd] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  // Track which row is pending delete confirmation
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   const inputCls = 'w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors';
 
@@ -56,6 +58,7 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
       sponsorName: p.sponsorName ?? '',
     });
     setError('');
+    setConfirmingId(null);
   };
 
   const handleSaveEdit = async () => {
@@ -66,12 +69,12 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
     try {
       const body = {
         type: editState.type,
-        title: editState.title.trim() || undefined,
+        title: editState.title.trim(),
         description: editState.description.trim(),
-        time: editState.time.trim() || undefined,
-        schedule: editState.schedule.trim() || undefined,
+        time: editState.time.trim(),
+        schedule: editState.schedule.trim(),
         isFree: editState.isFree,
-        sponsorName: editState.sponsorName.trim() || undefined,
+        sponsorName: editState.sponsorName.trim(),
       };
       const res = await fetchWithCsrf(`/api/community/ramadan/${editId}`, {
         method: 'PATCH',
@@ -101,6 +104,7 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
       }
       setPrograms((prev) => prev.filter((p) => p.id !== id));
       if (editId === id) setEditId(null);
+      setConfirmingId(null);
     } catch {
       setError('Ralat rangkaian — cuba semula');
     } finally {
@@ -115,12 +119,12 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
     try {
       const body = {
         type: addState.type,
-        title: addState.title.trim() || undefined,
+        title: addState.title.trim(),
         description: addState.description.trim(),
-        time: addState.time.trim() || undefined,
-        schedule: addState.schedule.trim() || undefined,
+        time: addState.time.trim(),
+        schedule: addState.schedule.trim(),
         isFree: addState.isFree,
-        sponsorName: addState.sponsorName.trim() || undefined,
+        sponsorName: addState.sponsorName.trim(),
       };
       const res = await fetchWithCsrf('/api/community/ramadan', {
         method: 'POST',
@@ -168,6 +172,7 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
             <div key={p.id} className="px-6 py-4">
               {editId === p.id ? (
                 <ProgramForm
+                  idPrefix={p.id}
                   state={editState}
                   onChange={setEditState}
                   onSave={handleSaveEdit}
@@ -207,14 +212,35 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
                     >
                       Edit
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(p.id)}
-                      disabled={loading}
-                      className="text-xs text-red-500 hover:text-red-700 border border-red-100 hover:border-red-200 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
-                    >
-                      Padam
-                    </button>
+                    {confirmingId === p.id ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(p.id)}
+                          disabled={loading}
+                          className="text-xs text-white bg-red-600 hover:bg-red-700 border border-red-600 px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                        >
+                          Ya, padam
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmingId(null)}
+                          disabled={loading}
+                          className="text-xs text-zinc-500 hover:text-zinc-700 border border-zinc-200 px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                        >
+                          Batal
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmingId(p.id)}
+                        disabled={loading}
+                        className="text-xs text-red-500 hover:text-red-700 border border-red-100 hover:border-red-200 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                      >
+                        Padam
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -228,6 +254,7 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
         <div className="border-t border-zinc-100 px-6 py-5">
           <p className="text-sm font-semibold text-zinc-950 mb-4">Program baharu</p>
           <ProgramForm
+            idPrefix="add"
             state={addState}
             onChange={setAddState}
             onSave={handleAdd}
@@ -243,6 +270,7 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
 }
 
 interface ProgramFormProps {
+  idPrefix: string;
   state: EditState;
   onChange: (s: EditState) => void;
   onSave: () => void;
@@ -252,7 +280,7 @@ interface ProgramFormProps {
   inputCls: string;
 }
 
-function ProgramForm({ state, onChange, onSave, onCancel, loading, saveLabel, inputCls }: ProgramFormProps) {
+function ProgramForm({ idPrefix, state, onChange, onSave, onCancel, loading, saveLabel, inputCls }: ProgramFormProps) {
   const set = (key: keyof EditState, value: string | boolean) =>
     onChange({ ...state, [key]: value });
 
@@ -260,43 +288,44 @@ function ProgramForm({ state, onChange, onSave, onCancel, loading, saveLabel, in
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-zinc-700 mb-1">Jenis</label>
-          <select value={state.type} onChange={(e) => set('type', e.target.value)} className={`${inputCls} bg-white`}>
+          <label htmlFor={`${idPrefix}-type`} className="block text-xs font-medium text-zinc-700 mb-1">Jenis</label>
+          <select id={`${idPrefix}-type`} value={state.type} onChange={(e) => set('type', e.target.value)} className={`${inputCls} bg-white`}>
             {RAMADAN_TYPES.map((t) => (
               <option key={t} value={t}>{RAMADAN_TYPE_LABELS[t] ?? t}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-zinc-700 mb-1">Tajuk (pilihan)</label>
-          <input type="text" value={state.title} onChange={(e) => set('title', e.target.value)} maxLength={160} className={inputCls} placeholder="cth. Iftar Perdana" />
+          <label htmlFor={`${idPrefix}-title`} className="block text-xs font-medium text-zinc-700 mb-1">Tajuk (pilihan)</label>
+          <input id={`${idPrefix}-title`} type="text" value={state.title} onChange={(e) => set('title', e.target.value)} maxLength={160} className={inputCls} placeholder="cth. Iftar Perdana" />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-zinc-700 mb-1">Keterangan</label>
-        <textarea value={state.description} onChange={(e) => set('description', e.target.value)} rows={2} maxLength={1000} className={`${inputCls} resize-none`} placeholder="Huraikan program ini…" />
+        <label htmlFor={`${idPrefix}-description`} className="block text-xs font-medium text-zinc-700 mb-1">Keterangan</label>
+        <textarea id={`${idPrefix}-description`} value={state.description} onChange={(e) => set('description', e.target.value)} rows={2} maxLength={1000} className={`${inputCls} resize-none`} placeholder="Huraikan program ini…" />
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-zinc-700 mb-1">Masa</label>
-          <input type="text" value={state.time} onChange={(e) => set('time', e.target.value)} maxLength={60} className={inputCls} placeholder="18:45" />
+          <label htmlFor={`${idPrefix}-time`} className="block text-xs font-medium text-zinc-700 mb-1">Masa</label>
+          <input id={`${idPrefix}-time`} type="text" value={state.time} onChange={(e) => set('time', e.target.value)} maxLength={60} className={inputCls} placeholder="18:45" />
         </div>
         <div>
-          <label className="block text-xs font-medium text-zinc-700 mb-1">Jadual</label>
-          <input type="text" value={state.schedule} onChange={(e) => set('schedule', e.target.value)} maxLength={120} className={inputCls} placeholder="Setiap hari Ramadan" />
+          <label htmlFor={`${idPrefix}-schedule`} className="block text-xs font-medium text-zinc-700 mb-1">Jadual</label>
+          <input id={`${idPrefix}-schedule`} type="text" value={state.schedule} onChange={(e) => set('schedule', e.target.value)} maxLength={120} className={inputCls} placeholder="Setiap hari Ramadan" />
         </div>
       </div>
 
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <input id={`is-free-${state.type}`} type="checkbox" checked={state.isFree} onChange={(e) => set('isFree', e.target.checked)} className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500" />
-          <label htmlFor={`is-free-${state.type}`} className="text-sm font-medium text-zinc-700">Percuma</label>
+          <input id={`${idPrefix}-is-free`} type="checkbox" checked={state.isFree} onChange={(e) => set('isFree', e.target.checked)} className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500" />
+          <label htmlFor={`${idPrefix}-is-free`} className="text-sm font-medium text-zinc-700">Percuma</label>
         </div>
         {!state.isFree && (
           <div className="flex-1">
-            <input type="text" value={state.sponsorName} onChange={(e) => set('sponsorName', e.target.value)} maxLength={160} className={inputCls} placeholder="Nama penaja" />
+            <label htmlFor={`${idPrefix}-sponsor`} className="sr-only">Nama penaja</label>
+            <input id={`${idPrefix}-sponsor`} type="text" value={state.sponsorName} onChange={(e) => set('sponsorName', e.target.value)} maxLength={160} className={inputCls} placeholder="Nama penaja" />
           </div>
         )}
       </div>

@@ -92,13 +92,13 @@ export function FacilityForm({ initial }: FacilityFormProps) {
       name: name.trim(),
       type,
       capacity: Number(capacity) || 0,
-      description: description.trim() || undefined,
-      photoUrl: effectivePhoto,
+      description: description.trim(),
+      photoUrl: effectivePhoto ?? '',
       rateKariah: kariahSen,
       rateAwam: awamSen,
       deposit: depositSen,
-      rateNote: rateNote.trim() || undefined,
-      rules: rules.trim() || undefined,
+      rateNote: rateNote.trim(),
+      rules: rules.trim(),
       active,
     };
 
@@ -199,26 +199,27 @@ export function FacilityForm({ initial }: FacilityFormProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Foto</label>
+            <label htmlFor="fac-photo-select" className="block text-sm font-medium text-zinc-700 mb-1.5">Foto</label>
             <select
+              id="fac-photo-select"
               value={photoSelect}
               onChange={(e) => setPhotoSelect(e.target.value)}
               className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors bg-white mb-2"
-              aria-label="Pilih foto"
             >
               <option value="">Tiada foto</option>
               {BUNDLED_PHOTOS.map((p) => (
                 <option key={p.value} value={p.value}>{p.label}</option>
               ))}
             </select>
+            <label htmlFor="fac-photo-url" className="sr-only">URL foto tersuai</label>
             <input
+              id="fac-photo-url"
               type="url"
               value={photoUrl}
               onChange={(e) => setPhotoUrl(e.target.value)}
               placeholder="Atau masukkan URL https:// (mengatasi pilihan di atas)"
               maxLength={500}
               className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
-              aria-label="URL foto tersuai"
             />
             {effectivePhoto && (
               <p className="text-xs text-zinc-400 mt-1 truncate">Foto: {effectivePhoto}</p>

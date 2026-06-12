@@ -8,20 +8,11 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { requireActiveSubscription } from '@/lib/require-subscription';
 import { BOOKING_STATUSES, EVENT_TYPE_LABELS } from '@/lib/bookings';
-import { BookingStatusBadge } from '@/components/ui/Badge';
+import { BookingStatusBadge, BOOKING_STATUS_LABELS } from '@/components/ui/Badge';
 
 export const metadata: Metadata = {
   title: 'Tempahan — MosRev',
   description: 'Semak dan lulus tempahan kemudahan masjid.',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  requested: 'Menunggu',
-  approved: 'Diluluskan',
-  paid: 'Dibayar',
-  completed: 'Selesai',
-  declined: 'Ditolak',
-  cancelled: 'Dibatal',
 };
 
 const PAGE_SIZE = 20;
@@ -37,14 +28,20 @@ export default async function BookingsPage({
   await requireActiveSubscription(session.orgId);
 
   const { status: rawStatus, page: pageRaw } = await searchParams;
-  // When no filter is selected, default the query to "requested" so the admin
-  // lands on the actionable queue. The "Semua" pill sets rawStatus to undefined.
-  const status = (BOOKING_STATUSES as ReadonlyArray<string>).includes(rawStatus ?? '')
-    ? rawStatus
-    : rawStatus === undefined
-    ? 'requested'
-    : null;
-  const page = Math.max(1, Number(pageRaw ?? '1'));
+  // Semua = status=all (no DB filter); undefined = default to "requested"
+  // Any invalid value also falls back to "requested".
+  let status: string | null;
+  if (rawStatus === 'all') {
+    status = null;
+  } else if (rawStatus === undefined) {
+    status = 'requested';
+  } else if ((BOOKING_STATUSES as ReadonlyArray<string>).includes(rawStatus)) {
+    status = rawStatus;
+  } else {
+    status = 'requested';
+  }
+
+  const page = Math.max(1, Math.floor(Number(pageRaw) || 1));
 
   const { bookings, total } = await withOrg(session.orgId, async (tx) => {
     const where = { orgId: session.orgId, ...(status ? { status } : {}) };
@@ -62,7 +59,9 @@ export default async function BookingsPage({
   });
 
   const pages = Math.ceil(total / PAGE_SIZE);
-  const filters = ['', ...BOOKING_STATUSES] as const;
+
+  // Effective status for pagination links (mirrors the status var but uses "all" for null)
+  const effectiveStatusParam = status === null ? 'all' : status;
 
   return (
     <div className="space-y-6">
@@ -72,12 +71,25 @@ export default async function BookingsPage({
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
-        {filters.map((f) => {
-          const active = f === '' ? !rawStatus : rawStatus === f;
+        {/* Semua pill — active only when status=all */}
+        <Link
+          href="/bookings?status=all"
+          aria-current={rawStatus === 'all' ? 'true' : undefined}
+          className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
+            rawStatus === 'all'
+              ? 'bg-zinc-900 text-white'
+              : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+          }`}
+        >
+          Semua
+        </Link>
+        {(BOOKING_STATUSES as ReadonlyArray<string>).map((f) => {
+          // Active: explicit match, or "requested" pill is active on default landing
+          const active = rawStatus === f || (rawStatus === undefined && f === 'requested');
           return (
             <Link
-              key={f || 'all'}
-              href={f ? `/bookings?status=${f}` : '/bookings'}
+              key={f}
+              href={`/bookings?status=${f}`}
               aria-current={active ? 'true' : undefined}
               className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
                 active
@@ -85,7 +97,7 @@ export default async function BookingsPage({
                   : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
               }`}
             >
-              {f ? (STATUS_LABELS[f] ?? f) : 'Semua'}
+              {BOOKING_STATUS_LABELS[f] ?? f}
             </Link>
           );
         })}
@@ -99,7 +111,7 @@ export default async function BookingsPage({
           <div className="flex items-center gap-2">
             {page > 1 && (
               <Link
-                href={status ? `?status=${status}&page=${page - 1}` : `?page=${page - 1}`}
+                href={`?status=${effectiveStatusParam}&page=${page - 1}`}
                 className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
               >
                 Sebelum
@@ -107,7 +119,7 @@ export default async function BookingsPage({
             )}
             {page < pages && (
               <Link
-                href={status ? `?status=${status}&page=${page + 1}` : `?page=${page + 1}`}
+                href={`?status=${effectiveStatusParam}&page=${page + 1}`}
                 className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
               >
                 Seterusnya

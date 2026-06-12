@@ -30,7 +30,7 @@ export default async function FinancePage({
 
   const { fund: rawFund, page: pageRaw } = await searchParams;
   const fund = (FUNDS as ReadonlyArray<string>).includes(rawFund ?? '') ? rawFund : null;
-  const page = Math.max(1, Number(pageRaw ?? '1'));
+  const page = Math.max(1, Math.floor(Number(pageRaw) || 1));
 
   const { entries, total, allEntries } = await withOrg(session.orgId, async (tx) => {
     const where = { orgId: session.orgId, ...(fund ? { fund } : {}) };
@@ -66,30 +66,34 @@ export default async function FinancePage({
           download
           className="flex items-center gap-1.5 border border-zinc-200 hover:border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700 font-medium text-sm px-4 py-2 rounded-lg transition-colors"
         >
-          Export CSV
+          Eksport CSV
         </a>
       </div>
 
       {/* Fund cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {FUNDS.map((f) => (
-          <Link
-            key={f}
-            href={fund === f ? '/finance' : `/finance?fund=${f}`}
-            className={`rounded-xl border p-4 transition-colors hover:bg-zinc-50 ${
-              f === 'sewaan'
-                ? 'border-emerald-300 bg-emerald-50/50'
-                : fund === f
-                ? 'border-zinc-900 bg-zinc-50'
-                : 'border-zinc-200 bg-white'
-            }`}
-          >
-            <p className="text-xs font-medium text-zinc-500">{FUND_LABELS[f] ?? f}</p>
-            <p className={`text-lg font-bold mt-1 ${totals[f] >= 0 ? 'text-zinc-950' : 'text-red-600'}`}>
-              {formatMYR(totals[f] ?? 0)}
-            </p>
-          </Link>
-        ))}
+        {FUNDS.map((f) => {
+          const isSelected = fund === f;
+          return (
+            <Link
+              key={f}
+              href={isSelected ? '/finance' : `/finance?fund=${f}`}
+              aria-current={isSelected ? 'true' : undefined}
+              className={`rounded-xl border p-4 transition-colors hover:bg-zinc-50 ${
+                isSelected
+                  ? 'border-zinc-900 bg-zinc-50'
+                  : f === 'sewaan'
+                  ? 'border-emerald-300 bg-emerald-50/50'
+                  : 'border-zinc-200 bg-white'
+              }`}
+            >
+              <p className="text-xs font-medium text-zinc-500">{FUND_LABELS[f] ?? f}</p>
+              <p className={`text-lg font-bold mt-1 ${totals[f] >= 0 ? 'text-zinc-950' : 'text-red-600'}`}>
+                {formatMYR(totals[f] ?? 0)}
+              </p>
+            </Link>
+          );
+        })}
       </div>
 
       {/* Filter pills */}
@@ -150,49 +154,51 @@ export default async function FinancePage({
         </div>
       ) : (
         <div className="bg-white border border-zinc-200/70 rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-zinc-100">
-                <th className="text-left px-5 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Tarikh</th>
-                <th className="text-left px-3 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Tabung</th>
-                <th className="text-left px-3 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Keterangan</th>
-                <th className="text-right px-5 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Jumlah</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-100">
-              {entries.map((e) => (
-                <tr key={e.id} className="hover:bg-zinc-50 transition-colors">
-                  <td className="px-5 py-3 text-xs text-zinc-500 whitespace-nowrap">
-                    {new Date(e.entryDate).toLocaleDateString('ms-MY')}
-                  </td>
-                  <td className="px-3 py-3 text-xs text-zinc-600 whitespace-nowrap">
-                    {FUND_LABELS[e.fund] ?? e.fund}
-                  </td>
-                  <td className="px-3 py-3 text-xs text-zinc-700">
-                    <div className="flex items-start gap-1.5">
-                      {e.direction === 'in' ? (
-                        <ArrowUp className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" aria-hidden="true" />
-                      ) : (
-                        <ArrowDown className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" aria-hidden="true" />
-                      )}
-                      <span>{e.description}</span>
-                    </div>
-                    {e.refType === 'booking' && e.refId && (
-                      <Link
-                        href={`/bookings/${e.refId}`}
-                        className="text-xs text-emerald-600 hover:text-emerald-700 ml-5"
-                      >
-                        Lihat tempahan
-                      </Link>
-                    )}
-                  </td>
-                  <td className={`px-5 py-3 text-sm font-semibold text-right whitespace-nowrap ${e.direction === 'in' ? 'text-emerald-700' : 'text-red-600'}`}>
-                    {e.direction === 'out' ? '−' : '+'}{formatMYR(e.amount)}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm" aria-label="Catatan kewangan">
+              <thead>
+                <tr className="border-b border-zinc-100">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Tarikh</th>
+                  <th className="text-left px-3 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Tabung</th>
+                  <th className="text-left px-3 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Keterangan</th>
+                  <th className="text-right px-5 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wide">Jumlah</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-zinc-100">
+                {entries.map((e) => (
+                  <tr key={e.id} className="hover:bg-zinc-50 transition-colors">
+                    <td className="px-5 py-3 text-xs text-zinc-500 whitespace-nowrap">
+                      {new Date(e.entryDate).toLocaleDateString('ms-MY')}
+                    </td>
+                    <td className="px-3 py-3 text-xs text-zinc-600 whitespace-nowrap">
+                      {FUND_LABELS[e.fund] ?? e.fund}
+                    </td>
+                    <td className="px-3 py-3 text-xs text-zinc-700">
+                      <div className="flex items-start gap-1.5">
+                        {e.direction === 'in' ? (
+                          <ArrowUp className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" aria-hidden="true" />
+                        ) : (
+                          <ArrowDown className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" aria-hidden="true" />
+                        )}
+                        <span>{e.description}</span>
+                      </div>
+                      {e.refType === 'booking' && e.refId && (
+                        <Link
+                          href={`/bookings/${e.refId}`}
+                          className="text-xs text-emerald-600 hover:text-emerald-700 ml-5"
+                        >
+                          Lihat tempahan
+                        </Link>
+                      )}
+                    </td>
+                    <td className={`px-5 py-3 text-sm font-semibold text-right whitespace-nowrap ${e.direction === 'in' ? 'text-emerald-700' : 'text-red-600'}`}>
+                      {e.direction === 'out' ? '−' : '+'}{formatMYR(e.amount)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

@@ -4,7 +4,6 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
-import { prismaAdmin } from '@/lib/db';
 import { requireActiveSubscription } from '@/lib/require-subscription';
 import { ProfileForm } from './ProfileForm';
 import { RamadanManager } from './RamadanManager';
@@ -20,24 +19,19 @@ export default async function CommunityPage() {
   if (!session.orgId) redirect('/onboarding');
   await requireActiveSubscription(session.orgId);
 
-  // Fetch org slug for the public link alongside the org-scoped data.
-  const [orgRow, profile, programs] = await Promise.all([
-    prismaAdmin.organization.findUnique({
-      where: { id: session.orgId },
-      select: { slug: true },
-    }),
-    withOrg(session.orgId, async (tx) =>
-      tx.mosqueProfile.findUnique({ where: { orgId: session.orgId } })
-    ),
-    withOrg(session.orgId, async (tx) =>
+  // Fetch org slug alongside org-scoped data in a single withOrg transaction.
+  // Organization has a self-id RLS policy so this read is safe without prismaAdmin.
+  const { slug, profile, programs } = await withOrg(session.orgId, async (tx) => {
+    const [orgRow, profile, programs] = await Promise.all([
+      tx.organization.findUnique({ where: { id: session.orgId }, select: { slug: true } }),
+      tx.mosqueProfile.findUnique({ where: { orgId: session.orgId } }),
       tx.ramadanProgram.findMany({
         where: { orgId: session.orgId },
         orderBy: [{ type: 'asc' }, { createdAt: 'asc' }],
-      })
-    ),
-  ]);
-
-  const slug = orgRow?.slug ?? '';
+      }),
+    ]);
+    return { slug: orgRow?.slug ?? '', profile, programs };
+  });
 
   return (
     <div className="space-y-6">

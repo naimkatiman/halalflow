@@ -181,7 +181,7 @@ export function Navbar() {
               </span>
             )}
           </div>
-          <nav className="hidden sm:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {nav.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
@@ -209,7 +209,7 @@ export function Navbar() {
                   ? `Free trial: ${user.trial.daysLeft} ${user.trial.daysLeft === 1 ? 'day' : 'days'} left`
                   : 'Your free trial has ended'
               }
-              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:border-amber-300 hover:text-amber-900 transition-colors"
+              className="hidden lg:flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:border-amber-300 hover:text-amber-900 transition-colors"
             >
               <Clock className="w-3 h-3 shrink-0" aria-hidden="true" />
               <span>{user.trial.daysLeft > 0 ? `Trial · ${user.trial.daysLeft}d left` : 'Trial ended'}</span>
@@ -219,7 +219,7 @@ export function Navbar() {
             <Link
               href="/settings"
               title={`Workspace: ${user.orgName}`}
-              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
+              className="hidden xl:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
             >
               <Buildings className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
               <span className="truncate">{user.orgName}</span>
@@ -227,12 +227,12 @@ export function Navbar() {
           )}
           {user && (
             <>
-              <span className="text-xs text-zinc-500 hidden sm:block truncate max-w-[160px]">{user.name}</span>
+              <span className="text-xs text-zinc-500 hidden lg:block truncate max-w-[160px]">{user.name}</span>
               <button
                 type="button"
                 onClick={handleLogout}
                 aria-label="Sign out"
-                className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
+                className="hidden lg:flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
               >
                 <SignOut className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Sign out</span>
@@ -241,7 +241,7 @@ export function Navbar() {
           )}
           <button
             type="button"
-            className="sm:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
+            className="lg:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
@@ -252,7 +252,7 @@ export function Navbar() {
         </div>
       </div>
       {mobileOpen && (
-        <div id="mobile-nav-menu-auth" className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-1">
+        <div id="mobile-nav-menu-auth" className="lg:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-1">
           {nav.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}

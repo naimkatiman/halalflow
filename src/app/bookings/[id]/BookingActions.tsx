@@ -99,7 +99,10 @@ export function BookingActions({ booking }: BookingActionsProps) {
     });
   };
 
-  const handleCancel = () => act('cancel');
+  const handleCancel = () => {
+    if (!window.confirm('Batal tempahan ini? Tindakan ini tidak boleh dibuat asal.')) return;
+    act('cancel');
+  };
   const handleComplete = () => act('complete');
 
   const s = booking.status;
