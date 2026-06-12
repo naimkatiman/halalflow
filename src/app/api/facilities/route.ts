@@ -15,10 +15,14 @@ const createSchema = z.object({
   type: z.enum(FACILITY_TYPES),
   capacity: z.number().int().min(0).max(100000).default(0),
   description: z.string().trim().max(2000).optional(),
-  photoUrl: z.string().trim().max(500).optional(),
-  rateKariah: z.number().int().min(0),
-  rateAwam: z.number().int().min(0),
-  deposit: z.number().int().min(0).default(0),
+  photoUrl: z.string().trim().max(500)
+    .refine((v) => /^https:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//")), {
+      message: "Photo must be an https URL or a local path",
+    })
+    .optional(),
+  rateKariah: z.number().int().min(0).max(100_000_000),
+  rateAwam: z.number().int().min(0).max(100_000_000),
+  deposit: z.number().int().min(0).max(100_000_000).default(0),
   rateNote: z.string().trim().max(200).optional(),
   rules: z.string().trim().max(4000).optional(),
   active: z.boolean().default(true),
@@ -62,8 +66,8 @@ export async function POST(request: NextRequest) {
     const data = await withOrg(session.orgId, async (tx) =>
       tx.facility.create({
         data: {
-          orgId: session.orgId,
           ...parsed,
+          orgId: session.orgId,
         },
       }),
     );
