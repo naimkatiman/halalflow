@@ -1,3 +1,6 @@
+import { prismaAdmin } from '@/lib/db';
+import { isDemoEmail } from '@/lib/demo';
+
 const RESEND_API_URL = 'https://api.resend.com/emails';
 
 export function escapeHtml(text: string): string {
@@ -28,11 +31,34 @@ function getEmailConfig() {
 }
 
 export function isEmailConfigured() {
+  // Demo mode counts as configured: sendEmail captures to the outbox instead.
+  if (isDemoEmail()) return true;
   const { apiKey, from } = getEmailConfig();
   return Boolean(apiKey && from);
 }
 
 export async function sendEmail(message: EmailMessage): Promise<EmailSendResult> {
+  // Demo mode without real email keys: capture the message to the DB-backed
+  // outbox instead of sending. prismaAdmin because DemoEmail is a global,
+  // demo-only table with no org column (nothing for RLS to scope).
+  if (isDemoEmail()) {
+    try {
+      const row = await prismaAdmin.demoEmail.create({
+        data: {
+          to: Array.isArray(message.to) ? message.to.join(', ') : message.to,
+          subject: message.subject,
+          text: message.text,
+          html: message.html,
+        },
+      });
+      console.log(`[demo] captured email: ${message.subject}`);
+      return { ok: true, id: row.id };
+    } catch (error) {
+      console.error('sendEmail demo capture error:', error);
+      return { ok: false, reason: 'Failed to capture demo email to the outbox.' };
+    }
+  }
+
   const { apiKey, from } = getEmailConfig();
 
   if (!apiKey || !from) {

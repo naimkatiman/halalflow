@@ -1,4 +1,4 @@
-import { isStripeConfigured } from "@/lib/stripe";
+import { isBillingEnabled } from "@/lib/demo";
 
 // Statuses that still grant access. `past_due` keeps the org running during
 // Stripe's payment-retry grace window; only canceled/unpaid/incomplete lock out.
@@ -44,9 +44,10 @@ export function isOnDefaultTrial(
 /**
  * Whether an org may use the product given its subscription state.
  *
- * The paywall is a no-op until Stripe is configured: with no STRIPE_SECRET_KEY
- * this always returns true, so self-hosters and pre-billing deployments are
- * never locked out. Once Stripe is wired:
+ * The paywall is a no-op until billing is enabled — real Stripe keys or demo
+ * mode's simulated billing: with neither, this always returns true, so
+ * self-hosters and pre-billing deployments are never locked out. Once billing
+ * is on:
  *  - default trial (no Stripe subscription yet) expires TRIAL_DAYS after the
  *    org was created — "trialing" alone is no longer a forever pass;
  *  - past_due rides on status alone, since Stripe holds currentPeriodEnd at
@@ -55,7 +56,7 @@ export function isOnDefaultTrial(
  *    treated as missed webhooks and fail closed after a grace window.
  */
 export function isSubscriptionActive(org: SubscriptionState): boolean {
-  if (!isStripeConfigured()) return true;
+  if (!isBillingEnabled()) return true;
   if (!ACTIVE_STATUSES.has(org.subscriptionStatus ?? "")) return false;
   if (isOnDefaultTrial(org)) return Date.now() < trialEndsAt(org).getTime();
   if (org.subscriptionStatus === "past_due") return true;
