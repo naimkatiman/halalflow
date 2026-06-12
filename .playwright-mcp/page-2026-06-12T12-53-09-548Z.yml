@@ -1,0 +1,134 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]: Demo mode — payments and emails are simulated. No real charges, no real emails.
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - link "MosRev" [ref=e38] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e39]
+            - text: MosRev
+          - generic [ref=e41]: Demo
+        - navigation [ref=e42]:
+          - link "Dashboard" [ref=e43] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e44]
+            - text: Dashboard
+          - link "Workflows" [ref=e46] [cursor=pointer]:
+            - /url: /workflows
+            - img [ref=e47]
+            - text: Workflows
+          - link "Templates" [ref=e49] [cursor=pointer]:
+            - /url: /templates
+            - img [ref=e50]
+            - text: Templates
+          - link "Billing" [ref=e52] [cursor=pointer]:
+            - /url: /billing
+            - img [ref=e53]
+            - text: Billing
+          - link "Settings" [ref=e55] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e56]
+            - text: Settings
+          - link "Outbox" [ref=e58] [cursor=pointer]:
+            - /url: /demo/outbox
+            - img [ref=e59]
+            - text: Outbox
+      - generic [ref=e61]:
+        - link "Trial · 30d left" [ref=e62] [cursor=pointer]:
+          - /url: /billing
+          - img [ref=e63]
+          - generic [ref=e65]: Trial · 30d left
+        - link "Al-Noor Mosque Trust" [ref=e66] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e67]
+          - generic [ref=e69]: Al-Noor Mosque Trust
+        - generic [ref=e70]: Admin
+        - button "Sign out" [ref=e71]:
+          - img [ref=e72]
+          - generic [ref=e74]: Sign out
+  - main [ref=e9]:
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - heading "Al-Noor Mosque Trust" [level=1] [ref=e78]
+          - paragraph [ref=e79]: Workflow overview
+        - link "New workflow" [ref=e80] [cursor=pointer]:
+          - /url: /workflows/new
+          - img [ref=e81]
+          - text: New workflow
+      - generic [ref=e83]:
+        - link "4 Total" [ref=e84] [cursor=pointer]:
+          - /url: /workflows
+          - img [ref=e85]
+          - generic [ref=e87]: "4"
+          - generic [ref=e88]: Total
+        - link "2 Awaiting approval" [ref=e89] [cursor=pointer]:
+          - /url: /workflows?status=in_progress
+          - img [ref=e90]
+          - generic [ref=e92]: "2"
+          - generic [ref=e93]: Awaiting approval
+        - link "1 Approved" [ref=e94] [cursor=pointer]:
+          - /url: /workflows?status=approved
+          - img [ref=e95]
+          - generic [ref=e97]: "1"
+          - generic [ref=e98]: Approved
+        - link "1 Rejected" [ref=e99] [cursor=pointer]:
+          - /url: /workflows?status=rejected
+          - img [ref=e100]
+          - generic [ref=e102]: "1"
+          - generic [ref=e103]: Rejected
+      - generic [ref=e104]:
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - heading "Recent Workflows" [level=2] [ref=e107]
+            - link "View all" [ref=e108] [cursor=pointer]:
+              - /url: /workflows
+              - text: View all
+              - img [ref=e109]
+          - generic [ref=e111]:
+            - link "Friday Donation Box — Week 24 Donation Acknowledgment · Siti Aminah Awaiting approval" [ref=e112] [cursor=pointer]:
+              - /url: /workflows/cmqaxd6h1001plrzcgm95c023
+              - generic [ref=e113]:
+                - generic [ref=e114]: Friday Donation Box — Week 24
+                - generic [ref=e115]: Donation Acknowledgment · Siti Aminah
+              - generic [ref=e116]: Awaiting approval
+            - link "Zakat Aid — Family in Kampung Baru Zakat Distribution Request · Siti Aminah Awaiting approval" [ref=e117] [cursor=pointer]:
+              - /url: /workflows/cmqaxd4u1001glrzcijlgqkez
+              - generic [ref=e118]:
+                - generic [ref=e119]: Zakat Aid — Family in Kampung Baru
+                - generic [ref=e120]: Zakat Distribution Request · Siti Aminah
+              - generic [ref=e121]: Awaiting approval
+            - link "Ramadan Iftar Catering — RM 4,500 Expense Approval · Siti Aminah Approved" [ref=e122] [cursor=pointer]:
+              - /url: /workflows/cmqaxd2x60015lrzcifmzl93x
+              - generic [ref=e123]:
+                - generic [ref=e124]: Ramadan Iftar Catering — RM 4,500
+                - generic [ref=e125]: Expense Approval · Siti Aminah
+              - generic [ref=e126]: Approved
+            - link "Roof Repair Quotation — RM 12,000 Expense Approval · Siti Aminah Rejected" [ref=e127] [cursor=pointer]:
+              - /url: /workflows/cmqaxd7t9001vlrzcskd3g5vz
+              - generic [ref=e128]:
+                - generic [ref=e129]: Roof Repair Quotation — RM 12,000
+                - generic [ref=e130]: Expense Approval · Siti Aminah
+              - generic [ref=e131]: Rejected
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - heading "Templates" [level=2] [ref=e134]
+            - link "View all" [ref=e135] [cursor=pointer]:
+              - /url: /templates
+              - text: View all
+              - img [ref=e136]
+          - generic [ref=e138]:
+            - generic [ref=e139]: "6"
+            - paragraph [ref=e140]: workflow templates defined
+  - contentinfo [ref=e29]:
+    - generic [ref=e30]:
+      - generic [ref=e31]: MosRev — Islamic Finance Workflow Engine
+      - generic [ref=e32]:
+        - link "MosRev GitHub repository (opens in new tab)" [ref=e33] [cursor=pointer]:
+          - /url: https://github.com/naimkatiman/halalflow
+          - text: GitHub
+        - generic [ref=e34]: Open Source
+  - alert [ref=e35]: Dashboard — MosRev

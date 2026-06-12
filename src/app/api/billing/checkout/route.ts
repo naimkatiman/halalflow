@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prismaAdmin } from "@/lib/db";
+import { isDemoBilling } from "@/lib/demo";
 import { getStripe } from "@/lib/stripe";
 import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
@@ -17,6 +18,11 @@ export async function POST(request: NextRequest) {
 
     const csrf = await validateCsrfToken(request);
     if (!csrf.valid) return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403, headers: { "Cache-Control": "no-store" } });
+
+    // Demo mode routes to the simulated checkout page instead of Stripe.
+    if (isDemoBilling()) {
+      return NextResponse.json({ url: "/billing/demo-checkout" }, { headers: { "Cache-Control": "no-store", "X-CSRF-Token": csrf.newToken } });
+    }
 
     const stripe = getStripe();
     const priceId = process.env.STRIPE_PRICE_ID?.trim();

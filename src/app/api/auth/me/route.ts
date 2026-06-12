@@ -3,7 +3,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { prismaAdmin } from "@/lib/db";
 import { SessionData, sessionOptions } from "@/lib/session";
-import { isStripeConfigured } from "@/lib/stripe";
+import { isBillingEnabled, isDemoMode } from "@/lib/demo";
 import { isOnDefaultTrial, trialDaysLeft } from "@/lib/subscription";
 
 export async function GET() {
@@ -27,7 +27,7 @@ export async function GET() {
     // Surfaced so the UI can count down the card-free trial; null whenever
     // billing is off or the org has a real Stripe subscription.
     const trial =
-      org && isStripeConfigured() && isOnDefaultTrial(org)
+      org && isBillingEnabled() && isOnDefaultTrial(org)
         ? { daysLeft: trialDaysLeft(org) }
         : null;
 
@@ -42,6 +42,8 @@ export async function GET() {
           orgRole: session.orgRole,
           orgName: org?.name ?? null,
           trial,
+          // The UI uses this to surface the demo Outbox link and demo badge.
+          demo: isDemoMode(),
         },
       },
       { headers: { "Cache-Control": "no-store" } }
