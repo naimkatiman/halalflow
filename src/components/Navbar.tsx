@@ -57,7 +57,9 @@ export function Navbar() {
     );
   }
 
-  if (pathname === '/') {
+  // Community directory pages are public surfaces — anonymous visitors get the
+  // landing chrome (Sign in / Get started), not the app chrome.
+  if (pathname === '/' || pathname.startsWith('/masjid') || pathname.startsWith('/ramadan')) {
     return (
       <header className="border-b border-zinc-200/50 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
@@ -66,9 +68,9 @@ export function Navbar() {
             MosRev
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
-            <a href="#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
-            <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
-            <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
+            <a href="/#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
+            <a href="/#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
+            <a href="/#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
             <Link href="/masjid" className="hover:text-zinc-900 transition-colors">Direktori Masjid</Link>
             <Link href="/ramadan" className="hover:text-zinc-900 transition-colors">Ramadan</Link>
           </nav>
@@ -97,21 +99,21 @@ export function Navbar() {
         {mobileOpen && (
           <div id="mobile-nav-menu" className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-2">
             <a
-              href="#use-cases"
+              href="/#use-cases"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               Use cases
             </a>
             <a
-              href="#how-it-works"
+              href="/#how-it-works"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               How it works
             </a>
             <a
-              href="#pricing"
+              href="/#pricing"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
