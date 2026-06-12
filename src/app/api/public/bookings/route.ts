@@ -9,9 +9,9 @@ const publicBookingSchema = z.object({
   slug: z.string().trim().min(1).max(100),
   facilityId: z.string().trim().min(1).max(50),
   eventType: z.enum(EVENT_TYPES),
-  eventDate: z.coerce.date(),
-  startTime: z.string().regex(/^\d{2}:\d{2}$/),
-  endTime: z.string().regex(/^\d{2}:\d{2}$/),
+  eventDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  startTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+  endTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
   pax: z.number().int().min(1).max(100000),
   applicantName: z.string().trim().min(1).max(160),
   applicantPhone: z.string().trim().min(6).max(30),
@@ -29,8 +29,9 @@ const publicBookingSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     // 1. Rate limit by IP
+    // Railway appends the real client IP as the rightmost XFF entry; leftmost entries are client-supplied
     const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ??
       "unknown";
     const rateLimit = checkRateLimit("public-booking:" + ip);
     if (!rateLimit.allowed) {
@@ -47,7 +48,15 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Parse and validate body
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid JSON" },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
     let parsed: z.infer<typeof publicBookingSchema>;
     try {
       parsed = publicBookingSchema.parse(body);
@@ -61,14 +70,28 @@ export async function POST(request: NextRequest) {
       throw err;
     }
 
-    // 3. Reject past dates (date-only comparison)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const eventDay = new Date(parsed.eventDate);
-    eventDay.setHours(0, 0, 0, 0);
-    if (eventDay < today) {
+    // 3. Validate date and time windows (Malaysia calendar; YYYY-MM-DD and
+    // zero-padded HH:MM compare correctly as strings)
+    const klDate = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kuala_Lumpur",
+    });
+    const todayKL = klDate.format(new Date());
+    if (parsed.eventDate < todayKL) {
       return NextResponse.json(
         { error: "Tarikh telah lepas" },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+    const maxKL = klDate.format(new Date(Date.now() + 730 * 86400000));
+    if (parsed.eventDate > maxKL) {
+      return NextResponse.json(
+        { error: "Tarikh terlalu jauh" },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+    if (parsed.endTime <= parsed.startTime) {
+      return NextResponse.json(
+        { error: "Masa tamat mesti selepas masa mula" },
         { status: 400, headers: { "Cache-Control": "no-store" } },
       );
     }
@@ -105,7 +128,8 @@ export async function POST(request: NextRequest) {
         orgId: org.id,
         facilityId: parsed.facilityId,
         eventType: parsed.eventType,
-        eventDate: parsed.eventDate,
+        // Midnight UTC keeps the calendar date stable under UTC server rendering
+        eventDate: new Date(parsed.eventDate + "T00:00:00Z"),
         startTime: parsed.startTime,
         endTime: parsed.endTime,
         pax: parsed.pax,
