@@ -184,3 +184,17 @@ model Invitation {
   @@index([orgId])
   @@index([token])
 }
+
+// Demo-mode email outbox: when DEMO_MODE is on and no Resend keys are set,
+// sendEmail writes here instead of dispatching. Global demo-only table — no
+// org scoping, no RLS; reads/writes go through prismaAdmin.
+model DemoEmail {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  text      String
+  html      String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
