@@ -49,6 +49,9 @@ next-env.d.ts
 *.db-shm
 *.db-wal
 
+# Playwright MCP session artifacts (console logs + page snapshots)
+.playwright-mcp/
+
 # Brainstorming visual companion
 .superpowers/
 
