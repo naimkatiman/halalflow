@@ -7,6 +7,7 @@ import { Plus, Trash, ArrowLeft, ArrowUp, ArrowDown } from '@phosphor-icons/reac
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
 interface Step {
+  id: string;
   name: string;
   description: string;
   requiredRole?: string;
@@ -16,11 +17,11 @@ export function NewTemplateForm() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [steps, setSteps] = useState<Step[]>([{ name: '', description: '', requiredRole: '' }]);
+  const [steps, setSteps] = useState<Step[]>(() => [{ id: crypto.randomUUID(), name: '', description: '', requiredRole: '' }]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const addStep = () => setSteps([...steps, { name: '', description: '', requiredRole: '' }]);
+  const addStep = () => setSteps([...steps, { id: crypto.randomUUID(), name: '', description: '', requiredRole: '' }]);
 
   const removeStep = (i: number) => {
     if (steps.length === 1) return;
@@ -68,7 +69,7 @@ export function NewTemplateForm() {
       router.refresh();
     } catch (err) {
       console.error('NewTemplateForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -127,12 +128,12 @@ export function NewTemplateForm() {
           </div>
           <div className="space-y-3">
             {steps.map((step, i) => (
-              <div key={i} className="flex gap-3 items-start">
+              <div key={step.id} className="flex gap-3 items-start">
                 <div className="flex flex-col gap-1 pt-2">
-                  <button type="button" onClick={() => moveStep(i, -1)} disabled={i === 0} aria-label="Move step up" className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
+                  <button type="button" onClick={() => moveStep(i, -1)} disabled={i === 0} aria-label="Move step up" className="text-zinc-500 hover:text-zinc-700 disabled:opacity-30 transition-colors p-1">
                     <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
-                  <button type="button" onClick={() => moveStep(i, 1)} disabled={i === steps.length - 1} aria-label="Move step down" className="text-zinc-300 hover:text-zinc-600 disabled:opacity-30 transition-colors">
+                  <button type="button" onClick={() => moveStep(i, 1)} disabled={i === steps.length - 1} aria-label="Move step down" className="text-zinc-500 hover:text-zinc-700 disabled:opacity-30 transition-colors p-1">
                     <ArrowDown className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
                 </div>
@@ -154,31 +155,33 @@ export function NewTemplateForm() {
                       onClick={() => removeStep(i)}
                       disabled={steps.length === 1}
                       aria-label="Remove step"
-                      className="text-zinc-300 hover:text-red-500 disabled:opacity-30 transition-colors p-1"
+                      className="text-zinc-500 hover:text-red-600 disabled:opacity-30 transition-colors p-1"
                     >
                       <Trash className="w-3.5 h-3.5" aria-hidden="true" />
                     </button>
                   </div>
-                  <input
-                    type="text"
-                    value={step.description}
-                    onChange={(e) => updateStep(i, 'description', e.target.value)}
-                    aria-label={`Step ${i + 1} description`}
-                    className="w-full ml-5 px-3 py-1.5 border border-zinc-100 rounded-lg text-xs text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
-                    maxLength={2000}
-                    placeholder="Step description (optional)"
-                  />
-                  <select
-                    value={step.requiredRole || ''}
-                    onChange={(e) => updateStep(i, 'requiredRole', e.target.value)}
-                    aria-label={`Step ${i + 1} required role`}
-                    className="w-full ml-5 px-3 py-1.5 border border-zinc-100 rounded-lg text-xs text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors bg-white"
-                  >
-                    <option value="">Any member can approve</option>
-                    <option value="owner">Owner only</option>
-                    <option value="admin">Admin or above</option>
-                    <option value="member">Member or above</option>
-                  </select>
+                  <div className="pl-5 space-y-2">
+                    <input
+                      type="text"
+                      value={step.description}
+                      onChange={(e) => updateStep(i, 'description', e.target.value)}
+                      aria-label={`Step ${i + 1} description`}
+                      className="w-full px-3 py-1.5 border border-zinc-200 rounded-lg text-xs text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                      maxLength={2000}
+                      placeholder="Step description (optional)"
+                    />
+                    <select
+                      value={step.requiredRole || ''}
+                      onChange={(e) => updateStep(i, 'requiredRole', e.target.value)}
+                      aria-label={`Step ${i + 1} required role`}
+                      className="w-full px-3 py-1.5 border border-zinc-200 rounded-lg text-xs text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors bg-white"
+                    >
+                      <option value="">Any member can approve</option>
+                      <option value="owner">Owner only</option>
+                      <option value="admin">Admin or above</option>
+                      <option value="member">Member or above</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             ))}
