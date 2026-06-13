@@ -35,19 +35,19 @@ export default async function FinancePage({
   const { entries, total, allEntries } = await withOrg(session.orgId, async (tx) => {
     const where = { orgId: session.orgId, ...(fund ? { fund } : {}) };
     const allWhere = { orgId: session.orgId };
-    const [entries, total, allEntries] = await Promise.all([
-      tx.ledgerEntry.findMany({
-        where,
-        orderBy: { entryDate: 'desc' },
-        skip: (page - 1) * PAGE_SIZE,
-        take: PAGE_SIZE,
-      }),
-      tx.ledgerEntry.count({ where }),
-      tx.ledgerEntry.findMany({
-        where: allWhere,
-        select: { fund: true, direction: true, amount: true, description: true, entryDate: true, refType: true, refId: true },
-      }),
-    ]);
+    // Sequential on purpose: concurrent queries on one interactive transaction
+    // are unsupported by Prisma and stall over high-latency connections.
+    const entries = await tx.ledgerEntry.findMany({
+      where,
+      orderBy: { entryDate: 'desc' },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    });
+    const total = await tx.ledgerEntry.count({ where });
+    const allEntries = await tx.ledgerEntry.findMany({
+      where: allWhere,
+      select: { fund: true, direction: true, amount: true, description: true, entryDate: true, refType: true, refId: true },
+    });
     return { entries, total, allEntries };
   });
 

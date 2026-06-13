@@ -22,14 +22,14 @@ export default async function CommunityPage() {
   // Fetch org slug alongside org-scoped data in a single withOrg transaction.
   // Organization has a self-id RLS policy so this read is safe without prismaAdmin.
   const { slug, profile, programs } = await withOrg(session.orgId, async (tx) => {
-    const [orgRow, profile, programs] = await Promise.all([
-      tx.organization.findUnique({ where: { id: session.orgId }, select: { slug: true } }),
-      tx.mosqueProfile.findUnique({ where: { orgId: session.orgId } }),
-      tx.ramadanProgram.findMany({
-        where: { orgId: session.orgId },
-        orderBy: [{ type: 'asc' }, { createdAt: 'asc' }],
-      }),
-    ]);
+    // Sequential on purpose: concurrent queries on one interactive transaction
+    // are unsupported by Prisma and stall over high-latency connections.
+    const orgRow = await tx.organization.findUnique({ where: { id: session.orgId }, select: { slug: true } });
+    const profile = await tx.mosqueProfile.findUnique({ where: { orgId: session.orgId } });
+    const programs = await tx.ramadanProgram.findMany({
+      where: { orgId: session.orgId },
+      orderBy: [{ type: 'asc' }, { createdAt: 'asc' }],
+    });
     return { slug: orgRow?.slug ?? '', profile, programs };
   });
 

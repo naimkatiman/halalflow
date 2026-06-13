@@ -45,16 +45,16 @@ export default async function BookingsPage({
 
   const { bookings, total } = await withOrg(session.orgId, async (tx) => {
     const where = { orgId: session.orgId, ...(status ? { status } : {}) };
-    const [bookings, total] = await Promise.all([
-      tx.facilityBooking.findMany({
-        where,
-        include: { facility: { select: { name: true } } },
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * PAGE_SIZE,
-        take: PAGE_SIZE,
-      }),
-      tx.facilityBooking.count({ where }),
-    ]);
+    // Sequential on purpose: concurrent queries on one interactive transaction
+    // are unsupported by Prisma and stall over high-latency connections.
+    const bookings = await tx.facilityBooking.findMany({
+      where,
+      include: { facility: { select: { name: true } } },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    });
+    const total = await tx.facilityBooking.count({ where });
     return { bookings, total };
   });
 
