@@ -6,6 +6,7 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { isBillingEnabled, isDemoBilling } from '@/lib/demo';
 import { isOnDefaultTrial, isSubscriptionActive, trialDaysLeft, trialEndsAt } from '@/lib/subscription';
+import { PLAN_NAME, PLAN_PRICE_LABEL } from '@/lib/billing-plan';
 import { SubscribeButton } from './SubscribeButton';
 import { DemoControls } from './DemoControls';
 import { CheckCircle, Info, Warning } from '@phosphor-icons/react/dist/ssr';
@@ -94,9 +95,16 @@ export default async function BillingPage({
           </div>
         </div>
 
+        {demoBilling && (
+          <div className="flex items-center justify-between py-2 border-t border-zinc-100 text-sm">
+            <span className="text-zinc-500">Plan</span>
+            <span className="text-zinc-900 font-medium">{PLAN_NAME} · {PLAN_PRICE_LABEL}</span>
+          </div>
+        )}
+
         {org.currentPeriodEnd && (
           <div className="flex items-center justify-between py-2 border-t border-zinc-100 text-sm">
-            <span className="text-zinc-500">Renews / ends</span>
+            <span className="text-zinc-500">{['canceled', 'unpaid'].includes(org.subscriptionStatus) ? 'Access ends' : 'Renews on'}</span>
             <span className="text-zinc-900">{org.currentPeriodEnd.toLocaleDateString()}</span>
           </div>
         )}

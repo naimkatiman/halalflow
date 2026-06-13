@@ -4,7 +4,9 @@ import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { isDemoBilling } from '@/lib/demo';
+import Link from 'next/link';
 import { DemoCheckoutForm } from './DemoCheckoutForm';
+import { PLAN_NAME, PLAN_PRICE_LABEL } from '@/lib/billing-plan';
 import { Warning } from '@phosphor-icons/react/dist/ssr';
 
 export const metadata: Metadata = {
@@ -38,10 +40,10 @@ export default async function DemoCheckoutPage() {
           <h1 className="font-semibold text-zinc-950 text-sm">Order summary</h1>
           <div className="flex items-start justify-between gap-4 py-2 border-t border-zinc-100 text-sm">
             <div>
-              <p className="text-zinc-900 font-medium">MosRev Pro</p>
+              <p className="text-zinc-900 font-medium">{PLAN_NAME}</p>
               <p className="text-zinc-500 text-xs mt-0.5">Workspace subscription</p>
             </div>
-            <p className="text-zinc-900 font-medium whitespace-nowrap">RM99.00 / month</p>
+            <p className="text-zinc-900 font-medium whitespace-nowrap">{PLAN_PRICE_LABEL}</p>
           </div>
           <p className="text-xs text-zinc-500 bg-zinc-50 border border-zinc-200/70 rounded-lg px-3 py-2">
             Demo price — the real price is configured in Stripe.
@@ -50,6 +52,12 @@ export default async function DemoCheckoutPage() {
 
         <DemoCheckoutForm name={session.name || 'Demo Card'} />
       </div>
+
+      <p className="text-center text-sm">
+        <Link href="/billing?status=cancelled" className="text-zinc-500 hover:text-zinc-800 transition-colors">
+          Cancel and return to billing
+        </Link>
+      </p>
     </div>
   );
 }
