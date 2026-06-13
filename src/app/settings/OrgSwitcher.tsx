@@ -13,19 +13,27 @@ interface Org {
 
 export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId: string }) {
   const [switching, setSwitching] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   const handleSwitch = async (orgId: string) => {
     if (orgId === currentOrgId) return;
     setSwitching(orgId);
+    setError('');
     try {
       const res = await fetchWithCsrf(`/api/orgs/${orgId}/switch`, { method: 'POST' });
       if (res.ok) {
+        // A workspace switch changes session-global state the client navbar
+        // caches, so a full reload is intentional (router.refresh would leave
+        // the navbar's org pill pointing at the previous workspace).
         window.location.reload();
-      } else {
-        setSwitching(null);
+        return;
       }
-    } catch (error) {
-      console.error('Org switch error:', error);
+      const data = await res.json().catch(() => null);
+      setError(typeof data?.error === 'string' ? data.error : 'Could not switch workspace. Try again.');
+      setSwitching(null);
+    } catch (err) {
+      console.error('Org switch error:', err);
+      setError('Could not reach the server. Check your connection and try again.');
       setSwitching(null);
     }
   };
@@ -67,6 +75,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
           );
         })}
       </div>
+      {error && <p className="mt-1 text-xs text-red-600" role="alert">{error}</p>}
     </div>
   );
 }

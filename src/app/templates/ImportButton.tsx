@@ -1,12 +1,15 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { UploadSimple } from '@phosphor-icons/react';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
 export function ImportButton() {
+  const router = useRouter();
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -18,6 +21,7 @@ export function ImportButton() {
     if (!file) return;
     setImporting(true);
     setError('');
+    setSuccess('');
     try {
       const text = await file.text();
       let json: unknown;
@@ -34,7 +38,9 @@ export function ImportButton() {
         body: JSON.stringify(json),
       });
       if (res.ok) {
-        window.location.reload();
+        setSuccess('Template imported.');
+        setImporting(false);
+        router.refresh();
       } else {
         const data = await res.json().catch(() => null);
         setError(typeof data?.error === 'string' ? data.error : 'Import failed. Check the file and try again.');
@@ -73,6 +79,14 @@ export function ImportButton() {
           role="alert"
         >
           {error}
+        </p>
+      )}
+      {success && (
+        <p
+          className="absolute right-0 top-full mt-2 w-60 z-10 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 shadow-sm"
+          role="status"
+        >
+          {success}
         </p>
       )}
     </div>
