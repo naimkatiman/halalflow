@@ -7,25 +7,12 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { requireActiveSubscription } from '@/lib/require-subscription';
 import { Plus, FunnelSimple } from '@phosphor-icons/react/dist/ssr';
+import { StatusBadge, statusLabel } from '@/components/ui/Badge';
 
 export const metadata: Metadata = {
   title: 'Workflows — MosRev',
   description:
     'View and manage approval workflows across your organization. Track status, submit new requests, and review audit logs.',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  in_progress: 'Awaiting approval',
-  approved: 'Approved',
-  rejected: 'Rejected',
-  pending: 'Awaiting approval',
-};
-
-const STATUS_CLS: Record<string, string> = {
-  in_progress: 'bg-blue-50 text-blue-700 border-blue-100',
-  approved: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-  rejected: 'bg-red-50 text-red-700 border-red-100',
-  pending: 'bg-amber-50 text-amber-700 border-amber-100',
 };
 
 const PAGE_SIZE = 20;
@@ -96,7 +83,7 @@ export default async function WorkflowsPage({
                 : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
             }`}
           >
-            {f ? STATUS_LABELS[f] : 'All'}
+            {f ? statusLabel(f) : 'All'}
           </Link>
         ))}
       </div>
@@ -146,7 +133,6 @@ export default async function WorkflowsPage({
       ) : (
         <div className="bg-white border border-zinc-200/70 rounded-xl divide-y divide-zinc-100">
           {workflows.map((w) => {
-            const sc = STATUS_CLS[w.status] ?? STATUS_CLS['pending'];
             const completedSteps = w.approvals.filter((a) => a.status === 'approved').length;
             const totalSteps = w.approvals.length;
             return (
@@ -166,9 +152,7 @@ export default async function WorkflowsPage({
                     {w._count.comments > 0 && ` · ${w._count.comments} comments`}
                   </div>
                 </div>
-                <span className={`text-xs font-medium px-2 py-0.5 rounded-full border shrink-0 ml-4 ${sc}`}>
-                  {STATUS_LABELS[w.status] ?? w.status}
-                </span>
+                <StatusBadge status={w.status} className="shrink-0 ml-4" />
               </Link>
             );
           })}

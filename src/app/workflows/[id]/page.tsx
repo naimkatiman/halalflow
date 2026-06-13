@@ -6,6 +6,7 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { roleSatisfies } from '@/lib/roles';
 import { ArrowLeft, CheckCircle, XCircle, Clock, ChatCircle, FileArrowDown } from '@phosphor-icons/react/dist/ssr';
+import { StatusBadge } from '@/components/ui/Badge';
 import { ApprovalActions } from './ApprovalActions';
 import { CommentForm } from './CommentForm';
 import { DeleteButton } from '@/components/DeleteButton';
@@ -15,20 +16,6 @@ export const metadata: Metadata = {
   title: 'Workflow Details — MosRev',
   description:
     'Track the status of a submitted workflow, view approval steps, add comments, and see the full audit log.',
-};
-
-const STATUS_CLS: Record<string, string> = {
-  in_progress: 'bg-blue-50 text-blue-700 border-blue-100',
-  approved: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-  rejected: 'bg-red-50 text-red-700 border-red-100',
-  pending: 'bg-amber-50 text-amber-700 border-amber-100',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  in_progress: 'Awaiting approval',
-  approved: 'Approved',
-  rejected: 'Rejected',
-  pending: 'Awaiting approval',
 };
 
 export default async function WorkflowPage({ params }: { params: Promise<{ id: string }> }) {
@@ -69,7 +56,6 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
   const isActive = ['in_progress', 'pending'].includes(workflow.status);
   const canApprove = !currentApproval?.step.requiredRole || roleSatisfies(session.orgRole, currentApproval.step.requiredRole);
   const canDelete = workflow.createdById === session.userId || ['owner', 'admin'].includes(session.orgRole);
-  const sc = STATUS_CLS[workflow.status] ?? STATUS_CLS['pending'];
 
   const formatDate = (d: Date) =>
     new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(d));
@@ -83,9 +69,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">{workflow.title}</h1>
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${sc}`}>
-              {STATUS_LABELS[workflow.status] ?? workflow.status}
-            </span>
+            <StatusBadge status={workflow.status} />
           </div>
           <p className="text-sm text-zinc-500 mt-0.5">
             {workflow.template.name} · Submitted by {workflow.createdBy.name} · {formatDate(workflow.createdAt)}

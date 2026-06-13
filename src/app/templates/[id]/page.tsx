@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { ArrowLeft, Plus } from '@phosphor-icons/react/dist/ssr';
+import { StatusBadge } from '@/components/ui/Badge';
 import { ExportButton } from './ExportButton';
 import { DeleteButton } from '@/components/DeleteButton';
 import type { Metadata } from 'next';
@@ -36,20 +37,6 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
     });
   });
   if (!template) notFound();
-
-  const statusCls: Record<string, string> = {
-    in_progress: 'bg-blue-50 text-blue-700 border-blue-100',
-    approved: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-    rejected: 'bg-red-50 text-red-700 border-red-100',
-    pending: 'bg-amber-50 text-amber-700 border-amber-100',
-  };
-
-  const statusLabels: Record<string, string> = {
-    in_progress: 'Awaiting approval',
-    approved: 'Approved',
-    rejected: 'Rejected',
-    pending: 'Awaiting approval',
-  };
 
   const canManage = ['owner', 'admin'].includes(session.orgRole);
 
@@ -127,9 +114,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
                     <div className="text-sm text-zinc-950 truncate">{w.title}</div>
                     <div className="text-xs text-zinc-500">{w.createdBy.name}</div>
                   </div>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ml-2 shrink-0 ${statusCls[w.status] ?? statusCls['pending']}`}>
-                    {statusLabels[w.status] ?? w.status.replaceAll('_', ' ')}
-                  </span>
+                  <StatusBadge status={w.status} className="ml-2 shrink-0" />
                 </Link>
               ))}
             </div>

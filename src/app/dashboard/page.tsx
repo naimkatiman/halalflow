@@ -7,6 +7,7 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { requireActiveSubscription } from '@/lib/require-subscription';
 import { CheckCircle, XCircle, Clock, ArrowsClockwise, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
+import { StatusBadge } from '@/components/ui/Badge';
 
 export const metadata: Metadata = {
   title: 'Dashboard — MosRev',
@@ -34,7 +35,7 @@ export default async function DashboardPage() {
       tx.workflowTemplate.count({ where: { orgId: session.orgId } }),
       tx.organization.findUnique({ where: { id: session.orgId } }),
       tx.workflow.count({ where: { orgId: session.orgId } }),
-      tx.workflow.count({ where: { orgId: session.orgId, status: 'in_progress' } }),
+      tx.workflow.count({ where: { orgId: session.orgId, status: { in: ['in_progress', 'pending'] } } }),
       tx.workflow.count({ where: { orgId: session.orgId, status: 'approved' } }),
       tx.workflow.count({ where: { orgId: session.orgId, status: 'rejected' } }),
     ]);
@@ -46,14 +47,6 @@ export default async function DashboardPage() {
     inProgress: inProgressCount,
     approved: approvedCount,
     rejected: rejectedCount,
-  };
-
-  const statusConfig: Record<string, { label: string; cls: string }> = {
-    in_progress: { label: 'Awaiting approval', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-    pending: { label: 'Awaiting approval', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-    approved: { label: 'Approved', cls: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
-    rejected: { label: 'Rejected', cls: 'bg-red-50 text-red-700 border-red-100' },
-
   };
 
   return (
@@ -105,7 +98,6 @@ export default async function DashboardPage() {
           ) : (
             <div className="divide-y divide-zinc-100">
               {workflows.map((w) => {
-                const sc = statusConfig[w.status] ?? statusConfig['pending'];
                 return (
                   <Link
                     key={w.id}
@@ -118,9 +110,7 @@ export default async function DashboardPage() {
                       </div>
                       <div className="text-xs text-zinc-500 mt-0.5">{w.template.name} · {w.createdBy.name}</div>
                     </div>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full border shrink-0 ml-3 ${sc.cls}`}>
-                      {sc.label}
-                    </span>
+                    <StatusBadge status={w.status} className="shrink-0 ml-3" />
                   </Link>
                 );
               })}
