@@ -36,7 +36,7 @@ export function PricingFaq() {
       className="animate-fade-up scroll-mt-20 rounded-3xl border border-zinc-200 bg-white px-6 py-10 sm:px-10"
       style={{ ["--index" as string]: 3 }}
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-emerald-600">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-emerald-700">
         Pricing
       </p>
       <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl">

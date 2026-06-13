@@ -45,7 +45,7 @@ export function Hero() {
               Sign in
             </Link>
           </div>
-          <p className="mt-4 text-xs text-emerald-600">
+          <p className="mt-4 text-xs text-emerald-700">
             Open-source &middot; self-hostable &middot; no credit card
           </p>
         </div>
@@ -67,8 +67,8 @@ export function Hero() {
               <span
                 className={
                   step.done
-                    ? "text-[11px] font-semibold text-emerald-600"
-                    : "text-[11px] font-semibold text-amber-600"
+                    ? "text-[11px] font-semibold text-emerald-700"
+                    : "text-[11px] font-semibold text-amber-700"
                 }
               >
                 {step.status}

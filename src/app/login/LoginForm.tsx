@@ -98,7 +98,7 @@ export function LoginForm() {
           </form>
           <p className="text-center text-sm text-zinc-500 mt-5">
             No account?{' '}
-            <Link href="/register" className="text-emerald-600 hover:text-emerald-700 font-medium">
+            <Link href="/register" className="text-emerald-700 hover:text-emerald-800 font-medium">
               Create one
             </Link>
           </p>

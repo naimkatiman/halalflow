@@ -35,7 +35,7 @@ export default async function InvitePage({
           <p className="text-sm text-zinc-500 mb-6">
             This link is no longer valid. Ask the organization admin for a new invite.
           </p>
-          <Link href="/login" className="text-emerald-600 hover:text-emerald-700 font-medium text-sm">
+          <Link href="/login" className="text-emerald-700 hover:text-emerald-800 font-medium text-sm">
             Go to sign in
           </Link>
         </div>
@@ -108,7 +108,7 @@ export default async function InvitePage({
                 Already have an account?{' '}
                 <Link
                   href={`/login?redirect=${encodeURIComponent(`/invites/${token}`)}`}
-                  className="text-emerald-600 hover:text-emerald-700 font-medium"
+                  className="text-emerald-700 hover:text-emerald-800 font-medium"
                 >
                   Sign in
                 </Link>
