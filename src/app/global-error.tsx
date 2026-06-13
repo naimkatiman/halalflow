@@ -18,12 +18,15 @@ export default function GlobalError({
     <html lang="en">
       <body className="bg-white text-zinc-950">
         <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
-          <h1 className="text-6xl font-bold text-zinc-200 tabular-nums">Error</h1>
-          <p role="alert" className="mt-4 text-lg font-medium text-zinc-950">
-            Something went wrong
-          </p>
-          <p className="mt-1 text-sm text-zinc-500 max-w-sm">
-            {error.message || "An unexpected error occurred. Please try again."}
+          <h1 className="text-xl font-bold text-zinc-950">Something went wrong</h1>
+          <p role="alert" className="mt-2 text-sm text-zinc-500 max-w-sm">
+            An unexpected error occurred. Please try again.
+            {error.digest ? (
+              <>
+                {" "}If it keeps happening, share reference{" "}
+                <span className="font-mono text-zinc-600">{error.digest}</span> with support.
+              </>
+            ) : null}
           </p>
           <button
             type="button"
@@ -33,6 +36,14 @@ export default function GlobalError({
             <ArrowClockwise className="w-4 h-4" weight="bold" aria-hidden="true" />
             Try again
           </button>
+          {process.env.NODE_ENV === "development" && error.message ? (
+            <details className="mt-6 w-full max-w-lg text-left">
+              <summary className="text-xs text-zinc-500 cursor-pointer">Technical details (development only)</summary>
+              <pre className="mt-2 text-xs text-zinc-600 bg-zinc-50 border border-zinc-200/70 rounded-lg p-3 whitespace-pre-wrap break-words">
+                {error.message}
+              </pre>
+            </details>
+          ) : null}
         </div>
       </body>
     </html>
