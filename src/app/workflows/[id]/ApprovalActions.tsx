@@ -30,7 +30,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
       router.refresh();
     } catch (err) {
       console.error('ApprovalActions submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }

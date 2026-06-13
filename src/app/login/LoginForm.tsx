@@ -42,7 +42,7 @@ export function LoginForm() {
       router.refresh();
     } catch (err) {
       console.error('LoginForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }

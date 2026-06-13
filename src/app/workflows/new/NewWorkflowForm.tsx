@@ -70,7 +70,7 @@ export function NewWorkflowForm() {
       router.push(`/workflows/${data.workflow.id}`);
     } catch (err) {
       console.error('NewWorkflowForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }

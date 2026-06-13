@@ -38,7 +38,7 @@ export function ChangePasswordForm() {
       setSuccess('Password updated. Use it the next time you sign in.');
     } catch (err) {
       console.error('ChangePasswordForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }

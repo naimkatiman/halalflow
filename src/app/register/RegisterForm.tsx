@@ -52,7 +52,7 @@ export function RegisterForm() {
       router.refresh();
     } catch (err) {
       console.error('RegisterForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }

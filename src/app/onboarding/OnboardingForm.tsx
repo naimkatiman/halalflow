@@ -30,7 +30,7 @@ export default function OnboardingForm() {
       router.refresh();
     } catch (err) {
       console.error('OnboardingForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }

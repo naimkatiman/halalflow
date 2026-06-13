@@ -46,7 +46,7 @@ export function DemoControls() {
       router.refresh();
     } catch (err) {
       console.error('DemoControls action error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setPending(null);
     }

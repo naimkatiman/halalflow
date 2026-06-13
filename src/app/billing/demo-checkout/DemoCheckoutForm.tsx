@@ -28,7 +28,7 @@ export function DemoCheckoutForm({ name }: { name: string }) {
       window.location.href = '/billing?status=success';
     } catch (err) {
       console.error('DemoCheckoutForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
       setLoading(false);
     }
   };
