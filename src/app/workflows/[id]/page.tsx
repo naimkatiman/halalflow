@@ -195,7 +195,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
               <p className="text-sm text-zinc-600">This request was rejected. You can revise it and submit it again.</p>
               <Link
                 href={`/workflows/new?templateId=${workflow.templateId}`}
-                className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
+                className="text-sm font-medium text-emerald-700 hover:text-emerald-800"
               >
                 Resubmit as new workflow →
               </Link>

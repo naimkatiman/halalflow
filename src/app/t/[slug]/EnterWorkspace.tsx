@@ -33,7 +33,7 @@ export function EnterWorkspace({ orgId, orgName }: { orgId: string; orgName: str
     <div role="status" className="flex flex-col items-center justify-center py-24 text-center">
       {error ? (
         <p className="text-sm text-zinc-500">
-          Could not open {orgName}. <a href="/dashboard" className="text-emerald-600 hover:text-emerald-700 font-medium">Go to dashboard</a>.
+          Could not open {orgName}. <a href="/dashboard" className="text-emerald-700 hover:text-emerald-800 font-medium">Go to dashboard</a>.
         </p>
       ) : (
         <div className="flex items-center gap-2 text-sm text-zinc-400">

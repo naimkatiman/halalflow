@@ -91,14 +91,14 @@ export default async function DashboardPage() {
         <div className="lg:col-span-2 bg-white border border-zinc-200/70 rounded-xl">
           <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between">
             <h2 className="font-semibold text-zinc-950 text-sm">Recent Workflows</h2>
-            <Link href="/workflows" className="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+            <Link href="/workflows" className="text-xs text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" aria-hidden="true" />
             </Link>
           </div>
           {workflows.length === 0 ? (
             <div className="p-8 text-center">
               <p className="text-sm text-zinc-400">No workflows yet.</p>
-              <Link href="/workflows/new" className="text-sm text-emerald-600 hover:text-emerald-700 mt-2 inline-block">
+              <Link href="/workflows/new" className="text-sm text-emerald-700 hover:text-emerald-800 mt-2 inline-block">
                 Create your first workflow →
               </Link>
             </div>
@@ -131,7 +131,7 @@ export default async function DashboardPage() {
         <div className="bg-white border border-zinc-200/70 rounded-xl">
           <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between">
             <h2 className="font-semibold text-zinc-950 text-sm">Templates</h2>
-            <Link href="/templates" className="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+            <Link href="/templates" className="text-xs text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" aria-hidden="true" />
             </Link>
           </div>
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
             {templates === 0 && (
               <Link
                 href="/templates/new"
-                className="inline-block text-xs text-emerald-600 hover:text-emerald-700 mt-2"
+                className="inline-block text-xs text-emerald-700 hover:text-emerald-800 mt-2"
               >
                 Create a template →
               </Link>

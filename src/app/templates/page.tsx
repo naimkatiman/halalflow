@@ -79,7 +79,7 @@ export default async function TemplatesPage({
             {page > 1 && (
               <Link
                 href={`?page=${page - 1}`}
-                className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
+                className="text-sm font-medium text-emerald-700 hover:text-emerald-800 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
               >
                 Previous
               </Link>
@@ -87,7 +87,7 @@ export default async function TemplatesPage({
             {page < pages && (
               <Link
                 href={`?page=${page + 1}`}
-                className="text-sm font-medium text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
+                className="text-sm font-medium text-emerald-700 hover:text-emerald-800 px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-emerald-200 transition-colors"
               >
                 Next
               </Link>

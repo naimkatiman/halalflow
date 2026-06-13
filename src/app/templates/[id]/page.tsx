@@ -98,7 +98,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
                   <div className="text-sm font-medium text-zinc-950">{step.name}</div>
                   {step.description && <div className="text-xs text-zinc-500 mt-0.5">{step.description}</div>}
                   {step.requiredRole && (
-                    <div className="text-xs text-emerald-600 font-medium mt-0.5">
+                    <div className="text-xs text-emerald-700 font-medium mt-0.5">
                       Requires {step.requiredRole} role
                     </div>
                   )}

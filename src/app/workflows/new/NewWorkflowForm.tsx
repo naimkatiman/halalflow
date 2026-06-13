@@ -98,7 +98,7 @@ export function NewWorkflowForm() {
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+            className="text-sm text-emerald-700 hover:text-emerald-800 font-medium"
           >
             Try again
           </button>
@@ -106,7 +106,7 @@ export function NewWorkflowForm() {
       ) : templates.length === 0 ? (
         <div className="bg-white border border-zinc-200/70 rounded-xl p-8 text-center">
           <p className="text-sm text-zinc-500 mb-3">You need at least one template to create a workflow.</p>
-          <Link href="/templates/new" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+          <Link href="/templates/new" className="text-sm text-emerald-700 hover:text-emerald-800 font-medium">
             Create a template →
           </Link>
         </div>

@@ -107,7 +107,7 @@ export function ChangePasswordForm() {
       </div>
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
       {success && (
-        <p className="text-xs text-emerald-600 flex items-center gap-1.5" role="status">
+        <p className="text-xs text-emerald-700 flex items-center gap-1.5" role="status">
           <Check className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
           {success}
         </p>

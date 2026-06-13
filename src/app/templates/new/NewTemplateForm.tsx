@@ -119,7 +119,7 @@ export function NewTemplateForm() {
             <button
               type="button"
               onClick={addStep}
-              className="flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+              className="flex items-center gap-1 text-xs text-emerald-700 hover:text-emerald-800 font-medium transition-colors"
             >
               <Plus className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
               Add step

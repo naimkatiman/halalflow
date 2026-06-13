@@ -88,7 +88,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
       </div>
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
       {success && (
-        <p className="text-xs text-emerald-600 flex items-center gap-2 flex-wrap" role="status">
+        <p className="text-xs text-emerald-700 flex items-center gap-2 flex-wrap" role="status">
           {success}
           {inviteUrl && <CopyInviteLink url={inviteUrl} label="Copy invite link" />}
         </p>
