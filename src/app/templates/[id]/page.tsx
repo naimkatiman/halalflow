@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { ArrowLeft, Plus } from '@phosphor-icons/react/dist/ssr';
+import { StatusBadge } from '@/components/ui/Badge';
 import { ExportButton } from './ExportButton';
 import { DeleteButton } from '@/components/DeleteButton';
 import type { Metadata } from 'next';
@@ -37,27 +38,13 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
   });
   if (!template) notFound();
 
-  const statusCls: Record<string, string> = {
-    in_progress: 'bg-blue-50 text-blue-700 border-blue-100',
-    approved: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-    rejected: 'bg-red-50 text-red-700 border-red-100',
-    pending: 'bg-amber-50 text-amber-700 border-amber-100',
-  };
-
-  const statusLabels: Record<string, string> = {
-    in_progress: 'Awaiting approval',
-    approved: 'Approved',
-    rejected: 'Rejected',
-    pending: 'Awaiting approval',
-  };
-
   const canManage = ['owner', 'admin'].includes(session.orgRole);
 
 
   return (
     <div className="max-w-3xl space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href="/templates" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors">
+      <div className="flex items-center gap-3 flex-wrap">
+        <Link href="/templates" aria-label="Go back" className="text-zinc-500 hover:text-zinc-700 transition-colors">
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <div className="flex-1">
@@ -86,7 +73,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
           <h2 className="font-semibold text-zinc-950 text-sm mb-4">
-            Approval steps <span className="text-zinc-400 font-normal">({template.steps.length})</span>
+            Approval steps <span className="text-zinc-500 font-normal">({template.steps.length})</span>
           </h2>
           <div className="space-y-2">
             {template.steps.map((step) => (
@@ -98,7 +85,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
                   <div className="text-sm font-medium text-zinc-950">{step.name}</div>
                   {step.description && <div className="text-xs text-zinc-500 mt-0.5">{step.description}</div>}
                   {step.requiredRole && (
-                    <div className="text-xs text-emerald-600 font-medium mt-0.5">
+                    <div className="text-xs text-emerald-700 font-medium mt-0.5">
                       Requires {step.requiredRole} role
                     </div>
                   )}
@@ -111,10 +98,10 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
 
         <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
           <h2 className="font-semibold text-zinc-950 text-sm mb-4">
-            Recent workflows <span className="text-zinc-400 font-normal">({template._count.workflows} total)</span>
+            Recent workflows <span className="text-zinc-500 font-normal">({template._count.workflows} total)</span>
           </h2>
           {template.workflows.length === 0 ? (
-            <p className="text-xs text-zinc-400">No workflows from this template yet.</p>
+            <p className="text-xs text-zinc-500">No workflows from this template yet.</p>
           ) : (
             <div className="space-y-2">
               {template.workflows.map((w) => (
@@ -125,11 +112,9 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
                 >
                   <div className="min-w-0">
                     <div className="text-sm text-zinc-950 truncate">{w.title}</div>
-                    <div className="text-xs text-zinc-400">{w.createdBy.name}</div>
+                    <div className="text-xs text-zinc-500">{w.createdBy.name}</div>
                   </div>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ml-2 shrink-0 ${statusCls[w.status] ?? statusCls['pending']}`}>
-                    {statusLabels[w.status] ?? w.status.replaceAll('_', ' ')}
-                  </span>
+                  <StatusBadge status={w.status} className="ml-2 shrink-0" />
                 </Link>
               ))}
             </div>

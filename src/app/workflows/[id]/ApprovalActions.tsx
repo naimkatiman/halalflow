@@ -10,7 +10,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [confirmingReject, setConfirmingReject] = useState(false);
+  const [confirming, setConfirming] = useState<'approve' | 'reject' | null>(null);
 
   const act = async (action: 'approved' | 'rejected') => {
     setError('');
@@ -30,7 +30,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
       router.refresh();
     } catch (err) {
       console.error('ApprovalActions submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -52,21 +52,42 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
         className="w-full px-3 py-2 border border-blue-200 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-colors resize-none"
       />
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
-      {confirmingReject ? (
+      {confirming === 'reject' ? (
         <div className="flex items-center gap-3 flex-wrap">
           <p className="text-sm text-red-700 font-medium">Reject this request? This cannot be undone.</p>
           <button
             type="button"
-            onClick={() => { setConfirmingReject(false); act('rejected'); }}
+            onClick={() => { setConfirming(null); act('rejected'); }}
             disabled={loading}
             className="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
           >
             <XCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
-            Yes, reject
+            {loading ? 'Rejecting…' : 'Yes, reject'}
           </button>
           <button
             type="button"
-            onClick={() => setConfirmingReject(false)}
+            onClick={() => setConfirming(null)}
+            disabled={loading}
+            className="text-sm text-zinc-500 hover:text-zinc-700 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      ) : confirming === 'approve' ? (
+        <div className="flex items-center gap-3 flex-wrap">
+          <p className="text-sm text-zinc-700 font-medium">Approve this step? This advances the request and cannot be undone.</p>
+          <button
+            type="button"
+            onClick={() => { setConfirming(null); act('approved'); }}
+            disabled={loading}
+            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+          >
+            <CheckCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
+            {loading ? 'Approving…' : 'Yes, approve'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setConfirming(null)}
             disabled={loading}
             className="text-sm text-zinc-500 hover:text-zinc-700 transition-colors"
           >
@@ -77,16 +98,16 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => act('approved')}
+            onClick={() => setConfirming('approve')}
             disabled={loading}
             className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
           >
             <CheckCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
-            {loading ? 'Submitting…' : 'Approve'}
+            Approve
           </button>
           <button
             type="button"
-            onClick={() => setConfirmingReject(true)}
+            onClick={() => setConfirming('reject')}
             disabled={loading}
             className="flex items-center gap-1.5 border border-red-200 bg-white hover:bg-red-50 disabled:opacity-50 text-red-600 font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
           >

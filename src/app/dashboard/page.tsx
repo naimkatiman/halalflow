@@ -7,6 +7,7 @@ import { SessionData, sessionOptions } from '@/lib/session';
 import { withOrg } from '@/lib/db';
 import { requireActiveSubscription } from '@/lib/require-subscription';
 import { CheckCircle, XCircle, Clock, ArrowsClockwise, ArrowRight, Plus } from '@phosphor-icons/react/dist/ssr';
+import { StatusBadge } from '@/components/ui/Badge';
 
 export const metadata: Metadata = {
   title: 'Dashboard — MosRev',
@@ -34,7 +35,7 @@ export default async function DashboardPage() {
       tx.workflowTemplate.count({ where: { orgId: session.orgId } }),
       tx.organization.findUnique({ where: { id: session.orgId } }),
       tx.workflow.count({ where: { orgId: session.orgId } }),
-      tx.workflow.count({ where: { orgId: session.orgId, status: 'in_progress' } }),
+      tx.workflow.count({ where: { orgId: session.orgId, status: { in: ['in_progress', 'pending'] } } }),
       tx.workflow.count({ where: { orgId: session.orgId, status: 'approved' } }),
       tx.workflow.count({ where: { orgId: session.orgId, status: 'rejected' } }),
     ]);
@@ -48,17 +49,9 @@ export default async function DashboardPage() {
     rejected: rejectedCount,
   };
 
-  const statusConfig: Record<string, { label: string; cls: string }> = {
-    in_progress: { label: 'Awaiting approval', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-    pending: { label: 'Awaiting approval', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-    approved: { label: 'Approved', cls: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
-    rejected: { label: 'Rejected', cls: 'bg-red-50 text-red-700 border-red-100' },
-
-  };
-
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">{org?.name ?? 'Dashboard'}</h1>
           <p className="text-sm text-zinc-500 mt-0.5">Workflow overview</p>
@@ -91,21 +84,20 @@ export default async function DashboardPage() {
         <div className="lg:col-span-2 bg-white border border-zinc-200/70 rounded-xl">
           <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between">
             <h2 className="font-semibold text-zinc-950 text-sm">Recent Workflows</h2>
-            <Link href="/workflows" className="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+            <Link href="/workflows" className="text-xs text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" aria-hidden="true" />
             </Link>
           </div>
           {workflows.length === 0 ? (
             <div className="p-8 text-center">
-              <p className="text-sm text-zinc-400">No workflows yet.</p>
-              <Link href="/workflows/new" className="text-sm text-emerald-600 hover:text-emerald-700 mt-2 inline-block">
+              <p className="text-sm text-zinc-500">No workflows yet.</p>
+              <Link href="/workflows/new" className="text-sm text-emerald-700 hover:text-emerald-800 mt-2 inline-block">
                 Create your first workflow →
               </Link>
             </div>
           ) : (
             <div className="divide-y divide-zinc-100">
               {workflows.map((w) => {
-                const sc = statusConfig[w.status] ?? statusConfig['pending'];
                 return (
                   <Link
                     key={w.id}
@@ -116,11 +108,9 @@ export default async function DashboardPage() {
                       <div className="text-sm font-medium text-zinc-950 truncate group-hover:text-emerald-700 transition-colors">
                         {w.title}
                       </div>
-                      <div className="text-xs text-zinc-400 mt-0.5">{w.template.name} · {w.createdBy.name}</div>
+                      <div className="text-xs text-zinc-500 mt-0.5">{w.template.name} · {w.createdBy.name}</div>
                     </div>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full border shrink-0 ml-3 ${sc.cls}`}>
-                      {sc.label}
-                    </span>
+                    <StatusBadge status={w.status} className="shrink-0 ml-3" />
                   </Link>
                 );
               })}
@@ -131,7 +121,7 @@ export default async function DashboardPage() {
         <div className="bg-white border border-zinc-200/70 rounded-xl">
           <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between">
             <h2 className="font-semibold text-zinc-950 text-sm">Templates</h2>
-            <Link href="/templates" className="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+            <Link href="/templates" className="text-xs text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" aria-hidden="true" />
             </Link>
           </div>
@@ -141,7 +131,7 @@ export default async function DashboardPage() {
             {templates === 0 && (
               <Link
                 href="/templates/new"
-                className="inline-block text-xs text-emerald-600 hover:text-emerald-700 mt-2"
+                className="inline-block text-xs text-emerald-700 hover:text-emerald-800 mt-2"
               >
                 Create a template →
               </Link>

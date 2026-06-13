@@ -31,7 +31,7 @@ export function CommentForm({ workflowId }: { workflowId: string }) {
       router.refresh();
     } catch (err) {
       console.error('CommentForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }

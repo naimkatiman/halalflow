@@ -13,19 +13,27 @@ interface Org {
 
 export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId: string }) {
   const [switching, setSwitching] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   const handleSwitch = async (orgId: string) => {
     if (orgId === currentOrgId) return;
     setSwitching(orgId);
+    setError('');
     try {
       const res = await fetchWithCsrf(`/api/orgs/${orgId}/switch`, { method: 'POST' });
       if (res.ok) {
+        // A workspace switch changes session-global state the client navbar
+        // caches, so a full reload is intentional (router.refresh would leave
+        // the navbar's org pill pointing at the previous workspace).
         window.location.reload();
-      } else {
-        setSwitching(null);
+        return;
       }
-    } catch (error) {
-      console.error('Org switch error:', error);
+      const data = await res.json().catch(() => null);
+      setError(typeof data?.error === 'string' ? data.error : 'Could not switch workspace. Try again.');
+      setSwitching(null);
+    } catch (err) {
+      console.error('Org switch error:', err);
+      setError('Could not reach the server. Check your connection and try again.');
       setSwitching(null);
     }
   };
@@ -33,7 +41,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
   return (
     <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2 mb-1">
-        <Buildings className="w-4 h-4 text-zinc-400" aria-hidden="true" />
+        <Buildings className="w-4 h-4 text-zinc-500" aria-hidden="true" />
         <h2 className="font-semibold text-zinc-950 text-sm">Your Organizations</h2>
       </div>
       <div className="divide-y divide-zinc-100">
@@ -51,14 +59,14 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
                     </span>
                   )}
                 </div>
-                <div className="text-xs text-zinc-400">{org.slug} · <span className="capitalize">{org.role}</span></div>
+                <div className="text-xs text-zinc-500">{org.slug} · <span className="capitalize">{org.role}</span></div>
               </div>
               {!isCurrent && (
                 <button
                   type="button"
                   onClick={() => handleSwitch(org.id)}
                   disabled={switching === org.id}
-                  className="text-xs font-medium text-emerald-600 hover:text-emerald-700 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-emerald-50"
+                  className="text-xs font-medium text-emerald-700 hover:text-emerald-800 disabled:opacity-50 transition-colors px-2 py-1 rounded-lg hover:bg-emerald-50"
                 >
                   {switching === org.id ? 'Switching…' : 'Switch'}
                 </button>
@@ -67,6 +75,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
           );
         })}
       </div>
+      {error && <p className="mt-1 text-xs text-red-600" role="alert">{error}</p>}
     </div>
   );
 }

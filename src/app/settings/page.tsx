@@ -23,6 +23,13 @@ export default async function SettingsPage() {
 
   const canInvite = ['owner', 'admin'].includes(session.orgRole);
 
+  // Owners decide who approves money, so make that role scannable instead of
+  // flattening every role to the same gray pill.
+  const roleBadgeCls = (role: string) =>
+    role === 'owner'
+      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+      : 'bg-zinc-100 text-zinc-700';
+
   const { org, pendingInvites } = await withOrg(session.orgId, async (tx) => {
     const org = await tx.organization.findUnique({
       where: { id: session.orgId },
@@ -88,7 +95,7 @@ export default async function SettingsPage() {
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-zinc-500">Your role</span>
-            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${roleBadgeCls(session.orgRole)}`}>
               {session.orgRole}
             </span>
           </div>
@@ -105,9 +112,9 @@ export default async function SettingsPage() {
             <div key={m.id} className="flex items-center justify-between py-3">
               <div>
                 <div className="text-sm font-medium text-zinc-950">{m.user.name}</div>
-                <div className="text-xs text-zinc-400">{m.user.email}</div>
+                <div className="text-xs text-zinc-600">{m.user.email}</div>
               </div>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${roleBadgeCls(m.role)}`}>
                 {m.role}
               </span>
             </div>
@@ -124,7 +131,7 @@ export default async function SettingsPage() {
                 <span className="text-sm text-zinc-600 truncate">{invite.email}</span>
                 <div className="flex items-center gap-3 shrink-0">
                   <CopyInviteLink url={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/invites/${invite.token}`} />
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${roleBadgeCls(invite.role)}`}>
                     {invite.role}
                   </span>
                 </div>

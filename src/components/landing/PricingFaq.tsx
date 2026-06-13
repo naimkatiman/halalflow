@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { PLAN_PRICE_LABEL } from "@/lib/billing-plan";
 
 const included = [
   "Unlimited workflows and templates",
@@ -36,7 +37,7 @@ export function PricingFaq() {
       className="animate-fade-up scroll-mt-20 rounded-3xl border border-zinc-200 bg-white px-6 py-10 sm:px-10"
       style={{ ["--index" as string]: 3 }}
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-emerald-600">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-emerald-700">
         Pricing
       </p>
       <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl">
@@ -51,6 +52,9 @@ export function PricingFaq() {
           <p className="mt-2 text-sm leading-relaxed text-zinc-600">
             Full access, no credit card. One simple subscription per workspace
             when your committee is ready — cancel anytime.
+          </p>
+          <p className="mt-3 text-sm text-zinc-700">
+            Then <span className="font-semibold text-zinc-950">{PLAN_PRICE_LABEL}</span> per workspace when you’re ready.
           </p>
           <ul className="mt-5 space-y-2.5">
             {included.map((item) => (

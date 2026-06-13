@@ -55,7 +55,7 @@ export default async function DemoOutboxPage() {
                   <p className="text-sm font-medium text-zinc-900 truncate">{email.subject}</p>
                   <p className="text-xs text-zinc-500 mt-0.5 truncate">To: {email.to}</p>
                 </div>
-                <span className="text-xs text-zinc-400 whitespace-nowrap shrink-0 mt-0.5">
+                <span className="text-xs text-zinc-500 whitespace-nowrap shrink-0 mt-0.5">
                   {email.createdAt.toLocaleString()}
                 </span>
               </summary>

@@ -38,7 +38,7 @@ export function ChangePasswordForm() {
       setSuccess('Password updated. Use it the next time you sign in.');
     } catch (err) {
       console.error('ChangePasswordForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -95,7 +95,7 @@ export function ChangePasswordForm() {
           />
         </div>
       </div>
-      <p className="text-xs text-zinc-400">At least 8 characters.</p>
+      <p className="text-xs text-zinc-500">At least 8 characters.</p>
       <div className="flex items-center gap-3">
         <button
           type="submit"
@@ -107,7 +107,7 @@ export function ChangePasswordForm() {
       </div>
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
       {success && (
-        <p className="text-xs text-emerald-600 flex items-center gap-1.5" role="status">
+        <p className="text-xs text-emerald-700 flex items-center gap-1.5" role="status">
           <Check className="w-3.5 h-3.5" weight="bold" aria-hidden="true" />
           {success}
         </p>

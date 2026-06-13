@@ -47,7 +47,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
       router.refresh();
     } catch (err) {
       console.error('InviteMemberForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-3 pt-2 border-t border-zinc-100">
       <label htmlFor="invite-email" className="text-xs font-semibold text-zinc-700">Add member by email</label>
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <input
           id="invite-email"
           type="email"
@@ -88,7 +88,7 @@ export function InviteMemberForm({ orgId }: { orgId: string }) {
       </div>
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
       {success && (
-        <p className="text-xs text-emerald-600 flex items-center gap-2 flex-wrap" role="status">
+        <p className="text-xs text-emerald-700 flex items-center gap-2 flex-wrap" role="status">
           {success}
           {inviteUrl && <CopyInviteLink url={inviteUrl} label="Copy invite link" />}
         </p>

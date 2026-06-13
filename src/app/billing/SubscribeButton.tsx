@@ -21,7 +21,7 @@ export function SubscribeButton({ label = 'Subscribe' }: { label?: string }) {
       }
       window.location.href = data.url;
     } catch {
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
       setLoading(false);
     }
   };

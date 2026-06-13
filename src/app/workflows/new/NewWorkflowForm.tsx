@@ -70,7 +70,7 @@ export function NewWorkflowForm() {
       router.push(`/workflows/${data.workflow.id}`);
     } catch (err) {
       console.error('NewWorkflowForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -79,7 +79,7 @@ export function NewWorkflowForm() {
   return (
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/workflows" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors">
+        <Link href="/workflows" aria-label="Go back" className="text-zinc-500 hover:text-zinc-700 transition-colors">
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">New Workflow</h1>
@@ -98,7 +98,7 @@ export function NewWorkflowForm() {
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+            className="text-sm text-emerald-700 hover:text-emerald-800 font-medium"
           >
             Try again
           </button>
@@ -106,7 +106,7 @@ export function NewWorkflowForm() {
       ) : templates.length === 0 ? (
         <div className="bg-white border border-zinc-200/70 rounded-xl p-8 text-center">
           <p className="text-sm text-zinc-500 mb-3">You need at least one template to create a workflow.</p>
-          <Link href="/templates/new" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+          <Link href="/templates/new" className="text-sm text-emerald-700 hover:text-emerald-800 font-medium">
             Create a template →
           </Link>
         </div>
@@ -128,7 +128,7 @@ export function NewWorkflowForm() {
               />
             </div>
             <div>
-              <label htmlFor="workflow-description" className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-400 font-normal">(optional)</span></label>
+              <label htmlFor="workflow-description" className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-500 font-normal">(optional)</span></label>
               <textarea
                 id="workflow-description"
                 value={description}
@@ -181,7 +181,7 @@ export function NewWorkflowForm() {
               disabled={loading}
               className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold py-2.5 px-6 rounded-lg text-sm transition-colors"
             >
-              {loading ? 'Creating…' : 'Start workflow'}
+              {loading ? 'Creating…' : 'Create workflow'}
             </button>
             <Link href="/workflows" className="text-sm text-zinc-500 hover:text-zinc-700 transition-colors">
               Cancel

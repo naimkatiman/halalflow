@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { GitBranch } from '@phosphor-icons/react';
+import { Logo } from '@/components/Logo';
 
 export function LoginForm() {
   const router = useRouter();
@@ -42,7 +42,7 @@ export function LoginForm() {
       router.refresh();
     } catch (err) {
       console.error('LoginForm submit error:', err);
-      setError('Something went wrong');
+      setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ export function LoginForm() {
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" aria-hidden="true" />
+          <Logo className="h-5 w-5 text-emerald-600" />
           <span className="font-bold text-zinc-950">MosRev</span>
         </div>
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm">
@@ -98,7 +98,7 @@ export function LoginForm() {
           </form>
           <p className="text-center text-sm text-zinc-500 mt-5">
             No account?{' '}
-            <Link href="/register" className="text-emerald-600 hover:text-emerald-700 font-medium">
+            <Link href="/register" className="text-emerald-700 hover:text-emerald-800 font-medium">
               Create one
             </Link>
           </p>

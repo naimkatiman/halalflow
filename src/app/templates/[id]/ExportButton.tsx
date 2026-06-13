@@ -5,9 +5,11 @@ import { DownloadSimple } from '@phosphor-icons/react';
 
 export function ExportButton({ templateId, templateName }: { templateId: string; templateName: string }) {
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleExport = async () => {
     setError('');
+    setLoading(true);
     try {
       const res = await fetch(`/api/templates/${templateId}/export`);
       if (!res.ok) {
@@ -26,6 +28,8 @@ export function ExportButton({ templateId, templateName }: { templateId: string;
     } catch (err) {
       console.error('Template export failed:', err);
       setError('Export failed. Check your connection and try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,10 +38,11 @@ export function ExportButton({ templateId, templateName }: { templateId: string;
       <button
         type="button"
         onClick={handleExport}
-        className="flex items-center gap-1.5 border border-zinc-200 hover:border-zinc-300 text-zinc-600 hover:text-zinc-800 font-medium text-sm px-3 py-2 rounded-lg transition-colors"
+        disabled={loading}
+        className="flex items-center gap-1.5 border border-zinc-200 hover:border-zinc-300 text-zinc-600 hover:text-zinc-800 disabled:opacity-50 font-medium text-sm px-3 py-2 rounded-lg transition-colors"
       >
         <DownloadSimple className="w-3.5 h-3.5" aria-hidden="true" />
-        Export
+        {loading ? 'Exporting…' : 'Export'}
       </button>
       {error && (
         <p
