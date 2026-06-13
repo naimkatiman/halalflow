@@ -39,3 +39,36 @@ export function StatusBadge({ status, size = 'sm', className }: BadgeProps) {
     </span>
   );
 }
+
+export const BOOKING_STATUS_LABELS: Record<string, string> = {
+  requested: 'Menunggu',
+  approved: 'Diluluskan',
+  paid: 'Dibayar',
+  completed: 'Selesai',
+  declined: 'Ditolak',
+  cancelled: 'Dibatalkan',
+};
+
+const BOOKING_COLORS: Record<string, string> = {
+  requested: 'bg-amber-50 text-amber-700 border border-amber-200',
+  approved: 'bg-blue-50 text-blue-700 border border-blue-200',
+  paid: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+  completed: 'bg-zinc-100 text-zinc-600 border border-zinc-200',
+  declined: 'bg-red-50 text-red-700 border border-red-200',
+  cancelled: 'bg-zinc-50 text-zinc-500 border border-zinc-200',
+};
+
+interface BookingBadgeProps {
+  status: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export function BookingStatusBadge({ status, size = 'md' }: BookingBadgeProps) {
+  const classes = BOOKING_COLORS[status] ?? 'bg-zinc-100 text-zinc-600 border border-zinc-200';
+  const label = BOOKING_STATUS_LABELS[status] ?? status;
+  return (
+    <span className={clsx('inline-flex items-center font-semibold rounded-full', classes, sizes[size])}>
+      {label}
+    </span>
+  );
+}
