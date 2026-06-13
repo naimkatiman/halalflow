@@ -201,7 +201,7 @@ export function RamadanManager({ initial }: RamadanManagerProps) {
                       </p>
                     )}
                     {p.sponsorName && (
-                      <p className="text-xs text-zinc-400 mt-0.5">Penaja: {p.sponsorName}</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Tajaan: {p.sponsorName}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">

@@ -16,9 +16,10 @@ const createSchema = z.object({
   capacity: z.number().int().min(0).max(100000).default(0),
   description: z.string().trim().max(2000).optional(),
   photoUrl: z.string().trim().max(500)
-    .refine((v) => /^https:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//")), {
+    .refine((v) => v === "" || /^https:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//")), {
       message: "Photo must be an https URL or a local path",
     })
+    .or(z.literal(""))
     .optional(),
   rateKariah: z.number().int().min(0).max(100_000_000),
   rateAwam: z.number().int().min(0).max(100_000_000),
@@ -63,10 +64,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const parsed = createSchema.parse(body);
 
+    const { photoUrl: parsedPhotoUrl, ...rest } = parsed;
     const data = await withOrg(session.orgId, async (tx) =>
       tx.facility.create({
         data: {
-          ...parsed,
+          ...rest,
+          photoUrl: parsedPhotoUrl || null,
           orgId: session.orgId,
         },
       }),
