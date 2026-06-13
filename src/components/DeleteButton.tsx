@@ -43,8 +43,8 @@ export function DeleteButton({ endpoint, redirectTo, confirmMessage, label = 'De
   return (
     <div className="relative">
       {confirming ? (
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-red-700 font-medium hidden sm:block">{confirmMessage}</span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs text-red-700 font-medium">{confirmMessage}</span>
           <button
             type="button"
             onClick={handleDelete}

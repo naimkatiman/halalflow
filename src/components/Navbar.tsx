@@ -189,7 +189,7 @@ export function Navbar() {
                   ? `Free trial: ${user.trial.daysLeft} ${user.trial.daysLeft === 1 ? 'day' : 'days'} left`
                   : 'Your free trial has ended'
               }
-              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:border-amber-300 hover:text-amber-900 transition-colors"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:border-amber-300 hover:text-amber-900 transition-colors"
             >
               <Clock className="w-3 h-3 shrink-0" aria-hidden="true" />
               <span>{user.trial.daysLeft > 0 ? `Trial · ${user.trial.daysLeft}d left` : 'Trial ended'}</span>
@@ -199,7 +199,7 @@ export function Navbar() {
             <Link
               href="/settings"
               title={`Workspace: ${user.orgName}`}
-              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
             >
               <Buildings className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
               <span className="truncate">{user.orgName}</span>

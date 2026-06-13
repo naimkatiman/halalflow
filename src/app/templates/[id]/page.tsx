@@ -43,7 +43,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="max-w-3xl space-y-6">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <Link href="/templates" aria-label="Go back" className="text-zinc-500 hover:text-zinc-700 transition-colors">
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>

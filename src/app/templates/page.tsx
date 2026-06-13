@@ -53,7 +53,7 @@ export default async function TemplatesPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">Templates</h1>
           <p className="text-sm text-zinc-500 mt-0.5">{total} templates</p>
