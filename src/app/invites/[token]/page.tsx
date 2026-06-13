@@ -5,7 +5,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { prismaAdmin } from '@/lib/db';
-import { GitBranch, CheckCircle, XCircle } from '@phosphor-icons/react/dist/ssr';
+import { CheckCircle, XCircle } from '@phosphor-icons/react/dist/ssr';
+import { Logo } from '@/components/Logo';
 
 export const metadata: Metadata = {
   title: 'Invitation — MosRev',
@@ -87,7 +88,7 @@ export default async function InvitePage({
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <GitBranch className="w-5 h-5 text-emerald-600" weight="bold" aria-hidden="true" />
+          <Logo className="h-5 w-5 text-emerald-600" />
           <span className="font-bold text-zinc-950">MosRev</span>
         </div>
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm text-center">
