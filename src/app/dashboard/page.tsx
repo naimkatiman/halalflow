@@ -97,7 +97,7 @@ export default async function DashboardPage() {
           </div>
           {workflows.length === 0 ? (
             <div className="p-8 text-center">
-              <p className="text-sm text-zinc-400">No workflows yet.</p>
+              <p className="text-sm text-zinc-500">No workflows yet.</p>
               <Link href="/workflows/new" className="text-sm text-emerald-700 hover:text-emerald-800 mt-2 inline-block">
                 Create your first workflow →
               </Link>
@@ -116,7 +116,7 @@ export default async function DashboardPage() {
                       <div className="text-sm font-medium text-zinc-950 truncate group-hover:text-emerald-700 transition-colors">
                         {w.title}
                       </div>
-                      <div className="text-xs text-zinc-400 mt-0.5">{w.template.name} · {w.createdBy.name}</div>
+                      <div className="text-xs text-zinc-500 mt-0.5">{w.template.name} · {w.createdBy.name}</div>
                     </div>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full border shrink-0 ml-3 ${sc.cls}`}>
                       {sc.label}

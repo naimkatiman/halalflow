@@ -105,7 +105,7 @@ export default async function SettingsPage() {
             <div key={m.id} className="flex items-center justify-between py-3">
               <div>
                 <div className="text-sm font-medium text-zinc-950">{m.user.name}</div>
-                <div className="text-xs text-zinc-400">{m.user.email}</div>
+                <div className="text-xs text-zinc-600">{m.user.email}</div>
               </div>
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 capitalize">
                 {m.role}

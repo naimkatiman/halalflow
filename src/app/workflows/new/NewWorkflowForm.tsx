@@ -79,7 +79,7 @@ export function NewWorkflowForm() {
   return (
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/workflows" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors">
+        <Link href="/workflows" aria-label="Go back" className="text-zinc-500 hover:text-zinc-700 transition-colors">
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">New Workflow</h1>
@@ -128,7 +128,7 @@ export function NewWorkflowForm() {
               />
             </div>
             <div>
-              <label htmlFor="workflow-description" className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-400 font-normal">(optional)</span></label>
+              <label htmlFor="workflow-description" className="block text-sm font-medium text-zinc-700 mb-1.5">Description <span className="text-zinc-500 font-normal">(optional)</span></label>
               <textarea
                 id="workflow-description"
                 value={description}

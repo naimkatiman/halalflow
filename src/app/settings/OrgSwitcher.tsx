@@ -33,7 +33,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
   return (
     <div className="bg-white border border-zinc-200/70 rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2 mb-1">
-        <Buildings className="w-4 h-4 text-zinc-400" aria-hidden="true" />
+        <Buildings className="w-4 h-4 text-zinc-500" aria-hidden="true" />
         <h2 className="font-semibold text-zinc-950 text-sm">Your Organizations</h2>
       </div>
       <div className="divide-y divide-zinc-100">
@@ -51,7 +51,7 @@ export function OrgSwitcher({ orgs, currentOrgId }: { orgs: Org[]; currentOrgId:
                     </span>
                   )}
                 </div>
-                <div className="text-xs text-zinc-400">{org.slug} · <span className="capitalize">{org.role}</span></div>
+                <div className="text-xs text-zinc-500">{org.slug} · <span className="capitalize">{org.role}</span></div>
               </div>
               {!isCurrent && (
                 <button

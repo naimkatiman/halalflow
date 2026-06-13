@@ -77,7 +77,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
   return (
     <div className="max-w-3xl space-y-6">
       <div className="flex items-start gap-3">
-        <Link href="/workflows" aria-label="Go back" className="text-zinc-400 hover:text-zinc-700 transition-colors mt-1">
+        <Link href="/workflows" aria-label="Go back" className="text-zinc-500 hover:text-zinc-700 transition-colors mt-1">
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         </Link>
         <div className="flex-1 min-w-0">
@@ -139,7 +139,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-sm font-medium text-zinc-950">{approval.step.name}</span>
-                        <span className="text-xs text-zinc-400 shrink-0">Step {approval.step.order + 1}</span>
+                        <span className="text-xs text-zinc-500 shrink-0">Step {approval.step.order + 1}</span>
                       </div>
                       {approval.step.description && (
                         <p className="text-xs text-zinc-500 mt-0.5">{approval.step.description}</p>
@@ -204,14 +204,14 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
 
           <div className="bg-white border border-zinc-200/70 rounded-xl p-5">
             <h2 className="font-semibold text-zinc-950 text-sm mb-4 flex items-center gap-1.5">
-              <ChatCircle className="w-4 h-4 text-zinc-400" aria-hidden="true" />
+              <ChatCircle className="w-4 h-4 text-zinc-500" aria-hidden="true" />
               Comments
               {workflow.comments.length > 0 && (
-                <span className="text-zinc-400 font-normal">({workflow.comments.length})</span>
+                <span className="text-zinc-500 font-normal">({workflow.comments.length})</span>
               )}
             </h2>
             {workflow.comments.length === 0 ? (
-              <p className="text-xs text-zinc-400 mb-4">No comments yet.</p>
+              <p className="text-xs text-zinc-500 mb-4">No comments yet.</p>
             ) : (
               <div className="space-y-3 mb-4">
                 {workflow.comments.map((c) => (
@@ -222,7 +222,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
                     <div className="flex-1">
                       <div className="flex items-baseline gap-2">
                         <span className="text-xs font-semibold text-zinc-900">{c.user.name}</span>
-                        <span className="text-xs text-zinc-400">{formatDate(c.createdAt)}</span>
+                        <span className="text-xs text-zinc-500">{formatDate(c.createdAt)}</span>
                       </div>
                       <p className="text-sm text-zinc-700 mt-0.5">{c.body}</p>
                     </div>
@@ -246,7 +246,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
                       {log.user && <span className="font-medium">{log.user.name} </span>}
                       {log.detail ?? log.action}
                     </p>
-                    <p className="text-xs text-zinc-400 mt-0.5">{formatDate(log.createdAt)}</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">{formatDate(log.createdAt)}</p>
                   </div>
                 </div>
               ))}
@@ -268,7 +268,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             <h2 className="font-semibold text-zinc-950 text-sm mb-3">Progress</h2>
             <div className="text-2xl font-bold text-zinc-950 tabular-nums">
               {workflow.approvals.filter((a) => a.status === 'approved').length}
-              <span className="text-sm font-normal text-zinc-400"> / {workflow.approvals.length}</span>
+              <span className="text-sm font-normal text-zinc-500"> / {workflow.approvals.length}</span>
             </div>
             <p className="text-xs text-zinc-500">steps completed</p>
             <div

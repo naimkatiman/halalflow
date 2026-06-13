@@ -95,7 +95,7 @@ export function ChangePasswordForm() {
           />
         </div>
       </div>
-      <p className="text-xs text-zinc-400">At least 8 characters.</p>
+      <p className="text-xs text-zinc-500">At least 8 characters.</p>
       <div className="flex items-center gap-3">
         <button
           type="submit"

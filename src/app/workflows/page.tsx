@@ -84,7 +84,7 @@ export default async function WorkflowsPage({
       </div>
 
       <div className="flex items-center gap-2">
-        <FunnelSimple className="w-3.5 h-3.5 text-zinc-400" aria-hidden="true" />
+        <FunnelSimple className="w-3.5 h-3.5 text-zinc-500" aria-hidden="true" />
         {filters.map((f) => (
           <Link
             key={f}
@@ -130,7 +130,7 @@ export default async function WorkflowsPage({
       {workflows.length === 0 ? (
         <div className="bg-white border border-zinc-200/70 border-dashed rounded-xl p-12 text-center">
           <p className="text-sm font-medium text-zinc-500">No workflows found</p>
-          <p className="text-xs text-zinc-400 mt-1 mb-4">
+          <p className="text-xs text-zinc-500 mt-1 mb-4">
             {status ? 'Try a different filter.' : 'Create your first workflow from a template.'}
           </p>
           {!status && (
@@ -161,7 +161,7 @@ export default async function WorkflowsPage({
                       {w.title}
                     </span>
                   </div>
-                  <div className="text-xs text-zinc-400 mt-0.5">
+                  <div className="text-xs text-zinc-500 mt-0.5">
                     {w.template.name} · {w.createdBy.name} · {completedSteps}/{totalSteps} steps
                     {w._count.comments > 0 && ` · ${w._count.comments} comments`}
                   </div>

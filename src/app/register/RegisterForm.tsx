@@ -96,7 +96,7 @@ export function RegisterForm() {
                   className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
                   placeholder="Al-Noor Mosque Trust"
                 />
-                <p className="text-xs text-zinc-400 mt-1">Creates your workspace. Leave blank to set up later.</p>
+                <p className="text-xs text-zinc-500 mt-1">Creates your workspace. Leave blank to set up later.</p>
               </div>
             )}
             <div>
