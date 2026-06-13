@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { PLAN_PRICE_LABEL } from "@/lib/billing-plan";
 
 const included = [
   "Unlimited workflows and templates",
@@ -51,6 +52,9 @@ export function PricingFaq() {
           <p className="mt-2 text-sm leading-relaxed text-zinc-600">
             Full access, no credit card. One simple subscription per workspace
             when your committee is ready — cancel anytime.
+          </p>
+          <p className="mt-3 text-sm text-zinc-700">
+            Then <span className="font-semibold text-zinc-950">{PLAN_PRICE_LABEL}</span> per workspace when you’re ready.
           </p>
           <ul className="mt-5 space-y-2.5">
             {included.map((item) => (

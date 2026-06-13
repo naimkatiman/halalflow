@@ -5,7 +5,7 @@ export function CtaBand() {
   return (
     <section
       className="animate-fade-up overflow-hidden rounded-3xl bg-emerald-950 px-6 py-12 sm:px-12 sm:py-14"
-      style={{ ["--index" as string]: 3 }}
+      style={{ ["--index" as string]: 4 }}
     >
       <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
         Start running your approvals today

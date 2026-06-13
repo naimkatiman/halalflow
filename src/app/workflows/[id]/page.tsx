@@ -149,7 +149,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
               <p className="text-sm text-blue-800">
                 You submitted this request, so a different committee member must review and approve it
                 {currentApproval.step.requiredRole && (
-                  <> (needs the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role or above)</>
+                  <> (needs the <span className="font-semibold capitalize">{currentApproval.step.requiredRole}</span> role or above)</>
                 )}
                 .
               </p>
@@ -168,7 +168,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ id: s
             ) : (
               <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
                 <p className="text-sm text-amber-800">
-                  This step requires the <span className="font-semibold">{currentApproval.step.requiredRole}</span> role (or above) to approve.
+                  This step requires the <span className="font-semibold capitalize">{currentApproval.step.requiredRole}</span> role (or above) to approve.
                 </p>
               </div>
             )

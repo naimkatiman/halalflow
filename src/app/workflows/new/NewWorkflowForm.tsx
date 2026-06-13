@@ -181,7 +181,7 @@ export function NewWorkflowForm() {
               disabled={loading}
               className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold py-2.5 px-6 rounded-lg text-sm transition-colors"
             >
-              {loading ? 'Creating…' : 'Start workflow'}
+              {loading ? 'Creating…' : 'Create workflow'}
             </button>
             <Link href="/workflows" className="text-sm text-zinc-500 hover:text-zinc-700 transition-colors">
               Cancel

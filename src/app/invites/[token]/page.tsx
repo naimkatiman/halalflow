@@ -26,20 +26,35 @@ export default async function InvitePage({
     include: { org: { select: { name: true } } },
   });
 
-  if (!invite || invite.acceptedAt || invite.expiresAt < new Date()) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
-        <div className="w-full max-w-sm text-center">
-          <XCircle className="w-10 h-10 text-red-500 mx-auto mb-4" weight="duotone" aria-hidden="true" />
-          <h1 className="text-lg font-bold text-zinc-950 mb-1">Invitation expired</h1>
-          <p className="text-sm text-zinc-500 mb-6">
-            This link is no longer valid. Ask the organization admin for a new invite.
-          </p>
-          <Link href="/login" className="text-emerald-700 hover:text-emerald-800 font-medium text-sm">
-            Go to sign in
-          </Link>
-        </div>
+  const problemCard = (title: string, body: string) => (
+    <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
+      <div className="w-full max-w-sm text-center">
+        <XCircle className="w-10 h-10 text-red-500 mx-auto mb-4" weight="duotone" aria-hidden="true" />
+        <h1 className="text-lg font-bold text-zinc-950 mb-1">{title}</h1>
+        <p className="text-sm text-zinc-500 mb-6">{body}</p>
+        <Link href="/login" className="text-emerald-700 hover:text-emerald-800 font-medium text-sm">
+          Go to sign in
+        </Link>
       </div>
+    </div>
+  );
+
+  if (!invite) {
+    return problemCard(
+      'Invitation not found',
+      'This invite link doesn’t match any invitation. Check that you copied the whole link.'
+    );
+  }
+  if (invite.acceptedAt) {
+    return problemCard(
+      'Invitation already accepted',
+      'This invite has already been used. Sign in to reach the workspace.'
+    );
+  }
+  if (invite.expiresAt < new Date()) {
+    return problemCard(
+      'Invitation expired',
+      'This link is no longer valid. Ask the organization admin for a new invite.'
     );
   }
 
