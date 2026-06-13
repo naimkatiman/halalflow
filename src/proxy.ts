@@ -25,5 +25,9 @@ export const config = {
     "/settings/:path*",
     "/billing/:path*",
     "/t/:path*",
+    "/facilities/:path*",
+    "/bookings/:path*",
+    "/finance/:path*",
+    "/community/:path*",
   ],
 };

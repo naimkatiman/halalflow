@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard, Clock, Tray } from '@phosphor-icons/react';
+import { GitBranch, SquaresFour, CheckSquare, Clipboard, GearSix, SignOut, List, X, Buildings, CreditCard, Clock, Tray, CalendarCheck, Coins, UsersThree } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { fetchWithCsrf } from '@/lib/csrf-client';
 
@@ -24,7 +24,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isPublicPage =
-    pathname === '/' || pathname === '/login' || pathname === '/register' || pathname === '/onboarding';
+    pathname === '/' || pathname === '/login' || pathname === '/register' || pathname === '/onboarding' || pathname.startsWith('/masjid') || pathname.startsWith('/ramadan');
 
   useEffect(() => {
     // Public pages render without a session — probing /api/auth/me there just
@@ -57,7 +57,9 @@ export function Navbar() {
     );
   }
 
-  if (pathname === '/') {
+  // Community directory pages are public surfaces — anonymous visitors get the
+  // landing chrome (Sign in / Get started), not the app chrome.
+  if (pathname === '/' || pathname.startsWith('/masjid') || pathname.startsWith('/ramadan')) {
     return (
       <header className="border-b border-zinc-200/50 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
@@ -66,9 +68,11 @@ export function Navbar() {
             MosRev
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-500">
-            <a href="#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</a>
-            <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
-            <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
+            <Link href="/#use-cases" className="hover:text-zinc-900 transition-colors">Use cases</Link>
+            <Link href="/#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</Link>
+            <Link href="/#pricing" className="hover:text-zinc-900 transition-colors">Pricing</Link>
+            <Link href="/masjid" className="hover:text-zinc-900 transition-colors">Direktori Masjid</Link>
+            <Link href="/ramadan" className="hover:text-zinc-900 transition-colors">Ramadan</Link>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login" className="hidden sm:block text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
@@ -94,27 +98,41 @@ export function Navbar() {
         </div>
         {mobileOpen && (
           <div id="mobile-nav-menu" className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-2">
-            <a
-              href="#use-cases"
+            <Link
+              href="/#use-cases"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               Use cases
-            </a>
-            <a
-              href="#how-it-works"
+            </Link>
+            <Link
+              href="/#how-it-works"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               How it works
-            </a>
-            <a
-              href="#pricing"
+            </Link>
+            <Link
+              href="/#pricing"
               className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
               onClick={() => setMobileOpen(false)}
             >
               Pricing
-            </a>
+            </Link>
+            <Link
+              href="/masjid"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Direktori Masjid
+            </Link>
+            <Link
+              href="/ramadan"
+              className="block text-sm text-zinc-500 hover:text-zinc-900 py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Ramadan
+            </Link>
             <div className="pt-2 border-t border-zinc-100 flex flex-col gap-2">
               <Link
                 href="/login"
@@ -141,6 +159,10 @@ export function Navbar() {
     { href: '/dashboard', label: 'Dashboard', icon: SquaresFour },
     { href: '/workflows', label: 'Workflows', icon: CheckSquare },
     { href: '/templates', label: 'Templates', icon: Clipboard },
+    { href: '/bookings', label: 'Tempahan', icon: CalendarCheck },
+    { href: '/facilities', label: 'Kemudahan', icon: Buildings },
+    { href: '/finance', label: 'Kewangan', icon: Coins },
+    { href: '/community', label: 'Komuniti', icon: UsersThree },
     { href: '/billing', label: 'Billing', icon: CreditCard },
     { href: '/settings', label: 'Settings', icon: GearSix },
     ...(user?.demo ? [{ href: '/demo/outbox', label: 'Outbox', icon: Tray }] : []),
@@ -161,7 +183,7 @@ export function Navbar() {
               </span>
             )}
           </div>
-          <nav className="hidden sm:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {nav.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
@@ -189,7 +211,7 @@ export function Navbar() {
                   ? `Free trial: ${user.trial.daysLeft} ${user.trial.daysLeft === 1 ? 'day' : 'days'} left`
                   : 'Your free trial has ended'
               }
-              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:border-amber-300 hover:text-amber-900 transition-colors"
+              className="hidden xl:flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:border-amber-300 hover:text-amber-900 transition-colors"
             >
               <Clock className="w-3 h-3 shrink-0" aria-hidden="true" />
               <span>{user.trial.daysLeft > 0 ? `Trial · ${user.trial.daysLeft}d left` : 'Trial ended'}</span>
@@ -199,7 +221,7 @@ export function Navbar() {
             <Link
               href="/settings"
               title={`Workspace: ${user.orgName}`}
-              className="hidden md:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
+              className="hidden 2xl:flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-full px-2.5 py-1 hover:border-zinc-300 hover:text-zinc-900 transition-colors max-w-[200px]"
             >
               <Buildings className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
               <span className="truncate">{user.orgName}</span>
@@ -207,12 +229,12 @@ export function Navbar() {
           )}
           {user && (
             <>
-              <span className="text-xs text-zinc-500 hidden sm:block truncate max-w-[160px]">{user.name}</span>
+              <span className="text-xs text-zinc-500 hidden xl:block truncate max-w-[160px]">{user.name}</span>
               <button
                 type="button"
                 onClick={handleLogout}
                 aria-label="Sign out"
-                className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
+                className="hidden xl:flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1.5 rounded-lg hover:bg-zinc-50"
               >
                 <SignOut className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Sign out</span>
@@ -221,7 +243,7 @@ export function Navbar() {
           )}
           <button
             type="button"
-            className="sm:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
+            className="xl:hidden p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
@@ -232,7 +254,7 @@ export function Navbar() {
         </div>
       </div>
       {mobileOpen && (
-        <div id="mobile-nav-menu-auth" className="sm:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-1">
+        <div id="mobile-nav-menu-auth" className="xl:hidden border-t border-zinc-200/50 bg-white px-6 py-3 space-y-1">
           {nav.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
@@ -254,7 +276,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => { setMobileOpen(false); handleLogout(); }}
-              className="flex sm:hidden items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
+              className="flex xl:hidden items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
             >
               <SignOut className="w-4 h-4" aria-hidden="true" />
               Sign out
