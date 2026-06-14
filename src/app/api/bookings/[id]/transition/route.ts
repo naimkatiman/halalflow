@@ -56,6 +56,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       // Overlap guard: a slot already held by another booking (approved+) must
       // not be double-approved or double-confirmed for this facility/date/time.
       if (target === "approved" || target === "paid") {
+        // Serialize concurrent approvals for the same facility/date so the
+        // read-then-write below cannot race two requests into the same slot
+        // (withOrg runs at Read Committed). The xact lock releases on commit.
+        const lockKey = `${booking.facilityId}:${booking.eventDate.toISOString().slice(0, 10)}`;
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey})::bigint)`;
         const sameDay = await tx.facilityBooking.findMany({
           where: {
             facilityId: booking.facilityId,
@@ -94,6 +99,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             paidAt: now,
             paidAmount: parsed.paymentAmount,
             paymentNote: parsed.paymentNote ?? null,
+            // Clear any stale receipt-rejection reason so a confirmed booking
+            // never displays an earlier "Sebab penolakan".
+            declineReason: null,
           }),
           ...(parsed.action === "reject_receipt" && {
             receiptImageId: null,
@@ -119,6 +127,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             createdById: session.userId,
           },
         });
+      }
+
+      // Rejecting a receipt unlinks it (above); drop the now-orphaned bytes too.
+      if (parsed.action === "reject_receipt" && booking.receiptImageId) {
+        await tx.uploadedImage.deleteMany({ where: { id: booking.receiptImageId } });
       }
 
       const fresh = await tx.facilityBooking.findFirst({ where: { id: booking.id } });

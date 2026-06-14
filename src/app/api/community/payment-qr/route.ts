@@ -6,7 +6,7 @@ import { SessionData, sessionOptions } from "@/lib/session";
 import { validateCsrfToken } from "@/lib/csrf";
 import { isOrgSubscribed } from "@/lib/require-subscription";
 import { roleSatisfies } from "@/lib/roles";
-import { validateImageUpload } from "@/lib/upload";
+import { validateImageUpload, MAX_UPLOAD_BYTES } from "@/lib/upload";
 
 const json = (b: unknown, status = 200, extra: Record<string, string> = {}) =>
   NextResponse.json(b, { status, headers: { "Cache-Control": "no-store", ...extra } });
@@ -21,6 +21,9 @@ export async function POST(request: NextRequest) {
     if (!roleSatisfies(session.orgRole, "admin")) return json({ error: "Forbidden" }, 403);
     const csrf = await validateCsrfToken(request);
     if (!csrf.valid) return json({ error: "Invalid CSRF token" }, 403);
+
+    const declaredLength = Number(request.headers.get("content-length") ?? 0);
+    if (declaredLength > MAX_UPLOAD_BYTES + 1024) return json({ error: "Saiz fail melebihi 5 MB" }, 413);
 
     const form = await request.formData();
     const file = form.get("file");

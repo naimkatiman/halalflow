@@ -46,8 +46,15 @@ const labelCls = "block text-xs font-medium text-zinc-700 mb-1";
 const STEPS = ["Fasiliti", "Tarikh & Masa", "Maklumat", "Semak"];
 
 export function BookingWizard({ slug, facilities, preselect, whatsapp }: Props) {
-  const today = new Date().toISOString().slice(0, 10);
-  const maxDate = new Date(Date.now() + 730 * 86400000).toISOString().slice(0, 10);
+  // Computed after mount to avoid an SSR/client hydration mismatch on the date
+  // input's min/max across a midnight or timezone boundary.
+  const [dateBounds, setDateBounds] = useState({ today: "", maxDate: "" });
+  useEffect(() => {
+    setDateBounds({
+      today: new Date().toISOString().slice(0, 10),
+      maxDate: new Date(Date.now() + 730 * 86400000).toISOString().slice(0, 10),
+    });
+  }, []);
 
   const defaultFacility =
     preselect && facilities.some((f) => f.id === preselect) ? preselect : (facilities[0]?.id ?? "");
@@ -80,7 +87,7 @@ export function BookingWizard({ slug, facilities, preselect, whatsapp }: Props) 
       return;
     }
     let active = true;
-    fetch(`/api/public/bookings/availability?facilityId=${encodeURIComponent(facilityId)}&date=${eventDate}`)
+    fetch(`/api/public/bookings/availability?slug=${encodeURIComponent(slug)}&facilityId=${encodeURIComponent(facilityId)}&date=${eventDate}`)
       .then((r) => (r.ok ? r.json() : { data: { occupied: [] } }))
       .then((d) => {
         if (active) setOccupied((d?.data?.occupied as Occupied[]) ?? []);
@@ -91,7 +98,7 @@ export function BookingWizard({ slug, facilities, preselect, whatsapp }: Props) 
     return () => {
       active = false;
     };
-  }, [step, facilityId, eventDate]);
+  }, [step, facilityId, eventDate, slug]);
 
   const paxNum = parseInt(pax, 10);
   const overCapacity =
@@ -204,6 +211,7 @@ export function BookingWizard({ slug, facilities, preselect, whatsapp }: Props) 
           return (
             <li key={label} className="flex items-center gap-2">
               <span
+                aria-current={active ? "step" : undefined}
                 className={
                   "flex items-center gap-1.5 px-2.5 py-1 rounded-full border " +
                   (active
@@ -280,14 +288,14 @@ export function BookingWizard({ slug, facilities, preselect, whatsapp }: Props) 
           )}
           <div>
             <label htmlFor="eventDate" className={labelCls}>Tarikh acara</label>
-            <input id="eventDate" type="date" value={eventDate} min={today} max={maxDate} onChange={(e) => setEventDate(e.target.value)} className={inputCls} required />
+            <input id="eventDate" type="date" value={eventDate} min={dateBounds.today} max={dateBounds.maxDate} onChange={(e) => setEventDate(e.target.value)} className={inputCls} required />
           </div>
           {eventDate && occupied.length > 0 && (
             <div className="text-xs text-zinc-500">
               <span className="font-medium text-zinc-600">Telah ditempah pada tarikh ini: </span>
               <span className="inline-flex flex-wrap gap-1.5 mt-1">
-                {occupied.map((o, i) => (
-                  <span key={i} className="inline-flex items-center bg-zinc-100 text-zinc-600 rounded-full px-2 py-0.5">
+                {occupied.map((o) => (
+                  <span key={`${o.startTime}-${o.endTime}`} className="inline-flex items-center bg-zinc-100 text-zinc-600 rounded-full px-2 py-0.5">
                     {o.startTime}–{o.endTime}
                   </span>
                 ))}
@@ -305,10 +313,10 @@ export function BookingWizard({ slug, facilities, preselect, whatsapp }: Props) 
             </div>
           </div>
           {!!startTime && !!endTime && !timeValid && (
-            <p className="text-xs text-danger">Masa tamat mesti selepas masa mula.</p>
+            <p className="text-xs text-danger" role="status">Masa tamat mesti selepas masa mula.</p>
           )}
           {clashes && (
-            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2" role="status">
               Masa ini bertindih dengan tempahan sedia ada. Anda masih boleh memohon — pejabat akan mengesahkan ketersediaan.
             </p>
           )}
@@ -317,7 +325,7 @@ export function BookingWizard({ slug, facilities, preselect, whatsapp }: Props) 
               Anggaran bilangan tetamu (pax){selectedFacility && selectedFacility.capacity > 0 ? ` · maks ${selectedFacility.capacity}` : ""}
             </label>
             <input id="pax" type="number" min="1" max={selectedFacility && selectedFacility.capacity > 0 ? selectedFacility.capacity : 100000} value={pax} onChange={(e) => setPax(e.target.value)} className={inputCls} required />
-            {overCapacity && <p className="mt-1 text-xs text-danger">Melebihi kapasiti kemudahan ({selectedFacility?.capacity} pax).</p>}
+            {overCapacity && <p className="mt-1 text-xs text-danger" role="status">Melebihi kapasiti kemudahan ({selectedFacility?.capacity} pax).</p>}
           </div>
         </div>
       )}

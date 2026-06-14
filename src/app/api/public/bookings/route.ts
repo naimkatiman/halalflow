@@ -31,8 +31,10 @@ const publicBookingSchema = z.object({
     .or(z.literal("")),
   isKariah: z.boolean().default(false),
   notes: z.string().trim().max(2000).optional(),
-  // Honeypot: bots fill hidden fields; humans never see it. Must be empty.
-  website: z.string().max(0).optional(),
+  // Honeypot: bots fill hidden fields; humans never see it. Accept any value so
+  // a filled field still parses and hits the silent fake-success branch below
+  // (a strict .max(0) would 400 and reveal the trap).
+  website: z.string().max(200).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -149,8 +151,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 6. Create booking — slug is not a booking column; orgId resolved server-side.
-    // reference is unique; retry on the rare collision (P2002).
-    const publicToken = generatePublicToken();
+    // reference + publicToken are unique; re-roll BOTH on the rare collision (P2002).
     let booking: Awaited<ReturnType<typeof prismaAdmin.facilityBooking.create>> | undefined;
     for (let attempt = 0; attempt < 5; attempt++) {
       try {
@@ -171,7 +172,7 @@ export async function POST(request: NextRequest) {
             notes: parsed.notes,
             status: "requested",
             reference: generateReference(),
-            publicToken,
+            publicToken: generatePublicToken(),
           },
         });
         break;

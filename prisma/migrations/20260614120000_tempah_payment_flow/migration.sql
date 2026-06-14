@@ -30,10 +30,13 @@ ALTER TABLE "FacilityBooking" ADD COLUMN "paidAmount" INTEGER;
 ALTER TABLE "FacilityBooking" ADD COLUMN "receiptImageId" TEXT;
 ALTER TABLE "FacilityBooking" ADD COLUMN "receiptUploadedAt" TIMESTAMP(3);
 
--- Backfill existing rows with unique values (md5 of id is deterministic & unique).
+-- Backfill existing rows with RANDOM values. publicToken is the sole access
+-- credential for the public status/receipt endpoints, so it must NOT be derivable
+-- from the booking id (which is shared with staff in emails/admin URLs).
+-- gen_random_uuid() is a core function (PostgreSQL 13+).
 UPDATE "FacilityBooking"
-  SET "reference" = upper(substr(md5("id"), 1, 8)),
-      "publicToken" = md5("id" || 'tok') || md5("id" || 'tok2')
+  SET "reference" = upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 8)),
+      "publicToken" = replace(gen_random_uuid()::text, '-', '') || replace(gen_random_uuid()::text, '-', '')
   WHERE "reference" IS NULL;
 
 ALTER TABLE "FacilityBooking" ALTER COLUMN "reference" SET NOT NULL;

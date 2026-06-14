@@ -22,7 +22,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 
   const isPaymentQr = await prismaAdmin.mosqueProfile.findFirst({
-    where: { paymentQrImageId: id },
+    where: { paymentQrImageId: id, published: true },
     select: { id: true },
   });
   let authorized = Boolean(isPaymentQr);
@@ -50,6 +50,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     status: 200,
     headers: {
       "Content-Type": image.mime,
+      // Never let a stored blob be interpreted as anything but the validated
+      // image type, and never render it as a top-level document.
+      "X-Content-Type-Options": "nosniff",
+      "Content-Disposition": "inline",
       "Cache-Control": "private, max-age=300",
       "Content-Length": String(image.sizeBytes),
     },

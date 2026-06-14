@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadSimple } from "@phosphor-icons/react";
 
@@ -16,6 +16,13 @@ export function ReceiptUpload({ token, currentStatus }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
+
+  // Revoke the blob URL when the preview changes or the component unmounts.
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   const pick = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError("");
@@ -66,14 +73,15 @@ export function ReceiptUpload({ token, currentStatus }: Props) {
     <div className="space-y-3">
       <label className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-900 cursor-pointer">
         <UploadSimple className="w-4 h-4" aria-hidden="true" />
-        <input type="file" accept="image/jpeg,image/png,image/webp" onChange={pick} className="hidden" />
+        <input type="file" accept="image/jpeg,image/png,image/webp" onChange={pick} className="hidden" aria-describedby="receipt-upload-error" />
         {currentStatus === "payment_review" ? "Tukar resit" : "Pilih resit bayaran"}
       </label>
+      {file && <p className="text-xs text-zinc-500">Dipilih: {file.name}</p>}
       {preview && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={preview} alt="Pratonton resit" className="max-h-60 rounded-lg border border-zinc-200" />
       )}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p id="receipt-upload-error" className="text-sm text-red-600" role="alert">{error}</p>}
       {file && (
         <button
           type="button"

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prismaAdmin } from "@/lib/db";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { validateImageUpload } from "@/lib/upload";
-import { canTransition } from "@/lib/bookings";
+import { validateImageUpload, MAX_UPLOAD_BYTES } from "@/lib/upload";
 import { sendEmail } from "@/lib/notifications/email";
 import { buildBookingReceiptOfficeEmail } from "@/lib/notifications/booking-email";
 
@@ -25,6 +24,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       where: { publicToken: token },
       select: {
         id: true, orgId: true, status: true, reference: true, applicantName: true,
+        receiptImageId: true,
         facility: { select: { name: true } },
         org: {
           select: {
@@ -38,8 +38,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       },
     });
     if (!booking) return json({ error: "Not found" }, 404);
-    if (!canTransition(booking.status, "payment_review")) {
+    // Allow first upload (approved) and replacement while still under review.
+    if (booking.status !== "approved" && booking.status !== "payment_review") {
       return json({ error: "Tempahan ini belum sedia untuk muat naik resit" }, 409);
+    }
+
+    // Reject oversized bodies before buffering them into memory.
+    const declaredLength = Number(request.headers.get("content-length") ?? 0);
+    if (declaredLength > MAX_UPLOAD_BYTES + 1024) {
+      return json({ error: "Saiz fail melebihi 5 MB" }, 413);
     }
 
     const form = await request.formData();
@@ -59,6 +66,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (updated.count === 0) {
       await prismaAdmin.uploadedImage.deleteMany({ where: { id: img.id } });
       return json({ error: "Tempahan telah dikemaskini" }, 409);
+    }
+    // On re-upload, drop the previously attached (now-orphaned) receipt bytes.
+    if (booking.receiptImageId && booking.receiptImageId !== img.id) {
+      await prismaAdmin.uploadedImage.deleteMany({ where: { id: booking.receiptImageId } });
     }
 
     const officeEmails = booking.org.members.map((m) => m.user.email).filter(Boolean);
