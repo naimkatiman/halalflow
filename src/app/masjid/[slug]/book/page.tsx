@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMosqueBySlug } from "@/lib/public-directory";
-import { BookingRequestForm } from "./BookingRequestForm";
+import { BookingWizard } from "./BookingWizard";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -29,7 +29,7 @@ export default async function BookPage({
         <h1 className="text-3xl font-extrabold tracking-tight text-emerald-950">Mohon Tempahan</h1>
         <p className="mt-1 text-sm text-zinc-500">{org.mosqueProfile!.displayName}</p>
       </div>
-      <BookingRequestForm slug={slug} facilities={org.facilities} preselect={preselect} />
+      <BookingWizard slug={slug} facilities={org.facilities} preselect={preselect} whatsapp={org.mosqueProfile!.whatsapp ?? null} />
     </div>
   );
 }
