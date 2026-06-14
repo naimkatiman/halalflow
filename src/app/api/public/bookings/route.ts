@@ -1,8 +1,15 @@
 import { zodErrorMessage } from "@/lib/api-errors";
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prismaAdmin } from "@/lib/db";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { EVENT_TYPES } from "@/lib/bookings";
+import { generateReference, generatePublicToken } from "@/lib/booking-codes";
+import { sendEmail } from "@/lib/notifications/email";
+import {
+  buildBookingRequestCustomerEmail,
+  buildBookingRequestOfficeEmail,
+} from "@/lib/notifications/booking-email";
 import { z } from "zod";
 
 const publicBookingSchema = z.object({
@@ -24,6 +31,8 @@ const publicBookingSchema = z.object({
     .or(z.literal("")),
   isKariah: z.boolean().default(false),
   notes: z.string().trim().max(2000).optional(),
+  // Honeypot: bots fill hidden fields; humans never see it. Must be empty.
+  website: z.string().max(0).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -70,6 +79,15 @@ export async function POST(request: NextRequest) {
       throw err;
     }
 
+    // 2b. Honeypot: a filled hidden field means a bot. Return a fake success so
+    // the bot gets no signal; no DB write happens.
+    if (parsed.website) {
+      return NextResponse.json(
+        { data: { reference: "TEMPAH00", token: "x" } },
+        { status: 201, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
     // 3. Validate date and time windows (Malaysia calendar; YYYY-MM-DD and
     // zero-padded HH:MM compare correctly as strings)
     const klDate = new Intl.DateTimeFormat("en-CA", {
@@ -101,7 +119,7 @@ export async function POST(request: NextRequest) {
       where: { slug: parsed.slug },
       select: {
         id: true,
-        mosqueProfile: { select: { published: true } },
+        mosqueProfile: { select: { published: true, displayName: true } },
       },
     });
     if (!org || !org.mosqueProfile?.published) {
@@ -122,29 +140,97 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 6. Create booking — slug is not a booking column; orgId resolved server-side
-    const booking = await prismaAdmin.facilityBooking.create({
-      data: {
-        orgId: org.id,
-        facilityId: parsed.facilityId,
-        eventType: parsed.eventType,
-        // Midnight UTC keeps the calendar date stable under UTC server rendering
-        eventDate: new Date(parsed.eventDate + "T00:00:00Z"),
-        startTime: parsed.startTime,
-        endTime: parsed.endTime,
-        pax: parsed.pax,
-        applicantName: parsed.applicantName,
-        applicantPhone: parsed.applicantPhone,
-        applicantEmail: parsed.applicantEmail || null,
-        isKariah: parsed.isKariah,
-        notes: parsed.notes,
-        status: "requested",
-      },
-    });
+    // 5b. Capacity guard
+    if (facility.capacity > 0 && parsed.pax > facility.capacity) {
+      return NextResponse.json(
+        { error: `Bilangan tetamu melebihi kapasiti (${facility.capacity} pax)` },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
 
-    // 7. Return short reference
+    // 6. Create booking — slug is not a booking column; orgId resolved server-side.
+    // reference is unique; retry on the rare collision (P2002).
+    const publicToken = generatePublicToken();
+    let booking: Awaited<ReturnType<typeof prismaAdmin.facilityBooking.create>> | undefined;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      try {
+        booking = await prismaAdmin.facilityBooking.create({
+          data: {
+            orgId: org.id,
+            facilityId: parsed.facilityId,
+            eventType: parsed.eventType,
+            // Midnight UTC keeps the calendar date stable under UTC server rendering
+            eventDate: new Date(parsed.eventDate + "T00:00:00Z"),
+            startTime: parsed.startTime,
+            endTime: parsed.endTime,
+            pax: parsed.pax,
+            applicantName: parsed.applicantName,
+            applicantPhone: parsed.applicantPhone,
+            applicantEmail: parsed.applicantEmail || null,
+            isKariah: parsed.isKariah,
+            notes: parsed.notes,
+            status: "requested",
+            reference: generateReference(),
+            publicToken,
+          },
+        });
+        break;
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") continue;
+        throw e;
+      }
+    }
+    if (!booking) {
+      return NextResponse.json(
+        { error: "Internal server error" },
+        { status: 500, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    // 7. Notify customer + office (best-effort — never fail the request on email)
+    const members = await prismaAdmin.orgMember.findMany({
+      where: { orgId: org.id, role: { in: ["owner", "admin"] } },
+      select: { user: { select: { email: true } } },
+    });
+    const officeEmails = members.map((m) => m.user.email).filter(Boolean);
+    try {
+      if (parsed.applicantEmail) {
+        await sendEmail(
+          buildBookingRequestCustomerEmail({
+            to: parsed.applicantEmail,
+            reference: booking.reference,
+            slug: parsed.slug,
+            token: booking.publicToken,
+            mosqueName: org.mosqueProfile.displayName,
+            facilityName: facility.name,
+            eventDate: parsed.eventDate,
+          }),
+        );
+      }
+      if (officeEmails.length) {
+        await sendEmail(
+          buildBookingRequestOfficeEmail({
+            to: officeEmails,
+            reference: booking.reference,
+            bookingId: booking.id,
+            mosqueName: org.mosqueProfile.displayName,
+            facilityName: facility.name,
+            eventDate: parsed.eventDate,
+            startTime: parsed.startTime,
+            endTime: parsed.endTime,
+            pax: parsed.pax,
+            applicantName: parsed.applicantName,
+            applicantPhone: parsed.applicantPhone,
+          }),
+        );
+      }
+    } catch (e) {
+      console.error("booking email error:", e);
+    }
+
+    // 8. Return reference + token (token drives the customer status URL)
     return NextResponse.json(
-      { data: { reference: booking.id.slice(0, 8).toUpperCase() } },
+      { data: { reference: booking.reference, token: booking.publicToken } },
       { status: 201, headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {
