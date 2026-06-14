@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { defaultTemplates } from "../src/lib/default-templates";
+import { generateReference, generatePublicToken } from "../src/lib/booking-codes";
 
 // Seeding writes to RLS-protected tables, so it connects as the BYPASSRLS
 // admin role. Falls back to DATABASE_URL only if the admin URL is unset.
@@ -261,6 +262,11 @@ async function seedDemoCommunity(primaryOrgId: string, adminId: string) {
       pantryType: "open",
       pantryHours: "Selepas Subuh – Maghrib, setiap hari",
       pantryNote: "Ambil apa yang perlu, derma apa yang mampu. Terbuka kepada semua.",
+      bankName: "Bank Islam",
+      bankAccountNo: "1234 5678 9012",
+      bankAccountHolder: "Tabung Masjid Al-Noor",
+      paymentInstructions:
+        "Pindahan ke akaun di atas atau imbas QR DuitNow. Muat naik resit selepas bayaran.",
     },
   });
 
@@ -350,6 +356,8 @@ async function seedDemoCommunity(primaryOrgId: string, adminId: string) {
         pax: 300,
         applicantName: "Ahmad Fauzi bin Ismail",
         applicantPhone: "012-3456789",
+        reference: generateReference(),
+        publicToken: generatePublicToken(),
         isKariah: true,
         status: "requested",
         notes: "Kenduri kahwin anak pertama. Perlukan set-up kerusi jenis bulat.",
@@ -369,10 +377,13 @@ async function seedDemoCommunity(primaryOrgId: string, adminId: string) {
         pax: 150,
         applicantName: "Siti Aminah binti Hassan",
         applicantPhone: "011-9876543",
+        reference: generateReference(),
+        publicToken: generatePublicToken(),
         isKariah: true,
         status: "approved",
         quotedAmount: 70000,
         depositAmount: 30000,
+        amountDue: 30000,
         decidedById: adminId,
         decidedAt: new Date(now - 2 * dayMs),
       },
@@ -391,10 +402,14 @@ async function seedDemoCommunity(primaryOrgId: string, adminId: string) {
         pax: 250,
         applicantName: "Lim Abdullah",
         applicantPhone: "016-2345678",
+        reference: generateReference(),
+        publicToken: generatePublicToken(),
         isKariah: false,
         status: "paid",
         quotedAmount: 150000,
         depositAmount: 30000,
+        amountDue: 150000,
+        paidAmount: 150000,
         decidedById: adminId,
         decidedAt: new Date(now - 5 * dayMs),
         paidAt: new Date(now - 3 * dayMs),
@@ -415,10 +430,14 @@ async function seedDemoCommunity(primaryOrgId: string, adminId: string) {
         pax: 30,
         applicantName: "Persatuan Peniaga Kecil Shah Alam",
         applicantPhone: "019-3456789",
+        reference: generateReference(),
+        publicToken: generatePublicToken(),
         isKariah: false,
         status: "completed",
         quotedAmount: 10000,
         depositAmount: 5000,
+        amountDue: 10000,
+        paidAmount: 10000,
         decidedById: adminId,
         decidedAt: new Date(now - 14 * dayMs),
         paidAt: new Date(now - 10 * dayMs),
@@ -439,6 +458,8 @@ async function seedDemoCommunity(primaryOrgId: string, adminId: string) {
         pax: 200,
         applicantName: "Kamarul Ariffin",
         applicantPhone: "013-7654321",
+        reference: generateReference(),
+        publicToken: generatePublicToken(),
         isKariah: true,
         status: "declined",
         declineReason: "Tarikh bertembung dengan program rasmi masjid",
@@ -460,8 +481,38 @@ async function seedDemoCommunity(primaryOrgId: string, adminId: string) {
         pax: 20,
         applicantName: "Nurul Huda",
         applicantPhone: "017-8765432",
+        reference: generateReference(),
+        publicToken: generatePublicToken(),
         isKariah: true,
         status: "cancelled",
+      },
+    });
+    bookingsCreated++;
+
+    // 7. payment_review — kenduri +18d (customer claims paid, awaiting verification)
+    await prisma.facilityBooking.create({
+      data: {
+        orgId: primaryOrgId,
+        facilityId: facilityDewan.id,
+        eventType: "kenduri",
+        eventDate: new Date(now + 18 * dayMs),
+        startTime: "08:00",
+        endTime: "17:00",
+        pax: 280,
+        applicantName: "Hajah Rokiah binti Salleh",
+        applicantPhone: "014-2233445",
+        applicantEmail: "rokiah@contoh.com",
+        reference: generateReference(),
+        publicToken: generatePublicToken(),
+        isKariah: false,
+        status: "payment_review",
+        quotedAmount: 150000,
+        depositAmount: 30000,
+        amountDue: 30000,
+        decidedById: adminId,
+        decidedAt: new Date(now - 1 * dayMs),
+        receiptUploadedAt: new Date(now - 1 * dayMs),
+        notes: "Kenduri kesyukuran. Sudah buat pindahan deposit.",
       },
     });
     bookingsCreated++;

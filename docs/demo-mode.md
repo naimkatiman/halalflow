@@ -64,29 +64,43 @@ What changes: Subscribe goes to real Stripe Checkout, emails send through Resend
 - The outbox is global, not tenant-scoped. Every captured email from every org on the deployment is visible to anyone who can open `/demo/outbox`. Use demo mode only on throwaway demo deployments with seeded data.
 - The time machine works by mutating `organization.createdAt` (the trial clock is anchored to org creation). Day 23 / Day 31 / Day 37 also reset the org to a default trial state and clear the relevant email sent-stamps so sweeps can re-send. Reset sets `createdAt` to now. Do not point it at an org whose real creation date matters.
 
-## Community + rental demo script
+## Community + rental demo script (customer tempah end-to-end)
 
-A presenter follows this click-path to show the mosque community module. Total time: about 5 minutes. Run after the main billing demo or standalone.
+A presenter follows this click-path to show the full customer booking + manual-payment journey. Total time: about 8 minutes. Run after the main billing demo or standalone.
 
+Prep (once): log in as `admin@halalflow.app` / `changeme123`, open **Community**, scroll to **Pembayaran tempahan**, and upload a QR image (any image) so the customer payment page shows a DuitNow QR. Bank details are pre-seeded. Then log out for the customer leg.
+
+Customer leg (no login):
 1. Open `/masjid` — the public mosque directory loads three published mosques.
 2. Click the **Selangor** state filter pill — only Masjid Al-Noor remains.
-3. Click the **Masjid Al-Noor** card — the full profile opens: photo, description, facilities, Ramadan programs, visitor info, and pantri komuniti sections.
-4. Click **Mohon Tempahan** on the Dewan Serbaguna card — the booking request form opens pre-selected on that facility.
-5. Fill in the form: select event type Kenduri, pick a date two weeks out, enter 08:00–17:00, pax 200, your name, phone. Submit. A reference number is shown — note it.
-6. Log in as `admin@halalflow.app` / `changeme123`.
-7. Open **Bookings** in the navbar — the new request appears at the top of the queue with status "Requested".
-8. Open the booking detail. Click **Lulus** (Approve): enter quoted amount RM 1,500.00, deposit RM 300.00. Confirm. Status changes to "Approved".
-9. Click **Rekod Bayaran** (Record payment): enter amount RM 1,500.00. Confirm. Status changes to "Paid".
-10. Open **Finance** in the navbar — a new "Sewaan: [your name] (Kenduri)" entry appears in the Sewaan fund, timestamped now.
-11. Click **Eksport CSV** — the browser downloads `penyata-<date>.csv` containing all ledger entries.
-12. Open **Community** in the navbar — the mosque profile form shows all the seeded fields. Toggle a field and save to show the PUT round-trip.
-13. Open `/ramadan` in a new tab — the Ramadan directory groups programs by type across all three seeded mosques.
+3. Click the **Masjid Al-Noor** card — the full profile opens: photo, facilities with rates, Ramadan programs, visitor info, pantri.
+4. Click **Mohon Tempahan** on the Dewan Serbaguna card — the **4-step wizard** opens on Step 1 with that facility selected.
+5. Step 2 (Tarikh & Masa): pick a date ~2 weeks out — already-booked ranges for that date show as chips. Enter 08:00–17:00, pax 200 (the field caps at the facility capacity of 400). Click Seterusnya.
+6. Step 3 (Maklumat): event type Kenduri, your name, phone, and an email (so confirmation/status emails fire). Seterusnya.
+7. Step 4 (Semak): review the summary and the **price estimate** (kariah vs awam rate + deposit). Click Hantar Permohonan.
+8. Confirmation panel: note the **reference**, then click **Semak Status & Bayar** — the token-addressed status page opens showing status **Menunggu**.
+
+Office leg (login):
+9. Log in as `admin@halalflow.app` / `changeme123`, open **Bookings** — the new request is at the top with status **Menunggu**.
+10. Open the booking detail. Click **Lulus**: quote RM 1,500.00, deposit RM 300.00, **Bayar sekarang** RM 300.00 (deposit). Confirm → status **Diluluskan**. (An approval email lands in the Outbox.)
+
+Payment leg (customer status page):
+11. Reload the customer status page — it now shows **Bayar sekarang RM 300.00**, the bank details, and the QR. Click **Pilih resit bayaran**, choose any image, **Hantar Resit** → status flips to **Menyemak Bayaran**.
+12. Back as admin, open the booking — the **receipt image** is shown with a "Resit dimuat naik — sila semak" panel. Click **Sahkan bayaran** RM 300.00 → status **Telah Ditempah**. (A confirmation email lands in the Outbox.) Or click **Tolak resit** to send it back to the customer to re-upload.
+13. Reload the customer status page — it shows **Tempahan disahkan**.
+
+Wrap-up:
+14. Open **Finance** — a "Sewaan: [your name] (Kenduri)" entry appears in the Sewaan fund. **Eksport CSV** downloads `penyata-<date>.csv`.
+15. Open **Outbox** — the request (customer + office), approval (customer), receipt (office), and confirmation (customer) emails are all captured.
+
+Shortcut: the seed also ships a booking already at **Menyemak Bayaran** (Hajah Rokiah) so you can demo the office verification step without running the whole customer leg first.
 
 What to point at during the demo:
-- Step 5: the facility rules amber info box in the booking form.
-- Step 7: the BookingStatusBadge color coding (amber = requested, blue = approved, emerald = paid).
-- Step 10: the fund totals cards at the top of Finance showing Sewaan, Wakaf, Kutipan Jumaat, and Infaq balances.
-- Step 13: the grouped Ramadan directory with Iftar / Terawih / Moreh / Tadarus sections.
+- Step 5: the availability chips and capacity-capped pax field.
+- Step 7: the live price estimate computed from the facility rate + the kariah toggle.
+- Step 9/12: the BookingStatusBadge color coding (amber pending = requested, blue = approved, amber = payment_review, emerald = paid/booked).
+- Step 11: the recoverable token status URL — refreshing keeps the reference and current state.
+- Step 14: the fund totals cards at the top of Finance.
 
 ## Demo imagery
 
