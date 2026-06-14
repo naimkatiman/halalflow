@@ -1,11 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-import { DownloadSimple } from '@phosphor-icons/react';
+import { useState, useEffect, useRef } from 'react';
+import { MorphIcon } from '@/components/morph/MorphIcon';
 
 export function ExportButton({ templateId, templateName }: { templateId: string; templateName: string }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+  const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (successTimer.current) clearTimeout(successTimer.current);
+    },
+    [],
+  );
 
   const handleExport = async () => {
     setError('');
@@ -25,6 +34,9 @@ export function ExportButton({ templateId, templateName }: { templateId: string;
       a.download = `${templateName.replace(/\s+/g, '_').toLowerCase()}_template.json`;
       a.click();
       URL.revokeObjectURL(url);
+      setSucceeded(true);
+      if (successTimer.current) clearTimeout(successTimer.current);
+      successTimer.current = setTimeout(() => setSucceeded(false), 1600);
     } catch (err) {
       console.error('Template export failed:', err);
       setError('Export failed. Check your connection and try again.');
@@ -41,8 +53,8 @@ export function ExportButton({ templateId, templateName }: { templateId: string;
         disabled={loading}
         className="flex items-center gap-1.5 border border-zinc-200 hover:border-zinc-300 text-zinc-600 hover:text-zinc-800 disabled:opacity-50 font-medium text-sm px-3 py-2 rounded-lg transition-colors"
       >
-        <DownloadSimple className="w-3.5 h-3.5" aria-hidden="true" />
-        {loading ? 'Exporting…' : 'Export'}
+        <MorphIcon name="downloadCheck" active={succeeded} size={14} className="shrink-0" />
+        {loading ? 'Exporting…' : succeeded ? 'Exported' : 'Export'}
       </button>
       {error && (
         <p
