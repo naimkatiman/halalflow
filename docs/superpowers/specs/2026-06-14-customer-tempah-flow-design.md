@@ -68,19 +68,23 @@ The community/rental module already ships a working, if thin, flow:
 ```
 requested ──approve(total + amountDue)──▶ approved
 approved  ──customer uploads receipt─────▶ payment_review
-payment_review ──admin confirms (paidAmount + ledger)──▶ paid   (slot BOOKED)
-payment_review ──admin rejects receipt──▶ approved              (re-upload)
+payment_review ──admin record_payment (paidAmount + ledger)──▶ paid   (slot BOOKED)
+approved ──admin record_payment (manual, no receipt)──▶ paid          (offline payers)
+payment_review ──admin reject_receipt──▶ approved                     (re-upload)
 paid ──────────event done────────────────▶ completed
 requested ──▶ declined | cancelled
 approved | payment_review ──▶ cancelled
 ```
 
-New status: `payment_review`. New actions: `confirm_payment` (replaces/renames the customer-
-verification half of the old `record_payment`; `payment_review -> paid`), `reject_receipt`
-(`payment_review -> approved`). Existing `record_payment` semantics fold into `confirm_payment`
-(it still posts the ledger entry and now also stores `paidAmount` on the booking). Receipt
-upload itself transitions `approved -> payment_review` via the public token route (not an admin
-action).
+New status: `payment_review`. Transitions: `approved -> [payment_review, paid, cancelled]`,
+`payment_review -> [paid, approved, cancelled]`. The existing `record_payment` action is KEPT
+(more surgical than renaming): it now fires from both `approved` and `payment_review`, still
+posts the `sewaan` ledger entry, and now also stores `paidAmount` on the booking (closing the
+gap where the paid amount lived only in the ledger). New action `reject_receipt`
+(`payment_review -> approved`, optional note). Receipt upload transitions
+`approved -> payment_review` via the public token route (not an admin action). Keeping the
+direct `approved -> paid` path lets the office mark offline/cash/WhatsApp payers paid without a
+customer upload.
 
 Customer-facing Bahasa labels: `requested`=Menunggu, `approved`=Diluluskan (Sila Bayar),
 `payment_review`=Menyemak Bayaran, `paid`=Telah Ditempah, `completed`=Selesai,
@@ -135,10 +139,10 @@ New customer-facing:
 
 Changed admin-facing:
 - `POST /api/bookings/[id]/transition` — `approve` captures `quotedAmount` (total) + `amountDue`
-  (pay now); add `confirm_payment` (-> `paid`, stores `paidAmount`, posts ledger, overlap guard)
-  and `reject_receipt` (-> `approved`, optional note). Overlap guard added to `approve` and
-  `confirm_payment`: reject (409) if another booking already holds the same facility/date/time in
-  `approved`/`payment_review`/`paid`/`completed`.
+  (pay now); extend `record_payment` (now also from `payment_review`; stores `paidAmount`, posts
+  ledger, overlap guard) and add `reject_receipt` (-> `approved`, optional note). Overlap guard
+  added to `approve` and `record_payment`: reject (409) if another booking already holds the same
+  facility/date/time in `approved`/`payment_review`/`paid`/`completed`.
 - `/community` profile form (`ProfileForm` + `PUT /api/community/profile`) — add bank details +
   DuitNow QR upload (writes `UploadedImage`, links `paymentQrImageId`).
 - `/bookings/[id]` detail + `BookingActions` — show `reference`, the receipt image (when
