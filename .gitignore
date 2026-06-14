@@ -57,3 +57,8 @@ next-env.d.ts
 
 # Claude Code worktrees
 .claude/
+
+# Morph icon preview scratch
+.tmp-morph/
+.tmp-morph-preview.ts
+morph-preview.png
