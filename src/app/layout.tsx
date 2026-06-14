@@ -5,6 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { isDemoMode } from "@/lib/demo";
 import { getLocale, getTheme } from "@/lib/i18n/server";
+import { getDictionary } from "@/lib/i18n";
 import { LocaleProvider } from "@/lib/i18n/provider";
 import { ThemeScript } from "@/components/ThemeScript";
 
@@ -41,6 +42,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const theme = await getTheme();
+  const t = getDictionary(locale);
 
   return (
     <html
@@ -53,25 +55,25 @@ export default async function RootLayout({
         <LocaleProvider initialLocale={locale}>
           <a
             href="#main-content"
-            className="absolute -top-10 left-4 z-50 bg-white text-zinc-900 px-4 py-2 rounded-lg shadow-lg ring-2 ring-emerald-500 font-medium text-sm transition-all focus:top-4"
+            className="absolute -top-10 left-4 z-50 bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100 px-4 py-2 rounded-lg shadow-lg ring-2 ring-emerald-500 font-medium text-sm transition-all focus:top-4"
           >
-            Skip to content
+            {t.a11y.skipToContent}
           </a>
           {isDemoMode() && (
-            <div className="bg-amber-50 text-amber-800 text-xs text-center px-4 py-1.5 border-b border-amber-100">
-              Demo mode — payments and emails are simulated. No real charges, no real emails.
+            <div className="bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 text-xs text-center px-4 py-1.5 border-b border-amber-100 dark:border-amber-900">
+              {t.banner.demo}
             </div>
           )}
           <Navbar />
           <main id="main-content" tabIndex={-1} className="flex-1 max-w-screen-xl mx-auto w-full px-6 py-8 outline-none">
             {children}
           </main>
-          <footer className="border-t border-zinc-200/50 py-5 px-6">
-            <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-zinc-500">
-              <span>MosRev — Islamic Finance Workflow Engine</span>
+          <footer className="border-t border-zinc-200/50 dark:border-zinc-800/50 py-5 px-6">
+            <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+              <span>{t.common.appName} — {t.footer.tagline}</span>
               <div className="flex items-center gap-4">
-                <a href="https://github.com/naimkatiman/halalflow" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-600 transition-colors" aria-label="MosRev GitHub repository (opens in new tab)">GitHub</a>
-                <span>Open Source</span>
+                <a href="https://github.com/naimkatiman/halalflow" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors" aria-label={t.footer.githubAria}>{t.footer.github}</a>
+                <span>{t.footer.openSource}</span>
               </div>
             </div>
           </footer>

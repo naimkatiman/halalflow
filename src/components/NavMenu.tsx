@@ -99,7 +99,7 @@ export function NavMenu({ ariaLabel, align = 'end', triggerClassName, renderTrig
           aria-label={ariaLabel}
           style={{ transformOrigin: align === 'end' ? 'top right' : 'top left' }}
           className={clsx(
-            'absolute z-50 mt-2 min-w-[15rem] rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg shadow-zinc-900/5',
+            'absolute z-50 mt-2 min-w-[15rem] rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg shadow-zinc-900/5 dark:border-zinc-700 dark:bg-zinc-900 dark:shadow-black/20',
             align === 'end' ? 'right-0' : 'left-0'
           )}
         >
