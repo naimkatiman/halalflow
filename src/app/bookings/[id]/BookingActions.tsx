@@ -124,14 +124,14 @@ export function BookingActions({ booking }: BookingActionsProps) {
   return (
     <div className="space-y-3">
       {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-4 py-2" role="alert">
+        <p className="text-sm text-danger bg-danger-tint border border-danger-line rounded-lg px-4 py-2" role="alert">
           {error}
         </p>
       )}
 
       {/* requested → Approve / Decline / Cancel */}
       {s === 'requested' && (
-        <div className="bg-amber-50 border border-amber-100 rounded-xl p-5 space-y-3">
+        <div className="bg-pending-tint border border-pending-line rounded-xl p-5 space-y-3">
           <p className="text-sm font-semibold text-zinc-950">Tindakan diperlukan</p>
 
           {panel === 'approve' && (
@@ -169,7 +169,7 @@ export function BookingActions({ booking }: BookingActionsProps) {
                   type="button"
                   onClick={handleApprove}
                   disabled={loading}
-                  className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+                  className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
                 >
                   {loading ? 'Memproses…' : 'Sahkan lulus'}
                 </button>
@@ -194,7 +194,7 @@ export function BookingActions({ booking }: BookingActionsProps) {
                   type="button"
                   onClick={handleDecline}
                   disabled={loading}
-                  className="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+                  className="bg-danger hover:bg-danger-strong disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
                 >
                   {loading ? 'Memproses…' : 'Tolak tempahan'}
                 </button>
@@ -208,14 +208,14 @@ export function BookingActions({ booking }: BookingActionsProps) {
               <button
                 type="button"
                 onClick={() => setPanel('approve')}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
               >
                 Lulus
               </button>
               <button
                 type="button"
                 onClick={() => setPanel('decline')}
-                className="border border-red-200 hover:bg-red-50 text-red-600 font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+                className="border border-danger-line hover:bg-danger-tint text-danger font-semibold text-sm px-4 py-2 rounded-lg tap"
               >
                 Tolak
               </button>
@@ -274,7 +274,7 @@ export function BookingActions({ booking }: BookingActionsProps) {
                   type="button"
                   onClick={handlePayment}
                   disabled={loading}
-                  className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+                  className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
                 >
                   {loading ? 'Memproses…' : 'Rekod bayaran'}
                 </button>
@@ -288,7 +288,7 @@ export function BookingActions({ booking }: BookingActionsProps) {
               <button
                 type="button"
                 onClick={() => setPanel('payment')}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
               >
                 Rekod pembayaran
               </button>
