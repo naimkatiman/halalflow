@@ -51,15 +51,15 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
         maxLength={1000}
         className="w-full px-3 py-2 border border-blue-200 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-colors resize-none"
       />
-      {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
+      {error && <p className="text-xs text-danger" role="alert">{error}</p>}
       {confirming === 'reject' ? (
         <div className="flex items-center gap-3 flex-wrap">
-          <p className="text-sm text-red-700 font-medium">Reject this request? This cannot be undone.</p>
+          <p className="text-sm text-danger-strong font-medium">Reject this request? This cannot be undone.</p>
           <button
             type="button"
             onClick={() => { setConfirming(null); act('rejected'); }}
             disabled={loading}
-            className="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 bg-danger hover:bg-danger-strong disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
           >
             <XCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
             {loading ? 'Rejecting…' : 'Yes, reject'}
@@ -80,7 +80,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
             type="button"
             onClick={() => { setConfirming(null); act('approved'); }}
             disabled={loading}
-            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
           >
             <CheckCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
             {loading ? 'Approving…' : 'Yes, approve'}
@@ -100,7 +100,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
             type="button"
             onClick={() => setConfirming('approve')}
             disabled={loading}
-            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
           >
             <CheckCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
             Approve
@@ -109,7 +109,7 @@ export function ApprovalActions({ workflowId, stepName }: { workflowId: string; 
             type="button"
             onClick={() => setConfirming('reject')}
             disabled={loading}
-            className="flex items-center gap-1.5 border border-red-200 bg-white hover:bg-red-50 disabled:opacity-50 text-red-600 font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 border border-danger-line bg-white hover:bg-danger-tint disabled:opacity-50 text-danger font-semibold text-sm px-4 py-2 rounded-lg tap"
           >
             <XCircle className="w-4 h-4" weight="bold" aria-hidden="true" />
             Reject

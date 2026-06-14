@@ -44,12 +44,12 @@ export function DeleteButton({ endpoint, redirectTo, confirmMessage, label = 'De
     <div className="relative">
       {confirming ? (
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-red-700 font-medium">{confirmMessage}</span>
+          <span className="text-xs text-danger-strong font-medium">{confirmMessage}</span>
           <button
             type="button"
             onClick={handleDelete}
             disabled={loading}
-            className="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium text-sm px-3 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 bg-danger hover:bg-danger-strong disabled:opacity-50 text-white font-medium text-sm px-3 py-2 rounded-lg tap"
           >
             <Trash className="w-3.5 h-3.5" aria-hidden="true" />
             {loading ? 'Deleting…' : 'Yes, delete'}
@@ -67,7 +67,7 @@ export function DeleteButton({ endpoint, redirectTo, confirmMessage, label = 'De
         <button
           type="button"
           onClick={() => setConfirming(true)}
-          className="flex items-center gap-1.5 border border-zinc-200 hover:border-red-200 hover:bg-red-50 text-zinc-600 hover:text-red-600 font-medium text-sm px-3 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 border border-zinc-200 hover:border-danger-line hover:bg-danger-tint text-zinc-600 hover:text-danger font-medium text-sm px-3 py-2 rounded-lg tap"
         >
           <Trash className="w-3.5 h-3.5" aria-hidden="true" />
           {label}
@@ -75,7 +75,7 @@ export function DeleteButton({ endpoint, redirectTo, confirmMessage, label = 'De
       )}
       {error && (
         <p
-          className="absolute right-0 top-full mt-2 w-72 z-10 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 shadow-sm"
+          className="absolute right-0 top-full mt-2 w-72 z-10 text-sm text-danger bg-danger-tint border border-danger-line rounded-lg px-3 py-2 shadow-sm"
           role="alert"
         >
           {error}

@@ -7,7 +7,7 @@ const config: Record<string, { label: string; classes: string }> = {
   pending: { label: 'Awaiting approval', classes: 'bg-blue-50 text-blue-700 border-blue-200' },
   in_progress: { label: 'Awaiting approval', classes: 'bg-blue-50 text-blue-700 border-blue-200' },
   approved: { label: 'Approved', classes: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  rejected: { label: 'Rejected', classes: 'bg-red-50 text-red-700 border-red-200' },
+  rejected: { label: 'Rejected', classes: 'bg-danger-tint text-danger-strong border-danger-line' },
 };
 
 const fallback = { label: 'Unknown', classes: 'bg-zinc-100 text-zinc-700 border-zinc-200' };
@@ -50,11 +50,11 @@ export const BOOKING_STATUS_LABELS: Record<string, string> = {
 };
 
 const BOOKING_COLORS: Record<string, string> = {
-  requested: 'bg-amber-50 text-amber-700 border border-amber-200',
+  requested: 'bg-pending-tint text-pending border border-pending-line',
   approved: 'bg-blue-50 text-blue-700 border border-blue-200',
   paid: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
   completed: 'bg-zinc-100 text-zinc-600 border border-zinc-200',
-  declined: 'bg-red-50 text-red-700 border border-red-200',
+  declined: 'bg-danger-tint text-danger-strong border border-danger-line',
   cancelled: 'bg-zinc-50 text-zinc-500 border border-zinc-200',
 };
 

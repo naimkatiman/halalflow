@@ -17,6 +17,23 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Semantic state colours — single source of truth for destructive ("danger")
+   and awaiting ("pending") UI. Each token aliases the exact Tailwind palette
+   shade the app already used, via the theme variable rather than a hex literal:
+   Tailwind v4 defines its palette in oklch (red-600 = oklch(57.7% 0.245 27.325),
+   not the v3 #dc2626), so hardcoding hex would shift the colour. Referencing
+   var(--color-red-600) keeps the swap byte-for-byte identical and palette-agnostic.
+   Generates bg-danger / text-danger / border-danger-line / bg-pending-tint, etc. */
+@theme inline {
+  --color-danger: var(--color-red-600); /* solid bg, primary danger text */
+  --color-danger-strong: var(--color-red-700); /* hover bg, emphasized text */
+  --color-danger-tint: var(--color-red-50); /* tinted background */
+  --color-danger-line: var(--color-red-200); /* tinted border */
+  --color-pending: var(--color-amber-700); /* pending/awaiting text */
+  --color-pending-tint: var(--color-amber-50); /* pending background */
+  --color-pending-line: var(--color-amber-200); /* pending border */
+}
+
 * {
   box-sizing: border-box;
 }
@@ -103,6 +120,18 @@ textarea:focus-visible,
   opacity: 0;
 }
 
+/* Press feedback on tap targets (Emil Kowalski): precise property transitions
+   plus a subtle press-down. Promoted from an inline Navbar utility string so the
+   motion is shared across every interactive surface. */
+.tap {
+  transition-property: color, background-color, border-color, transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.tap:active {
+  transform: scale(0.97);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -113,5 +142,11 @@ textarea:focus-visible,
   }
   .skeleton::after {
     animation: none;
+  }
+  .tap {
+    transition: none;
+  }
+  .tap:active {
+    transform: none;
   }
 }
