@@ -19,7 +19,9 @@ describe("canTransition", () => {
   it("rejects every other pair", () => {
     const legal = new Set([
       "requested>approved", "requested>declined", "requested>cancelled",
-      "approved>paid", "approved>cancelled", "paid>completed",
+      "approved>payment_review", "approved>paid", "approved>cancelled",
+      "payment_review>paid", "payment_review>approved", "payment_review>cancelled",
+      "paid>completed",
     ]);
     for (const from of BOOKING_STATUSES) {
       for (const to of BOOKING_STATUSES) {
@@ -38,6 +40,23 @@ describe("resolveAction", () => {
     expect(resolveAction("record_payment")).toBe("paid");
     expect(resolveAction("complete")).toBe("completed");
     expect(resolveAction("cancel")).toBe("cancelled");
+    expect(resolveAction("reject_receipt")).toBe("approved");
+  });
+});
+
+describe("payment_review flow", () => {
+  it("approved can go to payment_review or paid", () => {
+    expect(canTransition("approved", "payment_review")).toBe(true);
+    expect(canTransition("approved", "paid")).toBe(true);
+  });
+  it("payment_review can go to paid, back to approved, or cancelled", () => {
+    expect(canTransition("payment_review", "paid")).toBe(true);
+    expect(canTransition("payment_review", "approved")).toBe(true);
+    expect(canTransition("payment_review", "cancelled")).toBe(true);
+  });
+  it("approve rejects amountDue greater than the quote", () => {
+    expect(validateActionInput("approve", { quotedAmount: 70000, amountDue: 80000 }).ok).toBe(false);
+    expect(validateActionInput("approve", { quotedAmount: 70000, amountDue: 30000 }).ok).toBe(true);
   });
 });
 

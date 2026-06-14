@@ -1,10 +1,10 @@
 export const BOOKING_STATUSES = [
-  "requested", "approved", "paid", "completed", "declined", "cancelled",
+  "requested", "approved", "payment_review", "paid", "completed", "declined", "cancelled",
 ] as const;
 export type BookingStatus = (typeof BOOKING_STATUSES)[number];
 
 export const BOOKING_ACTIONS = [
-  "approve", "decline", "record_payment", "complete", "cancel",
+  "approve", "decline", "record_payment", "reject_receipt", "complete", "cancel",
 ] as const;
 export type BookingAction = (typeof BOOKING_ACTIONS)[number];
 
@@ -35,7 +35,8 @@ export const FACILITY_TYPE_LABELS: Record<string, string> = {
 
 const TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
   requested: ["approved", "declined", "cancelled"],
-  approved: ["paid", "cancelled"],
+  approved: ["payment_review", "paid", "cancelled"],
+  payment_review: ["paid", "approved", "cancelled"],
   paid: ["completed"],
   completed: [],
   declined: [],
@@ -46,6 +47,7 @@ const ACTION_TARGET: Record<BookingAction, BookingStatus> = {
   approve: "approved",
   decline: "declined",
   record_payment: "paid",
+  reject_receipt: "approved",
   complete: "completed",
   cancel: "cancelled",
 };
@@ -61,17 +63,27 @@ export function resolveAction(action: BookingAction): BookingStatus {
 export interface ActionInput {
   quotedAmount?: number;
   depositAmount?: number;
+  amountDue?: number;
   declineReason?: string;
   paymentAmount?: number;
   paymentNote?: string;
+  rejectReason?: string;
 }
 
 export function validateActionInput(
   action: BookingAction,
   input: ActionInput,
 ): { ok: true } | { ok: false; error: string } {
-  if (action === "approve" && !(typeof input.quotedAmount === "number" && input.quotedAmount > 0)) {
-    return { ok: false, error: "Approval requires a positive quoted amount" };
+  if (action === "approve") {
+    if (!(typeof input.quotedAmount === "number" && input.quotedAmount > 0)) {
+      return { ok: false, error: "Approval requires a positive quoted amount" };
+    }
+    if (typeof input.amountDue === "number") {
+      if (input.amountDue <= 0) return { ok: false, error: "Amount due must be positive" };
+      if (input.amountDue > input.quotedAmount) {
+        return { ok: false, error: "Amount due cannot exceed the quote" };
+      }
+    }
   }
   if (action === "decline" && !input.declineReason?.trim()) {
     return { ok: false, error: "Decline requires a reason" };
