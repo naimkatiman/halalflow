@@ -4,6 +4,9 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { isDemoMode } from "@/lib/demo";
+import { getLocale, getTheme } from "@/lib/i18n/server";
+import { LocaleProvider } from "@/lib/i18n/provider";
+import { ThemeScript } from "@/components/ThemeScript";
 
 export const viewport: Viewport = {
   themeColor: "#059669",
@@ -31,38 +34,48 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const theme = await getTheme();
+
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={`${GeistSans.variable} ${GeistMono.variable}${theme === "dark" ? " dark" : ""}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-[100dvh] flex flex-col bg-[var(--background)] text-[var(--foreground)] antialiased">
-        <a
-          href="#main-content"
-          className="absolute -top-10 left-4 z-50 bg-white text-zinc-900 px-4 py-2 rounded-lg shadow-lg ring-2 ring-emerald-500 font-medium text-sm transition-all focus:top-4"
-        >
-          Skip to content
-        </a>
-        {isDemoMode() && (
-          <div className="bg-amber-50 text-amber-800 text-xs text-center px-4 py-1.5 border-b border-amber-100">
-            Demo mode — payments and emails are simulated. No real charges, no real emails.
-          </div>
-        )}
-        <Navbar />
-        <main id="main-content" tabIndex={-1} className="flex-1 max-w-screen-xl mx-auto w-full px-6 py-8 outline-none">
-          {children}
-        </main>
-        <footer className="border-t border-zinc-200/50 py-5 px-6">
-          <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-zinc-500">
-            <span>MosRev — Islamic Finance Workflow Engine</span>
-            <div className="flex items-center gap-4">
-              <a href="https://github.com/naimkatiman/halalflow" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-600 transition-colors" aria-label="MosRev GitHub repository (opens in new tab)">GitHub</a>
-              <span>Open Source</span>
+        <ThemeScript />
+        <LocaleProvider initialLocale={locale}>
+          <a
+            href="#main-content"
+            className="absolute -top-10 left-4 z-50 bg-white text-zinc-900 px-4 py-2 rounded-lg shadow-lg ring-2 ring-emerald-500 font-medium text-sm transition-all focus:top-4"
+          >
+            Skip to content
+          </a>
+          {isDemoMode() && (
+            <div className="bg-amber-50 text-amber-800 text-xs text-center px-4 py-1.5 border-b border-amber-100">
+              Demo mode — payments and emails are simulated. No real charges, no real emails.
             </div>
-          </div>
-        </footer>
+          )}
+          <Navbar />
+          <main id="main-content" tabIndex={-1} className="flex-1 max-w-screen-xl mx-auto w-full px-6 py-8 outline-none">
+            {children}
+          </main>
+          <footer className="border-t border-zinc-200/50 py-5 px-6">
+            <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-zinc-500">
+              <span>MosRev — Islamic Finance Workflow Engine</span>
+              <div className="flex items-center gap-4">
+                <a href="https://github.com/naimkatiman/halalflow" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-600 transition-colors" aria-label="MosRev GitHub repository (opens in new tab)">GitHub</a>
+                <span>Open Source</span>
+              </div>
+            </div>
+          </footer>
+        </LocaleProvider>
       </body>
     </html>
   );

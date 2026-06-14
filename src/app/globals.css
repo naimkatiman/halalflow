@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Switch Tailwind's `dark:` variant from the default prefers-color-scheme media
+   query to a class on <html>, so the user's toggle (cookie-driven) controls it.
+   `:where()` keeps specificity at zero. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --accent: #059669;
   --accent-light: #34d399;
@@ -8,6 +13,16 @@
   --muted: #71717a;
   --border: rgba(39, 39, 42, 0.1);
   --radius: 0.75rem;
+}
+
+/* Dark theme token overrides. The body and any token-driven surface flip for free;
+   in-scope components add explicit `dark:` utility variants on top. Zinc-based to
+   match the app's existing zinc palette. */
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --muted: #a1a1aa;
+  --border: rgba(250, 250, 250, 0.12);
 }
 
 @theme inline {
@@ -64,6 +79,9 @@ body {
   background: rgba(0, 0, 0, 0.08);
   border-radius: 2px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
 
 /* Consistent keyboard focus ring across interactive elements. */
 a:focus-visible,
@@ -82,6 +100,17 @@ textarea:focus-visible,
   position: relative;
   overflow: hidden;
   background: rgba(39, 39, 42, 0.06);
+}
+.dark .skeleton {
+  background: rgba(250, 250, 250, 0.08);
+}
+.dark .skeleton::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
 }
 .skeleton::after {
   content: "";
