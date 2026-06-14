@@ -57,4 +57,121 @@ export const ms: Dictionary = {
     englishShort: "EN",
     malayShort: "MS",
   },
+  landing: {
+    hero: {
+      eyebrow: "Enjin aliran kerja kewangan Islam",
+      titleLine1: "Uruskan kelulusan anda",
+      titleLine2: "secara halal",
+      subtitle:
+        "MosRev memberi masjid, badan zakat, koperasi dan PKS Muslim satu tempat untuk menghala, meluluskan dan mengaudit setiap keputusan kewangan berbilang langkah.",
+      getStarted: "Mula Sekarang",
+      signIn: "Log Masuk",
+      badges: "Sumber terbuka · boleh hos sendiri · tanpa kad kredit",
+      previewTitle: "Agihan Zakat — kelompok Ramadan",
+      previewOrg: "Amanah Masjid Al-Noor",
+      steps: [
+        { name: "Pengesahan kelayakan", status: "Diluluskan" },
+        { name: "Semakan jawatankuasa asnaf", status: "Diluluskan" },
+        { name: "Kebenaran pelepasan dana", status: "Menunggu" },
+      ],
+    },
+    useCases: {
+      eyebrow: "Kegunaan",
+      heading: "Satu enjin, setiap kelulusan yang pasukan anda jalankan",
+      items: [
+        {
+          title: "Kelulusan perbelanjaan masjid",
+          body: "Pegawai kewangan menyemak, lembaga meluluskan. Setiap ringgit boleh dijejak.",
+        },
+        {
+          title: "Pengesahan derma",
+          body: "Sahkan penerimaan, keluarkan pengesahan — satu langkah kemas.",
+        },
+        {
+          title: "Kelulusan invois & pembayaran",
+          body: "Pengesahan berbilang langkah sebelum wang bergerak.",
+        },
+        {
+          title: "Permohonan agihan zakat",
+          body: "Semakan kelayakan, semakan jawatankuasa asnaf, pelepasan bendahari — keseluruhan rantaian, diaudit hujung ke hujung.",
+        },
+      ],
+    },
+    howItWorks: {
+      eyebrow: "Cara Ia Berfungsi",
+      heading: "Tiga langkah dari permohonan ke rekod",
+      steps: [
+        {
+          title: "Bina templat",
+          body: "Tetapkan langkah berurutan sekali — siapa menyemak, siapa meluluskan.",
+        },
+        {
+          title: "Hantar aliran kerja",
+          body: "Sesiapa dalam pasukan boleh memulakannya daripada templat dalam beberapa saat.",
+        },
+        {
+          title: "Lulus & audit",
+          body: "Pengesahan langkah demi langkah. Setiap tindakan direkod dalam log audit.",
+        },
+      ],
+    },
+    gallery: {
+      eyebrow: "Masjid di KL & Selangor",
+      heading: "Dipercayai komuniti sekitar Lembah Klang",
+      subtitle:
+        "Daripada Masjid Wilayah Persekutuan di Kuala Lumpur hingga Masjid Biru di Shah Alam — uruskan kewangan dan tempahan masjid anda dalam satu platform.",
+    },
+    community: {
+      eyebrow: "Komuniti masjid",
+      heading: "Hubung jemaah, pelawat dan komuniti",
+      subtitle:
+        "Siarkan profil masjid, buka tempahan dewan, dan kongsikan program Ramadan — semua dalam satu platform yang mudah diurus.",
+      directory: "Direktori Masjid",
+      ramadan: "Direktori Ramadan",
+      imageAlt: "Luar masjid komuniti",
+    },
+    pricing: {
+      eyebrow: "Harga",
+      heading: "Mula percuma, kekal apabila ia berbaloi",
+      planName: "Percubaan percuma",
+      planNote: "untuk setiap ruang kerja baharu",
+      planBody:
+        "Akses penuh, tanpa kad kredit. Satu langganan mudah bagi setiap ruang kerja apabila jawatankuasa anda bersedia — batal bila-bila masa.",
+      thenPrefix: "Kemudian",
+      thenSuffix: "bagi setiap ruang kerja apabila anda bersedia.",
+      included: [
+        "Aliran kerja dan templat tanpa had",
+        "Kelulusan berbilang langkah dengan keperluan peranan",
+        "Log audit penuh bagi setiap permohonan",
+        "Jemputan ahli dan peranan",
+        "Eksport dan import templat (JSON)",
+        "Resit PDF bagi permohonan yang diluluskan",
+      ],
+      cta: "Cipta ruang kerja anda",
+      faqs: [
+        {
+          q: "Adakah data masjid kami disimpan berasingan daripada organisasi lain?",
+          a: "Ya. Setiap ruang kerja diasingkan pada peringkat pangkalan data dengan keselamatan peringkat baris — satu organisasi tidak boleh membaca rekod organisasi lain, walaupun secara tidak sengaja.",
+        },
+        {
+          q: "Adakah kami perlukan kad kredit untuk bermula?",
+          a: "Tidak. Setiap ruang kerja baharu bermula dengan percubaan berciri penuh. Anda hanya menyediakan pengebilan apabila memutuskan untuk kekal.",
+        },
+        {
+          q: "Bolehkah kami mengeluarkan data kami?",
+          a: "Ya. Templat dieksport sebagai JSON yang boleh diimport semula di mana-mana, dan aliran kerja yang diluluskan menghasilkan resit PDF untuk rekod anda.",
+        },
+        {
+          q: "Untuk siapa ini?",
+          a: "Jawatankuasa masjid, badan zakat, koperasi dan PKS Muslim — mana-mana pasukan yang perlukan keputusan kewangan disemak, diluluskan dan direkod.",
+        },
+      ],
+    },
+    cta: {
+      heading: "Mula uruskan kelulusan anda hari ini",
+      subtitle:
+        "Cipta ruang kerja, jemput pasukan anda, dan bina templat pertama anda dalam beberapa minit. Tanpa kad kredit, tanpa panggilan persediaan.",
+      getStarted: "Mula Sekarang",
+    },
+  },
 };
