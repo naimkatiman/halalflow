@@ -1,5 +1,7 @@
 import { MapPin } from "@phosphor-icons/react/dist/ssr";
+import type { Dictionary } from "@/lib/i18n";
 
+// Proper nouns — names and locations are not translated.
 const masjids = [
   {
     src: "/images/mosque-hero.jpg",
@@ -18,24 +20,24 @@ const masjids = [
   },
 ];
 
-export function MasjidGallery() {
+export function MasjidGallery({ t }: { t: Dictionary }) {
+  const c = t.landing.gallery;
   return (
     <section className="animate-fade-up">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-emerald-700">
-        Masjid di KL &amp; Selangor
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-emerald-700 dark:text-emerald-400">
+        {c.eyebrow}
       </p>
-      <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl">
-        Dipercayai komuniti sekitar Lembah Klang
+      <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">
+        {c.heading}
       </h2>
-      <p className="mt-2 max-w-[52ch] text-sm leading-relaxed text-zinc-500">
-        Daripada Masjid Wilayah Persekutuan di Kuala Lumpur hingga Masjid Biru
-        di Shah Alam — uruskan kewangan dan tempahan masjid anda dalam satu platform.
+      <p className="mt-2 max-w-[52ch] text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+        {c.subtitle}
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {masjids.map((masjid) => (
           <figure
             key={masjid.name}
-            className="group relative h-64 overflow-hidden rounded-2xl border border-emerald-100 shadow-sm"
+            className="group relative h-64 overflow-hidden rounded-2xl border border-emerald-100 shadow-sm dark:border-emerald-900/50"
           >
             <img
               src={masjid.src}
