@@ -10,13 +10,14 @@ interface Booking {
   status: string;
   quotedAmount?: number | null;
   depositAmount?: number | null;
+  amountDue?: number | null;
 }
 
 interface BookingActionsProps {
   booking: Booking;
 }
 
-type Panel = 'approve' | 'decline' | 'payment' | null;
+type Panel = 'approve' | 'decline' | 'payment' | 'reject' | null;
 
 export function BookingActions({ booking }: BookingActionsProps) {
   const router = useRouter();
@@ -27,15 +28,20 @@ export function BookingActions({ booking }: BookingActionsProps) {
   // Approve fields
   const [quoteRm, setQuoteRm] = useState('');
   const [depositRm, setDepositRm] = useState('');
+  const [amountDueRm, setAmountDueRm] = useState('');
 
   // Decline fields
   const [declineReason, setDeclineReason] = useState('');
 
   // Payment fields
   const [paymentRm, setPaymentRm] = useState(
-    booking.quotedAmount ? (booking.quotedAmount / 100).toFixed(2) : ''
+    booking.amountDue ? (booking.amountDue / 100).toFixed(2)
+      : booking.quotedAmount ? (booking.quotedAmount / 100).toFixed(2) : ''
   );
   const [paymentNote, setPaymentNote] = useState('');
+
+  // Reject-receipt fields
+  const [rejectReason, setRejectReason] = useState('');
 
   const act = async (action: string, extra: Record<string, unknown> = {}) => {
     setError('');
@@ -76,7 +82,27 @@ export function BookingActions({ booking }: BookingActionsProps) {
       setError('Deposit tidak sah');
       return;
     }
-    await act('approve', { quotedAmount, ...(depositAmount !== undefined ? { depositAmount } : {}) });
+    // "Bayar sekarang" defaults to the full quote when left blank.
+    const amountDue = amountDueRm.trim() ? parseRmToSen(amountDueRm) : quotedAmount;
+    if (amountDue === null || amountDue <= 0) {
+      setError('Jumlah bayar sekarang tidak sah');
+      return;
+    }
+    if (amountDue > quotedAmount) {
+      setError('Bayar sekarang tidak boleh melebihi sebutharga');
+      return;
+    }
+    await act('approve', {
+      quotedAmount,
+      amountDue,
+      ...(depositAmount !== undefined ? { depositAmount } : {}),
+    });
+  };
+
+  const handleReject = async () => {
+    await act('reject_receipt', {
+      ...(rejectReason.trim() ? { rejectReason: rejectReason.trim() } : {}),
+    });
   };
 
   const handleDecline = async () => {
@@ -163,6 +189,19 @@ export function BookingActions({ booking }: BookingActionsProps) {
                     aria-label="Deposit RM"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-zinc-700 mb-1">Bayar sekarang (RM, kosong = penuh)</label>
+                <input
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  value={amountDueRm}
+                  onChange={(e) => setAmountDueRm(e.target.value)}
+                  placeholder="cth. deposit sahaja"
+                  className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                  aria-label="Bayar sekarang RM"
+                />
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -291,6 +330,111 @@ export function BookingActions({ booking }: BookingActionsProps) {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
               >
                 Rekod pembayaran
+              </button>
+              <button
+                type="button"
+                onClick={handleCancel}
+                disabled={loading}
+                className="border border-zinc-200 hover:bg-zinc-50 text-zinc-600 font-medium text-sm px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {loading ? 'Memproses…' : 'Batal tempahan'}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* payment_review → Confirm payment / Reject receipt / Cancel */}
+      {s === 'payment_review' && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 space-y-3">
+          <p className="text-sm font-semibold text-zinc-950">
+            Resit dimuat naik — sila semak
+            {booking.amountDue ? ` · ${formatMYR(booking.amountDue)}` : booking.quotedAmount ? ` · ${formatMYR(booking.quotedAmount)}` : ''}
+          </p>
+
+          {panel === 'payment' && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-zinc-700 mb-1">Jumlah bayaran (RM)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    value={paymentRm}
+                    onChange={(e) => setPaymentRm(e.target.value)}
+                    placeholder="0.00"
+                    className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                    aria-label="Jumlah bayaran RM"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-zinc-700 mb-1">Nota (pilihan)</label>
+                  <input
+                    type="text"
+                    value={paymentNote}
+                    onChange={(e) => setPaymentNote(e.target.value)}
+                    placeholder="cth. DuitNow, Transfer"
+                    maxLength={500}
+                    className="w-full px-3 py-2 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                    aria-label="Nota bayaran"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handlePayment}
+                  disabled={loading}
+                  className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
+                >
+                  {loading ? 'Memproses…' : 'Sahkan bayaran'}
+                </button>
+                <button type="button" onClick={() => setPanel(null)} disabled={loading} className="text-sm text-zinc-500 hover:text-zinc-700">Batal</button>
+              </div>
+            </div>
+          )}
+
+          {panel === 'reject' && (
+            <div className="space-y-3">
+              <textarea
+                rows={2}
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                placeholder="Sebab resit ditolak (pilihan)…"
+                maxLength={500}
+                className="w-full px-3 py-2 border border-zinc-200 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-400 resize-none"
+                aria-label="Sebab resit ditolak"
+              />
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleReject}
+                  disabled={loading}
+                  className="bg-danger hover:bg-danger-strong disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
+                >
+                  {loading ? 'Memproses…' : 'Tolak resit'}
+                </button>
+                <button type="button" onClick={() => setPanel(null)} disabled={loading} className="text-sm text-zinc-500 hover:text-zinc-700">Batal</button>
+              </div>
+            </div>
+          )}
+
+          {panel === null && (
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => setPanel('payment')}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg tap"
+              >
+                Sahkan bayaran
+              </button>
+              <button
+                type="button"
+                onClick={() => setPanel('reject')}
+                className="border border-danger-line hover:bg-danger-tint text-danger font-semibold text-sm px-4 py-2 rounded-lg tap"
+              >
+                Tolak resit
               </button>
               <button
                 type="button"

@@ -33,6 +33,10 @@ const profileSchema = z.object({
   pantryType: z.enum(["open", "asnaf"]).optional(),
   pantryHours: z.string().trim().max(200).optional(),
   pantryNote: z.string().trim().max(500).optional(),
+  bankName: z.string().trim().max(120).optional(),
+  bankAccountNo: z.string().trim().max(120).optional(),
+  bankAccountHolder: z.string().trim().max(120).optional(),
+  paymentInstructions: z.string().trim().max(1000).optional(),
   published: z.boolean().default(false),
 });
 
