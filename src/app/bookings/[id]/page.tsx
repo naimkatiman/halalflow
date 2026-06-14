@@ -49,6 +49,7 @@ export default async function BookingDetailPage({
           <BookingStatusBadge status={booking.status} />
         </div>
       </div>
+      <p className="pl-7 -mt-3 text-xs font-mono text-zinc-500">Rujukan: {booking.reference}</p>
 
       {/* Actions */}
       <BookingActions
@@ -57,6 +58,7 @@ export default async function BookingDetailPage({
           status: booking.status,
           quotedAmount: booking.quotedAmount,
           depositAmount: booking.depositAmount,
+          amountDue: booking.amountDue,
         }}
       />
 
@@ -127,7 +129,7 @@ export default async function BookingDetailPage({
         </div>
 
         {/* Money */}
-        {(booking.quotedAmount !== null || booking.depositAmount !== null || booking.paidAt) && (
+        {(booking.quotedAmount !== null || booking.depositAmount !== null || booking.amountDue !== null || booking.paidAmount !== null || booking.paidAt || booking.receiptImageId) && (
           <div className="px-5 py-4">
             <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wide mb-3">Kewangan</p>
             <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
@@ -143,6 +145,18 @@ export default async function BookingDetailPage({
                   <dd className="font-medium text-zinc-900">{formatMYR(booking.depositAmount)}</dd>
                 </div>
               )}
+              {booking.amountDue !== null && (
+                <div>
+                  <dt className="text-zinc-400 text-xs">Bayar sekarang</dt>
+                  <dd className="font-medium text-zinc-900">{formatMYR(booking.amountDue)}</dd>
+                </div>
+              )}
+              {booking.paidAmount !== null && (
+                <div>
+                  <dt className="text-zinc-400 text-xs">Jumlah dibayar</dt>
+                  <dd className="font-medium text-zinc-900">{formatMYR(booking.paidAmount)}</dd>
+                </div>
+              )}
               {booking.paidAt && (
                 <div>
                   <dt className="text-zinc-400 text-xs">Tarikh bayar</dt>
@@ -153,6 +167,19 @@ export default async function BookingDetailPage({
                 <div className="col-span-2">
                   <dt className="text-zinc-400 text-xs">Nota bayaran</dt>
                   <dd className="font-medium text-zinc-900">{booking.paymentNote}</dd>
+                </div>
+              )}
+              {booking.receiptImageId && (
+                <div className="col-span-2">
+                  <dt className="text-zinc-400 text-xs mb-1">Resit bayaran</dt>
+                  <dd>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/api/uploads/${booking.receiptImageId}`}
+                      alt="Resit bayaran"
+                      className="max-h-80 rounded-lg border border-zinc-200"
+                    />
+                  </dd>
                 </div>
               )}
             </dl>

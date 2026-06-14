@@ -43,7 +43,8 @@ export function StatusBadge({ status, size = 'sm', className }: BadgeProps) {
 export const BOOKING_STATUS_LABELS: Record<string, string> = {
   requested: 'Menunggu',
   approved: 'Diluluskan',
-  paid: 'Dibayar',
+  payment_review: 'Menyemak Bayaran',
+  paid: 'Telah Ditempah',
   completed: 'Selesai',
   declined: 'Ditolak',
   cancelled: 'Dibatalkan',
@@ -52,6 +53,7 @@ export const BOOKING_STATUS_LABELS: Record<string, string> = {
 const BOOKING_COLORS: Record<string, string> = {
   requested: 'bg-pending-tint text-pending border border-pending-line',
   approved: 'bg-blue-50 text-blue-700 border border-blue-200',
+  payment_review: 'bg-amber-50 text-amber-700 border border-amber-200',
   paid: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
   completed: 'bg-zinc-100 text-zinc-600 border border-zinc-200',
   declined: 'bg-danger-tint text-danger-strong border border-danger-line',

@@ -39,6 +39,11 @@ interface ProfileInitial {
   pantryType?: string | null;
   pantryHours?: string | null;
   pantryNote?: string | null;
+  bankName?: string | null;
+  bankAccountNo?: string | null;
+  bankAccountHolder?: string | null;
+  paymentInstructions?: string | null;
+  paymentQrImageId?: string | null;
   published: boolean;
 }
 
@@ -78,9 +83,46 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
   const [pantryHours, setPantryHours] = useState(initial?.pantryHours ?? '');
   const [pantryNote, setPantryNote] = useState(initial?.pantryNote ?? '');
 
+  const [bankName, setBankName] = useState(initial?.bankName ?? '');
+  const [bankAccountNo, setBankAccountNo] = useState(initial?.bankAccountNo ?? '');
+  const [bankAccountHolder, setBankAccountHolder] = useState(initial?.bankAccountHolder ?? '');
+  const [paymentInstructions, setPaymentInstructions] = useState(initial?.paymentInstructions ?? '');
+  const [qrImageId, setQrImageId] = useState(initial?.paymentQrImageId ?? '');
+  const [qrUploading, setQrUploading] = useState(false);
+  const [qrError, setQrError] = useState('');
+
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const profileSaved = Boolean(initial);
+
+  const handleQrUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setQrError('Saiz fail melebihi 5 MB');
+      return;
+    }
+    setQrError('');
+    setQrUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetchWithCsrf('/api/community/payment-qr', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) {
+        setQrError(data.error || 'Gagal memuat naik QR');
+        return;
+      }
+      setQrImageId(data.data.imageId);
+    } catch {
+      setQrError('Ralat rangkaian — cuba semula');
+    } finally {
+      setQrUploading(false);
+    }
+  };
 
   const effectivePhoto = photoUrl.trim() || photoSelect || undefined;
 
@@ -112,6 +154,10 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
       pantryType: pantryAvailable ? pantryType : undefined,
       pantryHours: pantryAvailable ? pantryHours.trim() : '',
       pantryNote: pantryAvailable ? pantryNote.trim() : '',
+      bankName: bankName.trim(),
+      bankAccountNo: bankAccountNo.trim(),
+      bankAccountHolder: bankAccountHolder.trim(),
+      paymentInstructions: paymentInstructions.trim(),
       published,
     };
 
@@ -301,6 +347,47 @@ export function ProfileForm({ initial, slug }: ProfileFormProps) {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Pembayaran — bank account + QR shown to customers when paying */}
+        <div className="space-y-4 border-t border-zinc-100 pt-5">
+          <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Pembayaran tempahan</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="prof-bank" className="block text-sm font-medium text-zinc-700 mb-1.5">Nama bank</label>
+              <input id="prof-bank" type="text" value={bankName} onChange={(e) => setBankName(e.target.value)} maxLength={120} className={inputCls} placeholder="Bank Islam" />
+            </div>
+            <div>
+              <label htmlFor="prof-bankacc" className="block text-sm font-medium text-zinc-700 mb-1.5">No. akaun</label>
+              <input id="prof-bankacc" type="text" value={bankAccountNo} onChange={(e) => setBankAccountNo(e.target.value)} maxLength={120} className={inputCls} placeholder="1234 5678 9012" />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="prof-bankholder" className="block text-sm font-medium text-zinc-700 mb-1.5">Nama pemegang akaun</label>
+            <input id="prof-bankholder" type="text" value={bankAccountHolder} onChange={(e) => setBankAccountHolder(e.target.value)} maxLength={120} className={inputCls} placeholder="Tabung Masjid Al-Noor" />
+          </div>
+          <div>
+            <label htmlFor="prof-payinstr" className="block text-sm font-medium text-zinc-700 mb-1.5">Arahan bayaran</label>
+            <textarea id="prof-payinstr" value={paymentInstructions} onChange={(e) => setPaymentInstructions(e.target.value)} rows={2} maxLength={1000} className={`${inputCls} resize-none`} placeholder="Pindahan ke akaun di atas atau imbas QR DuitNow. Muat naik resit selepas bayaran." />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">QR DuitNow</label>
+            {profileSaved ? (
+              <div className="flex items-center gap-4">
+                {qrImageId && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={`/api/uploads/${qrImageId}`} alt="QR pembayaran" className="h-24 w-24 object-contain rounded-lg border border-zinc-200" />
+                )}
+                <label className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-900 cursor-pointer">
+                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleQrUpload} disabled={qrUploading} className="hidden" />
+                  {qrUploading ? 'Memuat naik…' : qrImageId ? 'Tukar QR' : 'Muat naik QR'}
+                </label>
+              </div>
+            ) : (
+              <p className="text-xs text-zinc-400">Simpan profil dahulu sebelum memuat naik QR.</p>
+            )}
+            {qrError && <p className="mt-2 text-sm text-red-600">{qrError}</p>}
+          </div>
         </div>
 
         {error && (

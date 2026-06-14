@@ -8,6 +8,10 @@ import { validateCsrfToken } from "@/lib/csrf";
 import { isOrgSubscribed } from "@/lib/require-subscription";
 import { roleSatisfies } from "@/lib/roles";
 import { BOOKING_ACTIONS, EVENT_TYPE_LABELS, canTransition, resolveAction, validateActionInput } from "@/lib/bookings";
+import { BLOCKING_STATUSES, timeRangesOverlap } from "@/lib/availability";
+import { prismaAdmin } from "@/lib/db";
+import { sendEmail } from "@/lib/notifications/email";
+import { buildBookingApprovedCustomerEmail, buildBookingConfirmedCustomerEmail } from "@/lib/notifications/booking-email";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
@@ -15,9 +19,11 @@ const transitionSchema = z.object({
   action: z.enum(BOOKING_ACTIONS),
   quotedAmount: z.number().int().positive().max(100_000_000).optional(),
   depositAmount: z.number().int().min(0).max(100_000_000).optional(),
+  amountDue: z.number().int().positive().max(100_000_000).optional(),
   declineReason: z.string().trim().max(500).optional(),
   paymentAmount: z.number().int().positive().max(100_000_000).optional(),
   paymentNote: z.string().trim().max(500).optional(),
+  rejectReason: z.string().trim().max(500).optional(),
 });
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -47,6 +53,24 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       const inputCheck = validateActionInput(parsed.action, parsed);
       if (!inputCheck.ok) return { error: inputCheck.error, status: 400 } as const;
 
+      // Overlap guard: a slot already held by another booking (approved+) must
+      // not be double-approved or double-confirmed for this facility/date/time.
+      if (target === "approved" || target === "paid") {
+        const sameDay = await tx.facilityBooking.findMany({
+          where: {
+            facilityId: booking.facilityId,
+            eventDate: booking.eventDate,
+            status: { in: [...BLOCKING_STATUSES] },
+            id: { not: booking.id },
+          },
+          select: { startTime: true, endTime: true },
+        });
+        const clash = sameDay.some((b) =>
+          timeRangesOverlap(booking.startTime, booking.endTime, b.startTime, b.endTime),
+        );
+        if (clash) return { error: "Slot ini telah ditempah untuk tempahan lain", status: 409 } as const;
+      }
+
       const now = new Date();
       // Compare-and-swap on the status we read: a concurrent transition makes
       // count 0, so we never double-apply a transition or double-post the ledger.
@@ -57,6 +81,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           ...(parsed.action === "approve" && {
             quotedAmount: parsed.quotedAmount,
             depositAmount: parsed.depositAmount ?? null,
+            amountDue: parsed.amountDue ?? parsed.quotedAmount,
             decidedById: session.userId,
             decidedAt: now,
           }),
@@ -67,7 +92,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           }),
           ...(parsed.action === "record_payment" && {
             paidAt: now,
+            paidAmount: parsed.paymentAmount,
             paymentNote: parsed.paymentNote ?? null,
+          }),
+          ...(parsed.action === "reject_receipt" && {
+            receiptImageId: null,
+            declineReason: parsed.rejectReason ?? null,
           }),
         },
       });
@@ -97,6 +127,41 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     if ("error" in result) {
       return NextResponse.json({ error: result.error }, { status: result.status, headers: { "Cache-Control": "no-store" } });
+    }
+
+    // Notify the customer on approval (quote ready) and on confirmed payment.
+    // Best-effort: never fail the transition because an email failed.
+    const fresh = result.data;
+    if (fresh?.applicantEmail && (parsed.action === "approve" || parsed.action === "record_payment")) {
+      try {
+        const orgInfo = await prismaAdmin.organization.findUnique({
+          where: { id: session.orgId },
+          select: { slug: true, mosqueProfile: { select: { displayName: true } } },
+        });
+        if (orgInfo?.slug && orgInfo.mosqueProfile) {
+          if (parsed.action === "approve") {
+            await sendEmail(buildBookingApprovedCustomerEmail({
+              to: fresh.applicantEmail,
+              reference: fresh.reference,
+              slug: orgInfo.slug,
+              token: fresh.publicToken,
+              mosqueName: orgInfo.mosqueProfile.displayName,
+              amountDueSen: fresh.amountDue ?? fresh.quotedAmount ?? 0,
+              quotedSen: fresh.quotedAmount ?? undefined,
+            }));
+          } else if (fresh.status === "paid") {
+            await sendEmail(buildBookingConfirmedCustomerEmail({
+              to: fresh.applicantEmail,
+              reference: fresh.reference,
+              slug: orgInfo.slug,
+              token: fresh.publicToken,
+              mosqueName: orgInfo.mosqueProfile.displayName,
+            }));
+          }
+        }
+      } catch (e) {
+        console.error("transition email error:", e);
+      }
     }
 
     return NextResponse.json(
