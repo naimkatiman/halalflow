@@ -53,6 +53,7 @@ model Organization {
   bookings             FacilityBooking[]
   ledgerEntries        LedgerEntry[]
   ramadanPrograms      RamadanProgram[]
+  uploadedImages       UploadedImage[]
 }
 
 model OrgMember {
@@ -230,6 +231,11 @@ model MosqueProfile {
   pantryType      String?
   pantryHours     String?
   pantryNote      String?
+  bankName            String?
+  bankAccountNo       String?
+  bankAccountHolder   String?
+  paymentInstructions String?
+  paymentQrImageId    String?
   published       Boolean      @default(false)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
@@ -283,6 +289,12 @@ model FacilityBooking {
   decidedById    String?
   decidedAt      DateTime?
   paidAt         DateTime?
+  reference         String    @unique
+  publicToken       String    @unique
+  amountDue         Int?
+  paidAmount        Int?
+  receiptImageId    String?
+  receiptUploadedAt DateTime?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
@@ -324,4 +336,16 @@ model RamadanProgram {
   updatedAt   DateTime     @updatedAt
 
   @@index([orgId, type])
+}
+
+model UploadedImage {
+  id        String       @id @default(cuid())
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  mime      String
+  sizeBytes Int
+  data      Bytes
+  createdAt DateTime     @default(now())
+
+  @@index([orgId])
 }
