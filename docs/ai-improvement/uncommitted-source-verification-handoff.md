@@ -1,77 +1,135 @@
 # Uncommitted Source Verification Handoff — halalflow / MosRev
 
-Date: 2026-06-19 06:16 MPST (+0800)
-Run type: docs-only source-diff stabilization handoff
+Date: 2026-06-22 19:48 MPST (+0800)
+Run type: docs-only post-metrics verification checkpoint refresh for local-ahead dirty-tree stabilization
 Code changes: none this run
 
-## Why this exists
+## Why this refresh exists
 
-This recurring Zaky run found a materially dirty working tree before any new implementation work:
+This recurring Zaky run found the repository still local-ahead and dirty, with an existing handoff and source-review metrics packet already warning against new runtime work. The safe increment was therefore a post-metrics verification checkpoint: refresh the current evidence, keep the review packet current, and stop before adding source/runtime changes.
 
-- 9 tracked files are modified relative to `origin/main` / `HEAD`.
-- 7 files are untracked, including the repo-local AI docs and three pure-helper test files from earlier Zaky runs.
-- The tracked runtime/source side of the diff spans React client components, a morph animation hook, and `package-lock.json`.
+`git fetch --prune` left the branch at `main...origin/main [ahead 1]`. The merge-base probe still shows `origin/main` changed-path count `0`, and the dirty/remote overlap count remains `0`. That means the current blocker is local-lane disposition, not remote conflict triage.
 
-The current verification baseline is green, but green checks do **not** mean the full accumulated working-tree diff has been reviewed, accepted, or proven behavior-preserving. To avoid layering more runtime changes on top of unreviewed source changes, this run documents the diff inventory and makes source-diff stabilization the active next safe move.
+Current state after refreshing this post-metrics checkpoint:
 
-## Source diff inventory
+- Branch status is `main...origin/main [ahead 1]`.
+- Merge base with `origin/main` is `a7b8d034c0c69de409be8c9f6c963ee82649d96a`.
+- `origin/main` changed-path count since merge-base is `0`.
+- Dirty path count is `14`: `13` tracked paths plus untracked `docs/ai-improvement/source-review-metrics.md`.
+- Dirty/origin overlap count is `0`.
+- Local ahead commit: `a2a5447 test(lib): add money, api-errors, roles characterization tests`.
+- `a2a5447` adds the repo-local AI improvement docs plus `src/lib/money.test.ts`, `src/lib/roles.test.ts`, and `src/lib/api-errors.test.ts`.
+- The verification baseline is green, but green checks do **not** mean the local ahead commit, tracking refreshes, or working-tree source/runtime diff has been reviewed, pushed, accepted, or proven behavior-preserving.
 
-### Tracked operator/documentation diffs
+## Local committed-but-unpushed lane
 
-| Surface | Files | Current diff | Review implication |
-|---|---|---:|---|
-| Public setup and self-hosting docs | `README.md` | Included in 3-doc shortstat | Confirm the Postgres + RLS guidance is still the intended public setup posture before committing. |
-| Production deployment docs | `docs/deployment.md` | Included in 3-doc shortstat | Confirm the three-URL RLS role contract and owner/admin/app-role boundaries match production plans. |
-| Railway cron/operator docs | `docs/cron.md` | Included in 3-doc shortstat | Confirm the daily `/api/cron/trial-emails` Railway scheduler guidance supersedes the old SQLite/5-minute notes. |
-
-Tracked operator-doc shortstat at 06:16 MPST:
+`git show --stat --oneline --decorate --no-renames HEAD --` at 19:48 MPST:
 
 ```text
-3 files changed, 167 insertions(+), 78 deletions(-)
+a2a5447 (HEAD -> main) test(lib): add money, api-errors, roles characterization tests
+ docs/ai-improvement/README.md                      |  196 +++
+ docs/ai-improvement/dependency-audit-triage.md     |  148 +++
+ docs/ai-improvement/image-surface-decision-note.md |   76 ++
+ docs/ai-improvement/implementation-log.md          | 1395 ++++++++++++++++++++
+ .../uncommitted-source-verification-handoff.md     |  153 +++
+ docs/ai-improvement/verification-command-matrix.md |   47 +
+ src/lib/api-errors.test.ts                         |   57 +
+ src/lib/money.test.ts                              |   80 ++
+ src/lib/roles.test.ts                              |   30 +
+ 9 files changed, 2182 insertions(+)
 ```
 
-### Tracked runtime/source and lockfile diffs
+Review implication: owner/Fatin/maintainer should decide whether to keep/push, amend/split, or reset/drop this local commit. This autonomous run did not commit, amend, reset, stage, push, or otherwise mutate git history.
 
-| Surface | Files | Current diff | Review implication |
-|---|---|---:|---|
-| Dependency lockfile reproducibility | `package-lock.json` | Included in 6-file runtime shortstat | Confirm the lockfile sync is intentional and no dependency mutation is mixed with unrelated source review. |
-| Client UI lint stabilization | `src/components/LanguageToggle.tsx`, `src/components/ThemeToggle.tsx` | Included in 6-file runtime shortstat | Review the cookie helper extraction and requestAnimationFrame deferral as React-lint fixes, not product behavior changes. |
-| Static landing image optimization | `src/components/landing/MasjidGallery.tsx`, `src/components/landing/CommunityBand.tsx` | Included in 6-file runtime shortstat | Confirm the `next/image` conversions keep existing layout intent and do not require provider/config changes. |
-| Morph hook lint/runtime stability | `src/lib/morph/useMorph.ts` | Included in 6-file runtime shortstat | Review the `tRef`/`setProgress` data flow and reduced-motion next-frame snap before accepting. |
+## Remote-clean merge-base checkpoint
 
-Tracked source/runtime shortstat at 06:16 MPST:
+`git fetch --prune` completed before this inventory. The merge-base comparison is:
+
+```text
+BASE=a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+```
+
+`git diff --name-status --no-renames "$BASE"..origin/main` printed no rows. `git diff --name-status --no-renames "$BASE"..HEAD` listed the local-ahead additions only:
+
+```text
+A	docs/ai-improvement/README.md
+A	docs/ai-improvement/dependency-audit-triage.md
+A	docs/ai-improvement/image-surface-decision-note.md
+A	docs/ai-improvement/implementation-log.md
+A	docs/ai-improvement/uncommitted-source-verification-handoff.md
+A	docs/ai-improvement/verification-command-matrix.md
+A	src/lib/api-errors.test.ts
+A	src/lib/money.test.ts
+A	src/lib/roles.test.ts
+```
+
+Review implication: there is no current remote-changed-path conflict surface. The first decision remains local: decide the `a2a5447` posture, then split the dirty lanes below.
+
+## Remaining working-tree diff inventory
+
+### Tracked source/runtime and lockfile lane
+
+| File | Insertions | Deletions | Review implication |
+|---|---:|---:|---|
+| `package-lock.json` | 23 | 17 | Confirm the lockfile sync is intentional and not mixed with dependency remediation. |
+| `src/components/LanguageToggle.tsx` | 5 | 1 | Review cookie helper extraction / React lint stabilization as behavior-preserving. |
+| `src/components/ThemeToggle.tsx` | 4 | 1 | Review requestAnimationFrame deferral as React lint stabilization. |
+| `src/components/landing/CommunityBand.tsx` | 6 | 3 | Review static `next/image` conversion separately from dynamic `photoUrl` policy. |
+| `src/components/landing/MasjidGallery.tsx` | 5 | 3 | Review static `next/image` conversion separately from dynamic `photoUrl` policy. |
+| `src/lib/morph/useMorph.ts` | 22 | 9 | Review `tRef` / `setProgress` flow and reduced-motion next-frame snap. |
+
+Tracked source/runtime shortstat:
 
 ```text
 6 files changed, 65 insertions(+), 34 deletions(-)
 ```
 
-### Untracked artifacts from prior Zaky runs
+### Tracked operator/documentation lane
+
+| File | Insertions | Deletions | Review implication |
+|---|---:|---:|---|
+| `README.md` | 15 | 7 | Confirm PostgreSQL + RLS public setup is the intended operator posture. |
+| `docs/cron.md` | 46 | 37 | Confirm Railway daily `/api/cron/trial-emails` guidance supersedes old SQLite/5-minute notes. |
+| `docs/deployment.md` | 106 | 34 | Confirm the three-URL RLS role contract and owner/admin/app-role boundaries match production plans. |
+
+Tracked operator-doc shortstat:
+
+```text
+3 files changed, 167 insertions(+), 78 deletions(-)
+```
+
+### AI tracking/status docs lane
 
 | Surface | Files | Review implication |
 |---|---|---|
-| Repo-local AI tracking | `docs/ai-improvement/README.md`, `dependency-audit-triage.md`, `image-surface-decision-note.md`, `implementation-log.md` | These are expected recurring-agent artifacts but are not yet tracked. |
-| Pure-helper characterization tests | `src/lib/money.test.ts`, `src/lib/roles.test.ts`, `src/lib/api-errors.test.ts` | Tests pass locally and document current helper behavior; review and commit or intentionally drop them before new runtime work. |
+| Repo-local AI tracking refreshes | `docs/ai-improvement/README.md`, `docs/ai-improvement/implementation-log.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, `docs/ai-improvement/source-review-metrics.md` | Treat these as status/handoff/review-metrics artifacts, not application behavior changes and not proof that the runtime/source lanes are reviewed. |
+| Central board tracking | `C:/Ai/_zaky_ai_board/KANBAN.md` | Outside the repo; verify with read-back/no-index static check rather than repo diff. |
 
-Current untracked inventory at 06:16 MPST:
+The new metrics packet is intentionally untracked until owner/Fatin/maintainer decide how to split/commit the AI tracking docs.
 
-```text
-docs/ai-improvement/README.md
-docs/ai-improvement/dependency-audit-triage.md
-docs/ai-improvement/image-surface-decision-note.md
-docs/ai-improvement/implementation-log.md
-src/lib/api-errors.test.ts
-src/lib/money.test.ts
-src/lib/roles.test.ts
-```
+## Source/test/config metrics packet
 
-## Verification snapshot
+`docs/ai-improvement/source-review-metrics.md` records the focused source/test/config `pygount` scope: `202` files, `12,845` code lines, and `759` comment lines with docs, dependencies, build output, public media, `.next`, cache, and coverage folders excluded.
 
-Commands run from `C:/Ai/halalflow` on 2026-06-19 06:16 MPST:
+Use it to prioritize source review. Do not use it as deploy approval or proof that the runtime/source lane is behavior-preserving.
+
+## Current status snapshot
+
+Commands run from `C:/Ai/halalflow` after refreshing the post-metrics checkpoint on 2026-06-22 19:48 MPST (+0800):
 
 ```text
 git status --short --branch --untracked-files=all:
-## main...origin/main
+## main...origin/main [ahead 1]
  M README.md
+ M docs/ai-improvement/README.md
+ M docs/ai-improvement/implementation-log.md
+ M docs/ai-improvement/uncommitted-source-verification-handoff.md
+ M docs/ai-improvement/verification-command-matrix.md
  M docs/cron.md
  M docs/deployment.md
  M package-lock.json
@@ -80,19 +138,19 @@ git status --short --branch --untracked-files=all:
  M src/components/landing/CommunityBand.tsx
  M src/components/landing/MasjidGallery.tsx
  M src/lib/morph/useMorph.ts
-?? docs/ai-improvement/README.md
-?? docs/ai-improvement/dependency-audit-triage.md
-?? docs/ai-improvement/image-surface-decision-note.md
-?? docs/ai-improvement/implementation-log.md
-?? src/lib/api-errors.test.ts
-?? src/lib/money.test.ts
-?? src/lib/roles.test.ts
+?? docs/ai-improvement/source-review-metrics.md
 ```
 
+## Verification snapshot
+
+Commands run from `C:/Ai/halalflow` on 2026-06-22 19:50-19:51 MPST:
+
 ```text
+package.json parse: exit 0; package.json ok
 npm test: exit 0
 Test Files 12 passed (12)
 Tests 83 passed (83)
+Duration 946ms
 ```
 
 ```text
@@ -111,43 +169,53 @@ npx tsc --noEmit: exit 0
 
 ```text
 npm run build: exit 0
-Compiled successfully in 3.3s; finished TypeScript in 8.1s.
+Next.js 16.2.6 compiled successfully in 3.5s; TypeScript finished in 9.7s.
 Build still prints the pre-existing Prisma page-data warning because DATABASE_URL is not set in this local cron environment.
-Route table generated successfully.
+Static generation completed 49/49 pages and the route table was produced.
+```
+
+```text
+uvx --from pygount pygount ...: exit 0
+Sum: 202 files / 12,845 code / 759 comments
 ```
 
 ## Guardrails for the next run
 
-Do not layer new runtime work until the existing diff is reviewed or split. In particular, do not autonomously:
+Do not layer new runtime work until the local ahead commit and remaining working-tree diff are reviewed or split. In particular, do not autonomously:
 
 - change schema, migrations, RLS policy, auth/session, payment, upload, booking, ledger, or business rules;
 - run `npm audit fix --force`, dependency upgrades, or lockfile cleanup in the same pass;
 - deploy, mutate production data, change cron jobs, or change environment variables/secrets;
-- reformat the whole repo or combine source review with unrelated feature work.
+- reformat the whole repo or combine source review with unrelated feature work;
+- push, amend, reset, rebase, or otherwise mutate the local ahead commit without explicit approval.
 
 ## Suggested review sequence for Zaky / Fatin / maintainer
 
-1. Split the working tree into review lanes:
+1. Decide the disposition of local commit `a2a5447` first: keep/push, amend/split, or reset/drop.
+2. Because the merge-base probe found no remote-changed paths, review can focus on the local commit and dirty lanes rather than remote-conflict triage.
+3. Use `docs/ai-improvement/source-review-metrics.md` to review source/runtime churn by file before accepting or reverting those changes.
+4. Split the remaining working tree into review lanes:
+   - source/runtime and lockfile (`package-lock.json`, `LanguageToggle`, `ThemeToggle`, `useMorph`, `MasjidGallery`, `CommunityBand`);
    - operator docs (`README.md`, `docs/deployment.md`, `docs/cron.md`);
-   - lockfile reproducibility (`package-lock.json`);
-   - React lint/source stabilization (`LanguageToggle`, `ThemeToggle`, `useMorph`);
-   - static landing image conversions (`MasjidGallery`, `CommunityBand`);
-   - test-only helper coverage (`money`, `roles`, `api-errors`);
-   - AI tracking docs.
-2. For each lane, decide **keep / adjust / revert / commit separately**.
-3. Rerun the verification matrix after any lane decision, not only at the end.
-4. Only resume new runtime increments once the source diff has a clear owner-reviewed disposition.
+   - AI tracking/status docs (`docs/ai-improvement/*`, including the metrics packet).
+5. For each lane, decide **keep / adjust / revert / commit separately**.
+6. Rerun the verification matrix after any lane decision, not only at the end.
+7. Only resume new runtime increments once the local commit and source diff have a clear owner-reviewed disposition.
 
 ## Recommended next move
 
-Source-diff stabilization is the next safe move. If owner/Fatin review is available, use the lanes above to split/commit/revert the accumulated diff. If review is not available, keep the next autonomous run docs-only and update this handoff with fresh status and verification instead of adding new source changes.
+Source-diff stabilization remains the next safe move, now with a source-review metrics packet to make that review faster. If owner/Fatin review is available, decide what to do with local commit `a2a5447`, then split/review the remaining tracked lanes using `docs/ai-improvement/source-review-metrics.md` and `docs/ai-improvement/verification-command-matrix.md`. If review is not available, keep the next autonomous run docs-only and refresh current verification rather than adding source changes.
 
 ## External Source Applied
 
-External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned the repo, stopped before adding new runtime work, recorded one verified handoff, and made source-diff stabilization the next iteration.
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned the repo, fetched remote state, verified merge-base/dirty-overlap evidence, and stopped before runtime work.
 
-External source applied: https://github.com/DietrichGebert/ponytail — chose documentation/no-op over adding more code while source changes were already unreviewed.
+External source applied: https://github.com/DietrichGebert/ponytail — chose review leverage and documentation over adding more code while a local ahead commit and source changes remain unreviewed.
 
-External source applied: https://github.com/shadcn/improve — converted the dirty working tree into a file-specific review plan with anti-scope and verification commands.
+External source applied: https://github.com/shadcn/improve — turned the current dirty tree into a file-specific review packet with branch posture, path overlap, churn, anti-scope, and verification commands.
 
-External source applied: https://github.com/safishamsi/graphify — grouped related files by source/doc/test/dependency surfaces so reviewers can reason about dependencies before broad changes.
+External source applied: https://github.com/safishamsi/graphify — mapped the local commit, remote path set, runtime/source lane, operator-doc lane, and AI tracking/status docs as connected review surfaces.
+
+External source applied: codebase-inspection/pygount — measured source/test/config composition while excluding dependency/build/docs outputs.
+
+External source applied: zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint example — refreshed the existing metrics/handoff evidence instead of creating a duplicate artifact or adding runtime work.

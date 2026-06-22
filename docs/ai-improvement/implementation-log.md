@@ -1,5 +1,968 @@
 # AI Improvement Implementation Log — halalflow / MosRev
 
+## 2026-06-22 19:48 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+
+- Re-validated the existing local-ahead dirty tree without changing application source, runtime behavior, dependencies, or deploy config.
+- Refreshed the AI tracking baseline artifacts and central board with current verification evidence.
+- Kept the increment docs-only.
+
+### Work completed
+
+- Re-ran `git fetch --prune`, status, merge-base, and dirty/overlap probes.
+- Re-ran package parse, Vitest, ESLint, TypeScript, build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/README.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/source-review-metrics.md`.
+- Updated the central board row for the halalflow checkpoint.
+
+### External source applied
+
+External source applied: continuous-improvement + codebase-inspection/pygount + shadcn/improve + ponytail + graphify + zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint guidance — used the current dirty-tree snapshot, fresh baseline checks, and pygount scope to refresh the checkpoint.
+
+### Verification evidence
+
+```text
+date via Python zoneinfo: 2026-06-22 19:48 MPST (+0800)
+git fetch --prune: exit 0
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]
+ M README.md
+ M docs/ai-improvement/README.md
+ M docs/ai-improvement/implementation-log.md
+ M docs/ai-improvement/uncommitted-source-verification-handoff.md
+ M docs/ai-improvement/verification-command-matrix.md
+ M docs/cron.md
+ M docs/deployment.md
+ M package-lock.json
+ M src/components/LanguageToggle.tsx
+ M src/components/ThemeToggle.tsx
+ M src/components/landing/CommunityBand.tsx
+ M src/components/landing/MasjidGallery.tsx
+ M src/lib/morph/useMorph.ts
+?? docs/ai-improvement/source-review-metrics.md
+BASE=a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+localAheadPathCount=9
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+git show --stat --oneline --decorate --no-renames HEAD --: exit 0
+a2a5447 (HEAD -> main) test(lib): add money, api-errors, roles characterization tests
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83); Duration 946ms
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings)
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.5s; TypeScript finished in 9.7s; static generation completed 49/49 pages; known local missing-DATABASE_URL Prisma page-data warning still printed
+uvx --from pygount pygount --format=summary --folders-to-skip='.git,node_modules,venv,.venv,__pycache__,.cache,dist,build,.next,.tox,.eggs,*.egg-info' src prisma scripts package.json package-lock.json next.config.ts eslint.config.mjs postcss.config.mjs tsconfig.json vitest.config.ts: exit 0
+Sum: 202 files / 12,845 code / 759 comments
+```
+
+### Notes
+
+- Code changes: none this run.
+- The working tree remained local-ahead and dirty with 13 tracked files plus 1 untracked metrics artifact; dirty/origin overlap remained 0.
+- `npm run build` still printed the known local `DATABASE_URL` Prisma page-data warning and exited 0.
+- `npm run lint` still returned 4 known image warnings and no errors.
+- Final verification addendum after refreshing `docs/ai-improvement/source-review-metrics.md` and the board: `git diff --check` exit 0; `git diff --no-index --check -- /dev/null C:/Ai/halalflow/docs/ai-improvement/source-review-metrics.md` exit 1 with no whitespace-error output; `git diff --no-index --check -- /dev/null C:/Ai/_zaky_ai_board/KANBAN.md` exit 1 with no whitespace-error output; follow-up secondary verifier PASS on the timestamp subheads, matrix row 29, and halalflow board row.
+
+
+
+## 2026-06-22 11:51 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+
+- Re-validated the existing local-ahead dirty tree without changing application source, runtime behavior, dependencies, or deploy config.
+- Refreshed the AI tracking baseline artifacts and central board with current verification evidence.
+- Kept the increment docs-only.
+
+### Work completed
+
+- Re-ran `git fetch --prune`, status, merge-base, and dirty/overlap probes.
+- Re-ran package parse, Vitest, ESLint, TypeScript, build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/README.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/source-review-metrics.md`.
+- Added a new central-board row for the halalflow checkpoint.
+
+### External source applied
+
+External source applied: continuous-improvement + codebase-inspection/pygount + shadcn/improve + ponytail + graphify + zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint guidance — used the current dirty-tree snapshot, fresh baseline checks, and pygount scope to refresh the checkpoint.
+
+### Verification evidence
+
+```text
+date via Python zoneinfo: 2026-06-22 11:51 MPST (+0800)
+git fetch --prune: exit 0
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]
+ M README.md
+ M docs/ai-improvement/README.md
+ M docs/ai-improvement/implementation-log.md
+ M docs/ai-improvement/uncommitted-source-verification-handoff.md
+ M docs/ai-improvement/verification-command-matrix.md
+ M docs/cron.md
+ M docs/deployment.md
+ M package-lock.json
+ M src/components/LanguageToggle.tsx
+ M src/components/ThemeToggle.tsx
+ M src/components/landing/CommunityBand.tsx
+ M src/components/landing/MasjidGallery.tsx
+ M src/lib/morph/useMorph.ts
+?? docs/ai-improvement/source-review-metrics.md
+BASE=a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+localAheadPathCount=9
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+git show --stat --oneline --decorate --no-renames HEAD --: exit 0
+a2a5447 (HEAD -> main) test(lib): add money, api-errors, roles characterization tests
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83); Duration 1.07s
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings)
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 4.0s; TypeScript finished in 10.2s; static generation completed 49/49 pages; known local missing-DATABASE_URL Prisma page-data warning still printed
+uvx --from pygount pygount --format=summary --folders-to-skip='.git,node_modules,venv,.venv,__pycache__,.cache,dist,build,.next,.tox,.eggs,*.egg-info' src prisma scripts package.json package-lock.json next.config.ts eslint.config.mjs postcss.config.mjs tsconfig.json vitest.config.ts: exit 0
+Sum: 202 files / 12,845 code / 759 comments
+```
+
+### Notes
+
+- Code changes: none this run.
+- The working tree remained local-ahead and dirty with 13 tracked files plus 1 untracked metrics artifact; dirty/origin overlap remained 0.
+- `npm run build` still printed the known local `DATABASE_URL` Prisma page-data warning and exited 0.
+- `npm run lint` still returned 4 known image warnings and no errors.
+- Final verification addendum after refreshing `docs/ai-improvement/source-review-metrics.md` to match the current `docs/ai-improvement` shortstat (`4 files changed, 1077 insertions(+), 94 deletions(-)`): `git diff --check` exit 0; `git diff --no-index --check -- /dev/null C:/Ai/halalflow/docs/ai-improvement/source-review-metrics.md` exit 1 with no whitespace-error output; `git diff --no-index --check -- /dev/null C:/Ai/_zaky_ai_board/KANBAN.md` exit 1 with no whitespace-error output; follow-up secondary verifier PASS on the timestamp subheads, matrix row 29, and halalflow board row.
+
+### Files changed
+
+- `docs/ai-improvement/source-review-metrics.md`
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset/dropped, then use `docs/ai-improvement/source-review-metrics.md` to split the remaining dirty-tree lanes by source/runtime churn, operator docs, lockfile, and AI tracking/status docs. Metrics and green checks are review aids, not acceptance or deploy approval.
+
+## 2026-06-22 03:48 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+
+- Re-validated the existing local-ahead dirty tree without changing application source, runtime behavior, dependencies, or deploy config.
+- Refreshed the AI tracking baseline artifacts and central board with current verification evidence.
+- Kept the increment docs-only.
+
+### Work completed
+
+- Re-ran `git fetch --prune`, status, merge-base, and dirty/overlap probes.
+- Re-ran package parse, Vitest, ESLint, TypeScript, build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/README.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/source-review-metrics.md`.
+- Added a new central-board row for the halalflow checkpoint.
+
+### External source applied
+
+External source applied: continuous-improvement + codebase-inspection/pygount + shadcn/improve + ponytail + graphify + zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint guidance — used the current dirty-tree snapshot, fresh baseline checks, and pygount scope to refresh the checkpoint.
+
+### Verification evidence
+
+```text
+date via Python zoneinfo: 2026-06-22 03:48 MPST (+0800)
+git fetch --prune: exit 0
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]
+ M README.md
+ M docs/ai-improvement/README.md
+ M docs/ai-improvement/implementation-log.md
+ M docs/ai-improvement/uncommitted-source-verification-handoff.md
+ M docs/ai-improvement/verification-command-matrix.md
+ M docs/cron.md
+ M docs/deployment.md
+ M package-lock.json
+ M src/components/LanguageToggle.tsx
+ M src/components/ThemeToggle.tsx
+ M src/components/landing/CommunityBand.tsx
+ M src/components/landing/MasjidGallery.tsx
+ M src/lib/morph/useMorph.ts
+?? docs/ai-improvement/source-review-metrics.md
+BASE=a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+localAheadPathCount=9
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+git show --stat --oneline --decorate --no-renames HEAD --: exit 0
+a2a5447 (HEAD -> main) test(lib): add money, api-errors, roles characterization tests
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83); Duration 1.07s
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings)
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 4.0s; TypeScript finished in 10.2s; static generation completed 49/49 pages; known local missing-DATABASE_URL Prisma page-data warning still printed
+uvx --from pygount pygount --format=summary --folders-to-skip='.git,node_modules,venv,.venv,__pycache__,.cache,dist,build,.next,.tox,.eggs,*.egg-info' src prisma scripts package.json package-lock.json next.config.ts eslint.config.mjs postcss.config.mjs tsconfig.json vitest.config.ts: exit 0
+Sum: 202 files / 12,845 code / 759 comments
+```
+
+### Notes
+
+- Code changes: none this run.
+- The working tree remained local-ahead and dirty with 13 tracked files plus 1 untracked metrics artifact; dirty/origin overlap remained 0.
+- `npm run build` still printed the known local `DATABASE_URL` Prisma page-data warning and exited 0.
+- `npm run lint` still returned 4 known image warnings and no errors.
+- Final verification addendum: `git diff --check` exit 0; `git diff --no-index --check -- /dev/null C:/Ai/halalflow/docs/ai-improvement/source-review-metrics.md` exit 1 with no whitespace-error output; `git diff --no-index --check -- /dev/null C:/Ai/_zaky_ai_board/KANBAN.md` exit 1 with no whitespace-error output; follow-up secondary verifier PASS on the timestamp subheads, matrix row 29, and halalflow board row.
+
+## 2026-06-21 19:53 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+One docs-only checkpoint refresh: re-scanned git status, reran the branch/dirty-overlap probe and baseline checks, refreshed the existing source-review metrics packet, handoff, verification matrix, AI improvement README, and central board, and kept the local ahead commit/diff lanes in review-only posture. The run intentionally did not create a duplicate metrics artifact or add runtime work on top of the unreviewed local lanes.
+
+### Work completed
+- Re-scanned git status and fetched remote state; branch remains `main...origin/main [ahead 1]` with local commit `a2a5447`.
+- Reran the merge-base/dirty-overlap probe: merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, `originChangedPathCount=0`, `trackedDirtyPathCount=13`, `untrackedPathCount=1`, `dirtyPathCount=14`, and `dirtyOriginOverlapCount=0`.
+- Reran baseline checks: package parse, Vitest, ESLint, TypeScript, production build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/source-review-metrics.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, `docs/ai-improvement/README.md`, and the central Zaky board so they carry the 19:53 checkpoint evidence.
+
+### External source applied
+External source applied: continuous-improvement + codebase-inspection/pygount + shadcn/improve + ponytail + graphify + zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint guidance — refreshed the checkpoint with the current dirty-tree snapshot, baseline checks, and pygount scope.
+
+### Verification evidence
+```text
+date via Python zoneinfo: 2026-06-21 19:53 MPST (+0800)
+git fetch --prune: exit 0
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]
+merge-base/dirty-overlap: merge-base a7b8d034c0c69de409be8c9f6c963ee82649d96a; originChangedPathCount=0; trackedDirtyPathCount=13; untrackedPathCount=1; dirtyPathCount=14; dirtyOriginOverlapCount=0
+package.json parse: exit 0; package.json ok
+npm test: exit 0; 12 files / 83 tests; Duration 1.33s
+npm run lint: exit 0; 0 errors / 4 warnings
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.9s; TypeScript finished in 11.2s; 49/49 static pages; known local missing-DATABASE_URL Prisma page-data warning still printed
+uvx --from pygount pygount ...: exit 0; Sum 202 files / 12,845 code / 759 comments
+```
+
+### Notes
+Current branch posture remains `main...origin/main [ahead 1]` on local commit `a2a5447`. The new checkpoint is review-only: green checks are verification aids, not approval to push or deploy. The next safe move remains owner/Fatin review of the local-ahead dirty tree and a lane-by-lane split if any runtime or source work is resumed.
+
+## 2026-06-21 11:48 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+One docs-only checkpoint refresh: re-scanned git status, reran the current branch/dirty-overlap probe and baseline checks, refreshed the existing source-review metrics packet, handoff, verification matrix, AI improvement README, and central board, and kept the local ahead commit/diff lanes in review-only posture. The run intentionally did not create a duplicate metrics artifact or add runtime work on top of the unreviewed local lanes.
+
+### Work completed
+- Re-scanned git status and fetched remote state; branch remains `main...origin/main [ahead 1]` with local commit `a2a5447`.
+- Reran the merge-base/dirty-overlap probe: merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, `originChangedPathCount=0`, `trackedDirtyPathCount=13`, `untrackedPathCount=1`, `dirtyPathCount=14`, and `dirtyOriginOverlapCount=0`.
+- Reran baseline checks: package parse, Vitest, ESLint, TypeScript, production build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/source-review-metrics.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/README.md` so they carry the 11:48 checkpoint evidence.
+
+### External source applied
+External source applied: continuous-improvement + codebase-inspection/pygount + shadcn/improve + ponytail + graphify + zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint guidance — refreshed the checkpoint with the current dirty-tree snapshot, baseline checks, and pygount scope.
+
+### Verification evidence
+```text
+date via Python zoneinfo: 2026-06-21 11:48 MPST (+0800)
+git fetch --prune: exit 0
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]
+merge-base/dirty-overlap: merge-base a7b8d...; originChangedPathCount=0; trackedDirtyPathCount=13; untrackedPathCount=1; dirtyPathCount=14; dirtyOriginOverlapCount=0
+package.json parse: exit 0; package.json ok
+npm test: exit 0; 12 files / 83 tests; Duration 1.04s
+npm run lint: exit 0; 0 errors / 4 warnings
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 4.9s; TypeScript finished in 11.1s; 49/49 static pages; known local missing-DATABASE_URL Prisma page-data warning still printed
+uvx --from pygount pygount ...: exit 0; Sum 199 files / 12,580 code / 729 comments
+```
+
+### Notes
+Current branch posture remains `main...origin/main [ahead 1]` on local commit `a2a5447`. The new checkpoint is review-only: green checks are verification aids, not approval to push or deploy. The next safe move remains owner/Fatin review of the local-ahead dirty tree and a lane-by-lane split if any runtime or source work is resumed.
+
+## 2026-06-21 03:50 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+
+One docs-only checkpoint refresh: re-scanned git status, reran the current branch/dirty-overlap probe and baseline checks, refreshed the existing source-review metrics packet, handoff, verification matrix, AI improvement README, and central board, and kept the local ahead commit/diff lanes in review-only posture. The run intentionally did not create a duplicate metrics artifact or add runtime work on top of the unreviewed local lanes.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, business rules, git history, branches, remotes, or production state. Did not commit, amend, reset, rebase, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and fetched remote state; branch remains `main...origin/main [ahead 1]` with local commit `a2a5447`.
+- Reran the merge-base/dirty-overlap probe: merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, `originChangedPathCount=0`, `trackedDirtyPathCount=13`, `untrackedPathCount=1`, `dirtyPathCount=14`, and `dirtyOriginOverlapCount=0`.
+- Reran baseline checks: package parse, Vitest, ESLint, TypeScript, production build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/source-review-metrics.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, `docs/ai-improvement/README.md`, and the central Zaky board so they carry the 03:50 checkpoint evidence.
+
+### External source applied
+
+External source applied: continuous-improvement + codebase-inspection/pygount + shadcn/improve + ponytail + graphify + zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint guidance — re-scanned status, reran verification, and kept the current work in review-only posture.
+
+### Verification evidence
+
+```text
+date via Python zoneinfo: 2026-06-21 03:50 MPST (+0800)
+git fetch --prune: exit 0
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 13 tracked modified files plus untracked docs/ai-improvement/source-review-metrics.md.
+merge-base/dirty-overlap: merge-base a7b8d034c0c69de409be8c9f6c963ee82649d96a; originChangedPathCount=0; trackedDirtyPathCount=13; untrackedPathCount=1; dirtyPathCount=14; dirtyOriginOverlapCount=0
+package.json parse: exit 0; package.json ok
+npm test: exit 0; 12 files / 83 tests; Duration 983ms
+npm run lint: exit 0; 0 errors / 4 warnings
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.5s; TypeScript finished in 8.9s; 49/49 static pages; DATABASE_URL warning still printed
+uvx --from pygount pygount ...: exit 0; Sum 202 files / 12,845 code / 759 comments
+```
+
+### Notes
+
+Current branch posture remains `main...origin/main [ahead 1]` on local commit `a2a5447`. The new checkpoint is review-only: green checks are verification aids, not approval to push or deploy. The next safe move remains owner/Fatin review of the local-ahead dirty tree and a lane-by-lane split if any runtime or source work is resumed.
+
+## 2026-06-20 07:40 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+
+One docs-only checkpoint refresh: reran the current branch/dirty-overlap probe, safety checks, focused source/test/config metrics, and refreshed the existing source-review metrics packet, handoff, verification matrix, AI improvement README, and central board. The run intentionally did not create a duplicate metrics artifact or add runtime work on top of the unreviewed local lanes.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, business rules, git history, branches, remotes, or production state. Did not commit, amend, reset, rebase, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and fetched remote state; branch remains `main...origin/main [ahead 1]` with local commit `a2a5447`.
+- Reran a merge-base/dirty-overlap probe: merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, `originChangedPathCount=0`, `trackedDirtyPathCount=13`, `untrackedPathCount=1`, `dirtyPathCount=14`, and `dirtyOriginOverlapCount=0`.
+- Reran baseline checks: package parse, Vitest, ESLint, TypeScript, production build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/source-review-metrics.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/README.md` so they carry the 07:40 checkpoint evidence.
+- Updated the central Zaky board with a new top-row checkpoint entry.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned status, fetched remote state, reran checks, and stopped before adding new runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose no new code and refreshed review evidence while local lanes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — kept the dirty tree in file-specific review lanes with exact verification commands and acceptance boundaries.
+
+External source applied: https://github.com/safishamsi/graphify — treated local commit, dirty source/runtime files, operator docs, and AI tracking docs as connected review surfaces.
+
+External source applied: codebase-inspection/pygount — refreshed source/test/config composition while excluding docs/dependencies/build outputs.
+
+External source applied: zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint example — refreshed existing metrics/handoff evidence instead of creating a duplicate artifact or adding runtime work.
+
+### Verification evidence
+
+```text
+date via Python zoneinfo: 2026-06-20 07:40 MPST (+0800)
+
+git fetch --prune: exit 0
+
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 13 tracked modified files plus untracked docs/ai-improvement/source-review-metrics.md.
+
+merge-base HEAD origin/main: a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+
+localAheadPathCount=9; local-ahead paths are AI improvement docs plus src/lib/api-errors.test.ts, src/lib/money.test.ts, and src/lib/roles.test.ts.
+
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+git diff --shortstat -- docs/ai-improvement at checkpoint start before this run's tracking edits: 4 files changed, 745 insertions(+), 94 deletions(-)
+
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83); Duration 677ms
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.2s; TypeScript finished in 8.8s; static generation completed 49/49 pages; known local missing-DATABASE_URL Prisma page-data warning still printed.
+source/test/config pygount scope: exit 0; 199 files / 12,580 code / 729 comments; docs/dependencies/build outputs excluded.
+```
+
+Static/read-back checks after the tracking-doc and central-board refresh:
+
+```text
+Read-back completed for the AI improvement README top status, source-review metrics packet, top implementation-log entry, central board new row, and the row immediately after it.
+git diff --check: exit 0.
+No-index whitespace checks for source-review metrics, implementation log, verification matrix, handoff, and C:/Ai/_zaky_ai_board/KANBAN.md: exit 1 as expected for /dev/null comparisons, with no output and no whitespace-error lines.
+Marker probes over active AI-improvement artifacts returned zero hits for stale checkpoint or pre-final placeholder wording.
+Final no-temp overlap probe: originChangedPathCount=0; trackedDirtyPathCount=13; untrackedPathCount=1; dirtyPathCount=14; dirtyOriginOverlapCount=0.
+Final status: main...origin/main [ahead 1]; 13 tracked modified files plus untracked docs/ai-improvement/source-review-metrics.md.
+```
+
+### Files changed
+
+- `docs/ai-improvement/source-review-metrics.md`
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset/dropped, then use `docs/ai-improvement/source-review-metrics.md` to split the remaining dirty-tree lanes by source/runtime churn, operator docs, lockfile, and AI tracking/status docs. Metrics and green checks are review aids, not acceptance or deploy approval.
+
+## 2026-06-20 04:30 MPST (+0800) — Post-metrics verification checkpoint refresh for local-ahead dirty tree
+
+### Scope
+
+One docs-only checkpoint refresh: reran the current branch/dirty-overlap probe, safety checks, focused source/test/config metrics, and refreshed the existing source-review metrics packet, handoff, verification matrix, AI improvement README, and central board. The run intentionally did not create a duplicate metrics artifact or add runtime work on top of the unreviewed local lanes.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, business rules, git history, branches, remotes, or production state. Did not commit, amend, reset, rebase, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and fetched remote state; branch remains `main...origin/main [ahead 1]` with local commit `a2a5447`.
+- Reran a merge-base/dirty-overlap probe: merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, `originChangedPathCount=0`, `trackedDirtyPathCount=13`, `untrackedPathCount=1`, `dirtyPathCount=14`, and `dirtyOriginOverlapCount=0`.
+- Reran baseline checks: package parse, Vitest, ESLint, TypeScript, production build, and focused source/test/config `pygount`.
+- Refreshed `docs/ai-improvement/source-review-metrics.md`, `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/README.md` so they carry the 04:30 checkpoint evidence.
+- Updated the central Zaky board.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned status, fetched remote state, reran checks, and stopped before adding new runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose no new code and refreshed review evidence while local lanes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — kept the dirty tree in file-specific review lanes with exact verification commands and acceptance boundaries.
+
+External source applied: https://github.com/safishamsi/graphify — treated local commit, dirty source/runtime files, operator docs, and AI tracking docs as connected review surfaces.
+
+External source applied: codebase-inspection/pygount — refreshed source/test/config composition while excluding docs/dependencies/build outputs.
+
+External source applied: zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint example — refreshed existing metrics/handoff evidence instead of creating a duplicate artifact or adding runtime work.
+
+### Verification evidence
+
+```text
+date via Python zoneinfo: 2026-06-20 04:30 MPST (+0800)
+
+git fetch --prune: exit 0
+
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 13 tracked modified files plus untracked docs/ai-improvement/source-review-metrics.md.
+
+merge-base HEAD origin/main: a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+
+localAheadPathCount=9; local-ahead paths are AI improvement docs plus src/lib/api-errors.test.ts, src/lib/money.test.ts, and src/lib/roles.test.ts.
+
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+git diff --shortstat -- docs/ai-improvement before this checkpoint's tracking edits: 4 files changed, 657 insertions(+), 94 deletions(-)
+
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83); Duration 663ms
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.5s; TypeScript finished in 8.5s; static generation completed 49/49 pages; known local missing-DATABASE_URL Prisma page-data warning still printed.
+source/test/config pygount scope: exit 0; 199 files / 12,580 code / 729 comments; docs/dependencies/build outputs excluded.
+```
+
+Static/read-back checks after the tracking-doc and central-board refresh:
+
+```text
+Read-back completed for the top implementation-log entry, AI improvement README, source-review metrics packet, and central board row.
+git diff --check: exit 0.
+No-index whitespace checks for source-review metrics, implementation log, verification matrix, handoff, and C:/Ai/_zaky_ai_board/KANBAN.md: exit 1 as expected for /dev/null comparisons, with no output and no whitespace-error lines.
+Marker probes over active AI-improvement artifacts and the central board returned zero hits for pre-final placeholder wording.
+Final no-temp overlap probe: originChangedPathCount=0; trackedDirtyPathCount=13; untrackedPathCount=1; dirtyOriginOverlapCount=0.
+Final status: main...origin/main [ahead 1]; 13 tracked modified files plus untracked docs/ai-improvement/source-review-metrics.md.
+```
+
+### Files changed
+
+- `docs/ai-improvement/source-review-metrics.md`
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset/dropped, then use `docs/ai-improvement/source-review-metrics.md` to split the remaining dirty-tree lanes by source/runtime churn, operator docs, lockfile, and AI tracking/status docs. Metrics and green checks are review aids, not acceptance or deploy approval.
+
+## 2026-06-20 01:17 MPST (+0800) — Post-metrics verification checkpoint for local-ahead dirty tree
+
+### Scope
+
+One docs-only verification checkpoint: refreshed the existing source-review metrics packet, handoff, verification matrix, and AI improvement README after the repo remained local-ahead and dirty. The run intentionally did not create another metrics artifact or add runtime work on top of the unreviewed local lanes.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, business rules, git history, branches, remotes, or production state. Did not commit, amend, reset, rebase, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and fetched remote state; branch remains `main...origin/main [ahead 1]` with local commit `a2a5447`.
+- Reran a no-temp merge-base/dirty-overlap probe: merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, `originChangedPathCount=0`, `trackedDirtyPathCount=13`, `untrackedPathCount=1`, `dirtyPathCount=14`, and `dirtyOriginOverlapCount=0`.
+- Refreshed `docs/ai-improvement/source-review-metrics.md` with current source/test/config `pygount` metrics: `199` files / `12,580` code / `729` comments.
+- Refreshed `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/README.md` so they identify this as a post-metrics checkpoint, not a new runtime increment.
+- Updated the central Zaky board.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned status, fetched remote state, reran checks, and stopped before adding new runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose no new code and refreshed review evidence while local lanes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — kept the dirty tree in file-specific review lanes with exact verification commands and acceptance boundaries.
+
+External source applied: https://github.com/safishamsi/graphify — treated local commit, dirty source/runtime files, operator docs, and AI tracking docs as connected review surfaces.
+
+External source applied: codebase-inspection/pygount — refreshed source/test/config composition while excluding docs/dependencies/build outputs.
+
+External source applied: zaky-improvement-stack/source-review-metrics-packet + post-metrics checkpoint example — refreshed existing metrics/handoff evidence instead of creating a duplicate artifact or adding runtime work.
+
+### Verification evidence
+
+```text
+date '+%Y-%m-%d %H:%M %Z (%z)': 2026-06-20 01:17 MPST (+0800)
+
+git fetch --prune: exit 0
+
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 13 tracked modified files plus untracked docs/ai-improvement/source-review-metrics.md.
+
+merge-base HEAD origin/main: a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+
+localAheadPathCount=9; local-ahead paths are AI improvement docs plus src/lib/api-errors.test.ts, src/lib/money.test.ts, and src/lib/roles.test.ts.
+
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --numstat -- package-lock.json src: package-lock.json 23/17; LanguageToggle 5/1; ThemeToggle 4/1; CommunityBand 6/3; MasjidGallery 5/3; useMorph 22/9.
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+
+source/test/config pygount scope: 199 files / 12,580 code / 729 comment; docs/dependencies/build outputs excluded.
+
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83); Duration 672ms
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.7s; TypeScript finished in 9.0s; static generation completed 49/49 pages; known local missing-DATABASE_URL Prisma page-data warning still printed.
+```
+
+Static/read-back checks after the tracking-doc and central-board refresh:
+
+```text
+Read-back completed for source-review metrics, handoff, verification matrix, top implementation-log entry, AI improvement README, and central board row.
+git diff --check: exit 0.
+No-index whitespace checks for source-review metrics, implementation log, verification matrix, handoff, and C:/Ai/_zaky_ai_board/KANBAN.md: exit 1 as expected for /dev/null comparisons, with no output and no whitespace-error lines.
+Marker probes over active AI-improvement artifacts and the central board returned zero hits for pre-final placeholder wording.
+Final status/overlap probe: main...origin/main [ahead 1]; trackedDirtyPathCount=13; untrackedPathCount=1; dirtyPathCount=14; dirtyOriginOverlapCount=0.
+```
+
+### Files changed
+
+- `docs/ai-improvement/source-review-metrics.md`
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset/dropped, then use `docs/ai-improvement/source-review-metrics.md` to split the remaining dirty-tree lanes by source/runtime churn, operator docs, lockfile, and AI tracking/status docs. Metrics and green checks are review aids, not acceptance or deploy approval.
+
+## 2026-06-19 22:05 MPST (+0800) — Source-review metrics packet for local-ahead dirty tree
+
+### Scope
+
+One docs-only review-leverage increment: created `docs/ai-improvement/source-review-metrics.md` and refreshed the repo-local handoff, verification matrix, and README so owner/Fatin/maintainer review can use path-overlap, churn, and source/test/config size evidence instead of another plain dirty-tree checkpoint.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, business rules, git history, branches, remotes, or production state. Did not commit, amend, reset, rebase, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status after `git fetch --prune`; branch remains `main...origin/main [ahead 1]` with local commit `a2a5447`.
+- Reran a no-temp merge-base/dirty-overlap probe: merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, `originChangedPathCount=0`, `trackedDirtyPathCount=13`, `untrackedPathCount=1`, `dirtyPathCount=14`, and `dirtyOriginOverlapCount=0` after creating the metrics packet.
+- Created `docs/ai-improvement/source-review-metrics.md` with dirty path set, local-ahead path set, source/runtime + lockfile numstat, operator-doc numstat, focused source/test/config `pygount` summary, anti-scope, and review sequence.
+- Refreshed `docs/ai-improvement/uncommitted-source-verification-handoff.md` and `docs/ai-improvement/verification-command-matrix.md` so they point to the metrics packet and keep source-diff stabilization as the active next move.
+- Updated `docs/ai-improvement/README.md` and the central Zaky board.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned current state, fetched remote state, verified merge-base/dirty-overlap evidence, reran checks, and stopped before adding runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose review leverage/documentation over adding code while a local ahead commit and source changes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — converted the dirty tree into a file-specific review metrics packet with branch posture, path overlap, churn, anti-scope, and verification gates.
+
+External source applied: https://github.com/safishamsi/graphify — mapped the local commit, remote path set, runtime/source lane, operator-doc lane, and AI tracking/status docs as connected review surfaces.
+
+External source applied: codebase-inspection/pygount — measured source/test/config composition with dependency/build/docs outputs excluded.
+
+### Verification evidence
+
+```text
+date '+%Y-%m-%d %H:%M %Z (%z)': 2026-06-19 22:05 MPST (+0800)
+
+git fetch --prune: exit 0
+
+git status --short --branch --untracked-files=all after packet creation: ## main...origin/main [ahead 1]; 13 tracked modified files plus untracked docs/ai-improvement/source-review-metrics.md.
+
+merge-base HEAD origin/main: a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+trackedDirtyPathCount=13
+untrackedPathCount=1
+dirtyPathCount=14
+dirtyOriginOverlapCount=0
+
+localAheadPathCount=9; local-ahead paths are AI improvement docs plus src/lib/api-errors.test.ts, src/lib/money.test.ts, and src/lib/roles.test.ts.
+
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --numstat -- package-lock.json src: package-lock.json 23/17; LanguageToggle 5/1; ThemeToggle 4/1; CommunityBand 6/3; MasjidGallery 5/3; useMorph 22/9.
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+
+source/test/config pygount scope: 199 files / 12,570 code / 732 comment; docs/dependencies/build outputs excluded.
+
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83)
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.2s; TypeScript finished in 8.5s; static generation completed 49/49 pages; known local missing-DATABASE_URL Prisma page-data warning still printed.
+```
+
+Final static/read-back checks after updating tracking:
+
+```text
+Read-back completed for source-review metrics, handoff, verification matrix, top implementation-log entry, AI improvement README, and central board row.
+Final status/overlap probe: main...origin/main [ahead 1]; trackedDirtyPathCount=13; untrackedPathCount=1; dirtyPathCount=14; dirtyOriginOverlapCount=0.
+git diff --check: exit 0 with LF-to-CRLF warnings only; no whitespace-error lines.
+No-index whitespace checks for source-review metrics, implementation log, verification matrix, handoff, and C:/Ai/_zaky_ai_board/KANBAN.md: exit 1 as expected for /dev/null comparisons, with LF-to-CRLF warnings only and no whitespace-error lines.
+```
+
+### Files changed
+
+- `docs/ai-improvement/source-review-metrics.md`
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset/dropped, then use `docs/ai-improvement/source-review-metrics.md` to split the remaining dirty-tree lanes by source/runtime churn, operator docs, lockfile, and AI tracking/status docs. Metrics and green checks are review aids, not acceptance or deploy approval.
+
+## 2026-06-19 18:55 MPST (+0800) — Remote-clean checkpoint for local-ahead dirty tree
+
+### Scope
+
+One docs-only verification checkpoint: refreshed `docs/ai-improvement/uncommitted-source-verification-handoff.md`, `docs/ai-improvement/verification-command-matrix.md`, and `docs/ai-improvement/README.md` after `git fetch --prune` left the repo local-ahead only and a merge-base probe found no remote-changed paths or dirty/origin overlap. Local commit `a2a5447` is still the committed-but-unpushed lane, the same operator-doc/source/lockfile lanes remain dirty, and active AI tracking/status docs remain their own review lane.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, or business rules. Did not commit, amend, reset, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and found `main...origin/main [ahead 1]`, 13 tracked modified files, and no untracked files.
+- Ran `git fetch --prune`, computed merge-base `a7b8d034c0c69de409be8c9f6c963ee82649d96a`, and verified `origin/main` changed-path count `0` with dirty/origin overlap `0`.
+- Inspected `git log --oneline --decorate -5` and `git show --stat --oneline --decorate --no-renames HEAD --`; local commit `a2a5447` still adds repo-local AI docs plus `src/lib/money.test.ts`, `src/lib/roles.test.ts`, and `src/lib/api-errors.test.ts`.
+- Read the shared Zaky prompt template, central board, repo-local AI docs, and the Zaky uncommitted-source handoff reference before choosing the checkpoint increment.
+- Refreshed the handoff and verification matrix with remote-clean evidence so owner/Fatin review starts with local-lane decisions rather than remote-conflict triage.
+- Updated the AI improvement README and central Zaky board.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned current state, fetched remote state, verified merge-base/dirty-overlap evidence, reran checks, and stopped before adding runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose verification/documentation over adding more code while a local ahead commit and source changes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — updated the dirty-tree plan into a file-specific review lane map with current branch/ahead status, remote-clean evidence, anti-scope, and verification commands.
+
+External source applied: https://github.com/safishamsi/graphify — mapped the local commit, remote path set, remaining modified files, and AI tracking/status docs as connected review surfaces before any broad changes.
+
+### Verification evidence
+
+```text
+date '+%Y-%m-%d %H:%M %Z (%z)': 2026-06-19 18:55 MPST (+0800)
+
+git fetch --prune: exit 0
+
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 13 tracked modified files; no untracked files listed.
+
+git log --oneline --decorate -5: HEAD is a2a5447 (test(lib): add money, api-errors, roles characterization tests); origin/main is a7b8d03.
+
+git show --stat --oneline --decorate --no-renames HEAD --: a2a5447 adds 9 files / 2182 insertions (AI docs plus money, roles, and api-errors characterization tests).
+
+merge-base HEAD origin/main: a7b8d034c0c69de409be8c9f6c963ee82649d96a
+originChangedPathCount=0
+dirtyPathCount=13
+dirtyOriginOverlapCount=0
+
+git diff --shortstat --: 13 files changed, 587 insertions(+), 186 deletions(-)
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+git diff --shortstat -- docs/ai-improvement: 4 files changed, 355 insertions(+), 74 deletions(-)
+git diff --summary -- package-lock.json: no rows printed
+git diff --numstat -- package-lock.json: 23 17 package-lock.json
+
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83)
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; Next.js 16.2.6 compiled successfully in 3.5s; TypeScript finished in 9.4s; static generation completed 49/49 pages; pre-existing local missing-DATABASE_URL Prisma page-data warning still printed.
+```
+
+### Files changed
+
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset, then split the remaining tracked dirty-tree lanes in `docs/ai-improvement/uncommitted-source-verification-handoff.md`. The remote-clean checkpoint found no current `origin/main` changed-path conflict, but it does not approve the local diffs. If review is unavailable, keep the next autonomous run docs-only and refresh the checkpoint rather than adding source changes.
+
+## 2026-06-19 15:45 MPST (+0800) — Local-ahead dirty-tree handoff refresh
+
+### Scope
+
+One docs-only stabilization refresh: updated `docs/ai-improvement/uncommitted-source-verification-handoff.md` and `docs/ai-improvement/verification-command-matrix.md` after the recurring run found no owner/Fatin stabilization since the 12:35 handoff. Local commit `a2a5447` is still the committed-but-unpushed lane, the operator-doc/source/lockfile lanes are still dirty, and the active AI tracking/status docs are also modified; current status is 13 tracked modified files and no untracked files.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, or business rules. Did not commit, amend, reset, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and found `main...origin/main [ahead 1]`, 13 tracked modified files, and no untracked files.
+- Inspected `git log --oneline --decorate -5` and `git show --stat --oneline --decorate --no-renames HEAD --`; local commit `a2a5447` still adds repo-local AI docs plus `src/lib/money.test.ts`, `src/lib/roles.test.ts`, and `src/lib/api-errors.test.ts`.
+- Read the shared Zaky prompt template, central board, and repo-local AI docs before choosing the increment.
+- Loaded the Zaky uncommitted-source handoff reference and selected a docs-only handoff refresh instead of adding more runtime work.
+- Refreshed the handoff and verification matrix with the 15:45 evidence snapshot so the AI tracking/status docs remain their own dirty review lane, separate from operator docs, lockfile, React lint/source stabilization, and static landing image conversions.
+- Updated this README, this implementation log, and the central Zaky board.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned current state, detected no owner/Fatin stabilization since the prior handoff, refreshed the handoff, and stopped before adding new runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose documentation/no-op over adding more code while a local ahead commit and source changes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — updated the dirty-tree plan into a file-specific review lane map with current branch/ahead status, anti-scope, and verification commands.
+
+External source applied: https://github.com/safishamsi/graphify — mapped the local commit, remaining modified files, and AI tracking/status docs as connected review surfaces before any broad changes.
+
+### Verification evidence
+
+```text
+date '+%Y-%m-%d %H:%M %Z (%z)': 2026-06-19 15:45 MPST (+0800)
+
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 13 tracked modified files; no untracked files listed.
+
+git log --oneline --decorate -5: HEAD is a2a5447 (test(lib): add money, api-errors, roles characterization tests); origin/main is a7b8d03.
+
+git show --stat --oneline --decorate --no-renames HEAD --: a2a5447 adds 9 files / 2182 insertions (AI docs plus money, roles, and api-errors characterization tests).
+
+git diff --shortstat --: 13 files changed, 507 insertions(+), 186 deletions(-)
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+git diff --shortstat -- docs/ai-improvement: 4 files changed, 275 insertions(+), 74 deletions(-)
+git diff --summary -- package-lock.json: no rows printed
+git diff --numstat -- package-lock.json: 23 17 package-lock.json
+
+package.json parse: exit 0; package.json ok
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83)
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; compiled successfully in 3.4s; finished TypeScript in 9.8s; route table generated; pre-existing local missing-DATABASE_URL Prisma page-data warning still printed.
+```
+
+Final static/read-back checks after updating tracking:
+
+```text
+Read-back completed for handoff, verification matrix, top implementation-log entry, README metrics, and central board row; post-log-patch rerun `git diff --check` exit 0 with LF-to-CRLF warnings only; no-index whitespace checks for implementation log, verification matrix, and C:/Ai/_zaky_ai_board/KANBAN.md exited 1 with LF-to-CRLF warnings only and no whitespace-error lines; final status remained `main...origin/main [ahead 1]` with the same 13 tracked modified files and no untracked files; final shortstat after tracking updates was 13 files changed, 587 insertions(+), 186 deletions(-); `uvx --from pygount pygount --format=summary ...` exit 0, Sum: 254 files / 14,342 code / 3,451 comment.
+```
+
+### Files changed
+
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset, then split the remaining tracked dirty-tree lanes in `docs/ai-improvement/uncommitted-source-verification-handoff.md`. If review is unavailable, keep the next autonomous run docs-only and refresh the handoff rather than adding source changes.
+
+## 2026-06-19 12:35 MPST (+0800) — Local-ahead dirty-tree handoff refresh
+
+### Scope
+
+One docs-only stabilization refresh: updated `docs/ai-improvement/uncommitted-source-verification-handoff.md` and `docs/ai-improvement/verification-command-matrix.md` after the recurring run found the previous 09:25 handoff understated the current dirty tree. Local commit `a2a5447` is still the committed-but-unpushed lane, the operator-doc/source/lockfile lanes are still dirty, and the active AI tracking/status docs are also modified; current status is 13 tracked modified files and no untracked files.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, or business rules. Did not commit, amend, reset, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and found `main...origin/main [ahead 1]`, 13 tracked modified files, and no untracked files.
+- Inspected `git log --oneline --decorate -5` and `git show --stat --oneline --decorate --no-renames HEAD --`; local commit `a2a5447` still adds repo-local AI docs plus `src/lib/money.test.ts`, `src/lib/roles.test.ts`, and `src/lib/api-errors.test.ts`.
+- Read the shared Zaky prompt template, central board, and repo-local AI docs before choosing the increment.
+- Loaded the Zaky uncommitted-source handoff reference and selected a docs-only handoff refresh instead of adding more runtime work.
+- Refreshed the handoff and verification matrix so the AI tracking/status docs are their own dirty review lane, separate from operator docs, lockfile, React lint/source stabilization, and static landing image conversions.
+- Updated this README, this implementation log, and the central Zaky board.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned current state, detected stale dirty-tree evidence, refreshed the handoff, and stopped before adding new runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose documentation/no-op over adding more code while a local ahead commit and source changes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — updated the dirty-tree plan into a file-specific review lane map with current branch/ahead status, anti-scope, and verification commands.
+
+External source applied: https://github.com/safishamsi/graphify — mapped the local commit, remaining modified files, and AI tracking/status docs as connected review surfaces before any broad changes.
+
+### Verification evidence
+
+```text
+date '+%Y-%m-%d %H:%M %Z (%z)': 2026-06-19 12:35 MPST (+0800)
+
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 13 tracked modified files; no untracked files listed.
+
+git log --oneline --decorate -5: HEAD is a2a5447 (test(lib): add money, api-errors, roles characterization tests); origin/main is a7b8d03.
+
+git show --stat --oneline --decorate --no-renames HEAD --: a2a5447 adds 9 files / 2182 insertions (AI docs plus money, roles, and api-errors characterization tests).
+
+git diff --shortstat --: 13 files changed, 402 insertions(+), 192 deletions(-)
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+git diff --shortstat -- docs/ai-improvement: 4 files changed, 170 insertions(+), 80 deletions(-)
+git diff --summary -- package-lock.json: no rows printed
+git diff --numstat -- package-lock.json: 23 17 package-lock.json
+
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83)
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; compiled successfully in 3.0s; finished TypeScript in 8.1s; route table generated; pre-existing local missing-DATABASE_URL Prisma page-data warning still printed.
+```
+
+Final static/read-back checks after updating tracking:
+
+```text
+Read-back completed for docs/ai-improvement/uncommitted-source-verification-handoff.md, docs/ai-improvement/verification-command-matrix.md, docs/ai-improvement/README.md, this implementation log, and the central board row.
+git diff --check: exit 0 with LF-to-CRLF warnings only; no whitespace-error lines.
+No-index whitespace check for C:/Ai/_zaky_ai_board/KANBAN.md: exit 1 with LF-to-CRLF warning only; no whitespace-error lines.
+No-index whitespace check for docs/ai-improvement/implementation-log.md: exit 1 with LF-to-CRLF warning only; no whitespace-error lines.
+Final git status remained local-ahead and dirty with the same 13 tracked modified files and no untracked files listed.
+uvx --from pygount pygount --format=summary ...: exit 0; Sum: 254 files / 14,342 code / 3,415 comment; historical 09:25 and 06:16 implementation-log entries still mention older 9-file snapshots, but active handoff/matrix/README now describe the current 13-file dirty tree and tracking-doc lane.
+```
+
+### Files changed
+
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset, then split the remaining tracked dirty-tree lanes in `docs/ai-improvement/uncommitted-source-verification-handoff.md`. If review is unavailable, keep the next autonomous run docs-only and refresh the handoff rather than adding source changes.
+
+## 2026-06-19 09:25 MPST (+0800) — Local-ahead source verification handoff refresh
+
+### Scope
+
+One docs-only stabilization refresh: updated `docs/ai-improvement/uncommitted-source-verification-handoff.md` and `docs/ai-improvement/verification-command-matrix.md` after the recurring run found the previous 7 untracked AI/test artifacts are now captured in local committed-but-unpushed commit `a2a5447`, while 9 tracked operator-doc/source/lockfile files remain modified in the working tree.
+
+Anti-scope: did not change application source, tests, package files, dependencies, lockfile, schema/RLS, auth/session, billing/payment, UI behavior/copy/layout, deployment config, environment variables, secrets, cron jobs, data, or business rules. Did not commit, amend, reset, stage, push, deploy, or run dependency remediation.
+
+### Work completed
+
+- Re-scanned git status and found `main...origin/main [ahead 1]`, 9 tracked modified files, and no untracked files.
+- Inspected `git log --oneline --decorate -5` and `git show --stat --oneline --decorate --no-renames HEAD --`; local commit `a2a5447` adds repo-local AI docs plus `src/lib/money.test.ts`, `src/lib/roles.test.ts`, and `src/lib/api-errors.test.ts`.
+- Read the shared Zaky prompt template, central board, and repo-local AI docs before choosing the increment.
+- Loaded the Zaky uncommitted-source handoff reference and selected a docs-only handoff refresh instead of adding more runtime work.
+- Refreshed the handoff and verification matrix; updated this README, this implementation log, and the central Zaky board.
+
+### External source applied
+
+External source applied: https://github.com/naimkatiman/continuous-improvement — re-scanned current state, detected stale untracked-file evidence, refreshed the handoff, and stopped before adding new runtime work.
+
+External source applied: https://github.com/DietrichGebert/ponytail — chose documentation/no-op over adding more code while a local ahead commit and source changes remain unreviewed.
+
+External source applied: https://github.com/shadcn/improve — updated the dirty-tree plan into a file-specific review lane map with current branch/ahead status, anti-scope, and verification commands.
+
+External source applied: https://github.com/safishamsi/graphify — mapped the local commit and remaining modified files as connected review surfaces before any broad changes.
+
+### Verification evidence
+
+```text
+date '+%Y-%m-%d %H:%M %Z (%z)': 2026-06-19 09:25 MPST (+0800)
+
+git status --short --branch --untracked-files=all: ## main...origin/main [ahead 1]; 9 tracked modified files; no untracked files listed.
+
+git log --oneline --decorate -5: HEAD is a2a5447 (test(lib): add money, api-errors, roles characterization tests); origin/main is a7b8d03.
+
+git show --stat --oneline --decorate --no-renames HEAD --: a2a5447 adds 9 files / 2182 insertions (AI docs plus money, roles, and api-errors characterization tests).
+
+git diff --shortstat -- package-lock.json src: 6 files changed, 65 insertions(+), 34 deletions(-)
+git diff --shortstat -- README.md docs/cron.md docs/deployment.md: 3 files changed, 167 insertions(+), 78 deletions(-)
+
+npm test: exit 0; Test Files 12 passed (12); Tests 83 passed (83)
+npm run lint: exit 0; 4 problems (0 errors, 4 warnings) from known dynamic @next/next/no-img-element surfaces
+npx tsc --noEmit: exit 0
+npm run build: exit 0; compiled successfully in 3.1s; finished TypeScript in 9.0s; route table generated; pre-existing local missing-DATABASE_URL Prisma page-data warning still printed.
+uvx --from pygount pygount --format=summary ...: exit 0; Sum: 254 files / 14,342 code / 3,351 comment.
+```
+
+Final static/read-back checks after updating tracking:
+
+```text
+Read-back completed for docs/ai-improvement/uncommitted-source-verification-handoff.md, docs/ai-improvement/verification-command-matrix.md, docs/ai-improvement/README.md, this implementation log, and the central board row.
+git diff --check: exit 0 with LF-to-CRLF warnings only; no whitespace-error lines.
+No-index whitespace check for C:/Ai/_zaky_ai_board/KANBAN.md: exit 1 with LF-to-CRLF warnings only; no whitespace-error lines.
+Final git status remained local-ahead and dirty from the pre-existing 9 tracked operator-doc/source/lockfile diffs plus this run's docs/tracking refresh; no untracked files listed.
+Stale untracked-claim search was rerun after the final patch and current handoff/matrix/README no longer state that AI docs or helper tests are untracked.
+```
+
+### Files changed
+
+- `docs/ai-improvement/uncommitted-source-verification-handoff.md`
+- `docs/ai-improvement/verification-command-matrix.md`
+- `docs/ai-improvement/README.md`
+- `docs/ai-improvement/implementation-log.md`
+- `C:/Ai/_zaky_ai_board/KANBAN.md`
+
+### Code changes
+
+None. This run changed documentation/tracking artifacts only.
+
+### Recommended next safe action
+
+Source-diff stabilization before any new runtime work: owner/Fatin or maintainer should decide whether local commit `a2a5447` should be kept/pushed, amended/split, or reset, then split the remaining tracked dirty-tree lanes in `docs/ai-improvement/uncommitted-source-verification-handoff.md`. If review is unavailable, keep the next autonomous run docs-only and refresh the handoff rather than adding source changes.
+
 ## 2026-06-19 06:16 MPST (+0800) — Uncommitted source verification handoff
 
 ### Scope

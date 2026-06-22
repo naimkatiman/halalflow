@@ -1,78 +1,150 @@
-# Production Deployment Guide — Postgres
+# Production Deployment Guide — Postgres + RLS
 
-HalalFlow ships with SQLite for local development. For production, migrate to PostgreSQL for concurrent writes, connection pooling, and managed backups.
+MosRev currently uses PostgreSQL as the active Prisma datasource. Production deployments are designed around three database URLs and row-level-security (RLS) roles so tenant data fails closed by default.
+
+This guide supersedes older SQLite-era notes. Do not switch `prisma/schema.prisma` back to SQLite for production.
 
 ## 1. Create a Postgres database
 
-**Railway (recommended)**  
-Add a **PostgreSQL** service in the same project. Railway sets `DATABASE_URL` automatically — copy its value.
+Create a managed or self-hosted PostgreSQL database and keep the owner/superuser connection string available for initial setup and migrations.
 
-**Other hosts (Render, Supabase, self-hosted)**  
-Create a database and note the connection string:
-```
-postgresql://user:password@host:port/dbname?schema=public
-```
+Recommended operational requirements:
 
-## 2. Switch Prisma to PostgreSQL
+- automated backups and point-in-time restore if the host provides it;
+- TLS-enabled connections in production;
+- a stable database URL for the app runtime;
+- permission to create login roles before the first migration.
 
-Edit `prisma/schema.prisma`:
+Connection string shape:
 
-```prisma
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+```text
+postgresql://user:***@host:port/dbname?schema=public
 ```
 
-> Keep `generator client` exactly as-is.
+## 2. Provision the RLS roles before migrations
 
-## 3. Update environment variables
+Run `prisma/rls-roles.sql` once as the database owner/superuser before the first `prisma migrate deploy`.
+
+The script creates the two application roles used by `.env.example`:
+
+- `mosrev_app` — least-privilege runtime role. It is RLS-enforced and should be used by `DATABASE_URL`.
+- `mosrev_admin` — `BYPASSRLS` admin role. It is used only by `DATABASE_URL_ADMIN` for signup provisioning, invite-token resolution, cross-org membership lookups, and Stripe webhooks.
+
+Replace the placeholder passwords in `prisma/rls-roles.sql` before running it:
+
+```sql
+CREATE ROLE mosrev_app   LOGIN PASSWORD 'REPLACE_WITH_APP_PASSWORD';
+CREATE ROLE mosrev_admin LOGIN PASSWORD 'REPLACE_WITH_ADMIN_PASSWORD' BYPASSRLS;
+```
+
+The `ALTER DEFAULT PRIVILEGES` statements in that file are load-bearing: migrations create tables as the owner, and future tables must still be readable/writable by the app/admin roles.
+
+## 3. Configure environment variables
+
+Use `.env.example` as the source of truth for required variables:
 
 ```env
-# .env.production  (or Railway Variables)
-DATABASE_URL="postgresql://..."
-SESSION_SECRET="change-to-a-random-32-char-string"
+DATABASE_URL="postgresql://mosrev_app:***@host:5432/mosrev?schema=public"
+DATABASE_URL_ADMIN="postgresql://mosrev_admin:***@host:5432/mosrev?schema=public"
+DIRECT_URL="postgresql://owner:***@host:5432/mosrev?schema=public"
+SESSION_SECRET="change-me-to-a-random-32-char-string-mosrev"
+NEXT_PUBLIC_BASE_URL="https://your-domain.example"
 ```
 
-`SESSION_SECRET` must stay at least 32 characters.
+Database URL responsibilities:
 
-## 4. Generate client and run migrations
+| Variable | Role | Used for |
+|---|---|---|
+| `DATABASE_URL` | `mosrev_app` / least privilege / RLS-enforced | Normal Prisma app traffic through `prisma` and `withOrg()` |
+| `DATABASE_URL_ADMIN` | `mosrev_admin` / `BYPASSRLS` | Provisioning, cross-org membership lookup, invite-token resolution, Stripe webhooks |
+| `DIRECT_URL` | owner/superuser | Prisma migrations and DDL only |
+
+Production must set `DATABASE_URL_ADMIN`. If it is missing at runtime, `src/lib/db.ts` falls back to the least-privilege app role and admin/cross-org operations will fail closed.
+
+`SESSION_SECRET` must stay at least 32 characters. Generate a fresh value per environment.
+
+Optional integrations:
+
+- `RESEND_API_KEY` and `MOSREV_EMAIL_FROM` enable real workflow email.
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and `STRIPE_PRICE_ID` enable Stripe billing.
+- Leave Stripe variables unset to keep billing disabled for self-hosted installs.
+- `DEMO_MODE="true"` is for disposable demos only. Never enable demo mode alongside real production keys.
+
+## 4. Install dependencies and generate the Prisma client
 
 ```bash
 npm install
 npx prisma generate
+```
+
+If deploying from a lockfile-controlled environment, prefer the host's reproducible install command, such as `npm ci`, when appropriate.
+
+## 5. Run migrations
+
+Run migrations with `DIRECT_URL` available so Prisma can perform DDL through the owner/superuser connection:
+
+```bash
 npx prisma migrate deploy
 ```
 
-- `generate` rebuilds the Prisma client for Postgres.
-- `migrate deploy` applies existing migrations to the new database.
+The package `start` script already runs migrations before serving the app:
 
-## 5. Seed demo data (optional)
+```bash
+npm start
+# runs: prisma migrate deploy && next start
+```
+
+Keep the role-provisioning step separate from migrations. `prisma/rls-roles.sql` must be applied before migrations on a fresh database.
+
+## 6. Seed demo data only when intentional
 
 ```bash
 npx prisma db seed
 ```
 
-> Skip this if you want a clean production instance without demo credentials.
+Skip seeding for a clean production instance without demo credentials or demo organizations.
 
-## 6. Build and start
+## 7. Build and start
 
 ```bash
 npm run build
 npm start
 ```
 
-`npm start` already runs `prisma migrate deploy && next start`, so migrations apply automatically on each deploy.
+Set `NEXT_PUBLIC_BASE_URL` to the real public origin before sending invitation, booking, billing, or notification links.
 
-## 7. Verify
+## 8. Verify deployment
 
-- `GET /` returns the landing page (or redirects to `/dashboard` if logged in).
-- `POST /api/auth/login` with demo credentials returns a session cookie.
-- `GET /api/templates` returns the organization's templates.
+Minimum smoke checks:
 
-## Rollback
+- `GET /` returns the landing page, or redirects an already-authenticated browser to `/dashboard`.
+- Registration/onboarding can create an organization.
+- Login returns a session cookie.
+- An authenticated org route can read only the active org's data.
+- Public mosque directory and booking pages load only published/active data.
 
-If you need to revert to SQLite locally, change `provider` back to `"sqlite"`, restore the local `DATABASE_URL`, and run `npx prisma generate`.
+RLS trust check after setup:
+
+```bash
+set -a
+source .env
+set +a
+npx tsx scripts/rls-isolation-check.ts
+```
+
+Run the RLS check only against a safe database where temporary organizations may be created and deleted. Expected success ends with:
+
+```text
+ALL PASS — RLS isolation holds
+```
+
+If this check fails, stop deployment and investigate before serving real tenant data.
+
+## Rollback / recovery
+
+Do not roll production back to SQLite. For production recovery, restore the prior Postgres backup or redeploy the previous application version against the existing Postgres database.
+
+If a migration fails partway through, use Prisma's migration recovery guidance for `prisma migrate resolve` only after inspecting the actual database state and backup status.
 
 ## Stripe webhook outage (paywall runbook)
 
