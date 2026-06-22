@@ -5,6 +5,10 @@ import clsx from "clsx";
 import { useLocale } from "@/lib/i18n/provider";
 import { LOCALE_COOKIE, type Locale } from "@/lib/i18n";
 
+function persistLocaleCookie(next: Locale) {
+  document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
+}
+
 // Segmented EN/MS control. Writes the cookie so SSR is correct on the next load,
 // flips the provider for an instant client-side text swap, then refreshes so
 // server components re-render in the new language.
@@ -14,7 +18,7 @@ export function LanguageToggle() {
 
   const choose = (next: Locale) => {
     if (next === locale) return;
-    document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
+    persistLocaleCookie(next);
     setLocale(next);
     router.refresh();
   };
