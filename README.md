@@ -33,19 +33,23 @@ MosRev helps teams manage structured approval workflows:
 
 - **Next.js 16** (App Router, TypeScript, Turbopack)
 - **Tailwind CSS v4**
-- **Prisma 6 + SQLite** (swap for Postgres in production)
+- **Prisma 6 + PostgreSQL** with row-level security (RLS)
 - **iron-session** for auth
 - **@phosphor-icons/react** for icons
 
 ## Getting Started
 
+MosRev expects PostgreSQL locally and in production. Copy `.env.example`, create a local Postgres database, provision the two RLS roles from `prisma/rls-roles.sql`, then run migrations.
+
 ```bash
 npm install
-cp .env.example .env          # set DATABASE_URL and SESSION_SECRET
-npm run db:migrate             # run migrations
-npm run db:seed                # seed demo data
+cp .env.example .env          # set DATABASE_URL, DATABASE_URL_ADMIN, DIRECT_URL, SESSION_SECRET
+npm run db:migrate             # run migrations through DIRECT_URL
+npm run db:seed                # optional: seed demo data
 npm run dev
 ```
+
+See [docs/deployment.md](docs/deployment.md) for the full Postgres + RLS setup guide.
 
 Open [http://localhost:3000](http://localhost:3000).
 
@@ -80,7 +84,7 @@ src/
 │   ├── Navbar.tsx
 │   └── ui/
 └── lib/
-    ├── db.ts               # Prisma client
+    ├── db.ts               # Prisma app/admin clients + withOrg() RLS transaction helper
     └── session.ts          # iron-session config
 ```
 
@@ -105,12 +109,16 @@ Workflow → AuditLog
 
 ## Self-hosting
 
-Works with any Node.js host. For production, set:
+Works with any Node.js host that can provide PostgreSQL. For production, configure the three database URLs from `.env.example`:
 
 ```env
-DATABASE_URL="file:./data/prod.db"   # or postgres://...
+DATABASE_URL="postgresql://mosrev_app:***@host:5432/mosrev?schema=public"
+DATABASE_URL_ADMIN="postgresql://mosrev_admin:***@host:5432/mosrev?schema=public"
+DIRECT_URL="postgresql://owner:***@host:5432/mosrev?schema=public"
 SESSION_SECRET="your-32-char-secret"
 ```
+
+Before the first migration, run `prisma/rls-roles.sql` as the database owner/superuser. See [docs/deployment.md](docs/deployment.md) for the production checklist and RLS verification command.
 
 ## Roadmap
 

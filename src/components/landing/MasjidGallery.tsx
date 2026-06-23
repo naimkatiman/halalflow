@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { MapPin } from "@phosphor-icons/react/dist/ssr";
 import type { Dictionary } from "@/lib/i18n";
 
@@ -39,11 +40,12 @@ export function MasjidGallery({ t }: { t: Dictionary }) {
             key={masjid.name}
             className="group relative h-64 overflow-hidden rounded-2xl border border-emerald-100 shadow-sm dark:border-emerald-900/50"
           >
-            <img
+            <Image
               src={masjid.src}
               alt={`${masjid.name}, ${masjid.location}`}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div
               aria-hidden="true"

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Buildings, MoonStars, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import type { Dictionary } from "@/lib/i18n";
@@ -43,11 +44,13 @@ export function CommunityBand({ t }: { t: Dictionary }) {
             </Link>
           </div>
         </div>
-        <div className="relative h-64 lg:h-72 rounded-2xl overflow-hidden border border-emerald-100 shadow-lg dark:border-emerald-900/50">
-          <img
+        <div className="relative h-64 overflow-hidden rounded-2xl border border-emerald-100 shadow-lg lg:h-72 dark:border-emerald-900/50">
+          <Image
             src="/images/mosque-exterior-1.jpg"
             alt={c.imageAlt}
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
           />
         </div>
       </div>
