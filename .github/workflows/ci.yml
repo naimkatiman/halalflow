@@ -1,0 +1,60 @@
+name: CI
+
+# Continuous integration for MosRev (halalflow).
+# Runs the repository's secret-free checks on every push and PR.
+# Additive and non-breaking: introduces no new scripts and changes no app logic.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Use `npm install` (not `npm ci`): the committed package-lock.json has a
+      # cross-platform optional-dependency drift (@emnapi/* resolves to a
+      # different version on Linux than on the host that generated the lock), so
+      # `npm ci` fails its strict lock-sync check. `npm install` reconciles the
+      # tree at install time. Tighten back to `npm ci` once the lockfile is
+      # regenerated on Linux. The postinstall `prisma generate` only reads
+      # prisma/schema.prisma (no database connection needed).
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
+
+      # No dedicated typecheck script exists in package.json, so invoke the
+      # installed TypeScript compiler directly in --noEmit mode. Adds no
+      # package.json script and modifies no source file.
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      # Deferred: build + test need DATABASE_URL (a Postgres service) to run in
+      # CI. Re-enable in a follow-up once DB secrets / a service container are
+      # provisioned for the workflow.
+      # - name: Build
+      #   run: npm run build
+      # - name: Test
+      #   run: npm test
